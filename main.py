@@ -12,18 +12,30 @@ def main():
         next(reader)  # 헤더 스킵
 
         for row in reader:
-            file_path, line_number = row
+            if len(row) == 3:  # id, file_path, line_number
+                id_value, file_path, line_number = row
+            elif len(row) == 2:  # 기존 형식 호환성 유지
+                file_path, line_number = row
+                id_value = None
+            else:
+                print(f"⚠️ 잘못된 CSV 형식: {row}")
+                continue
+
             line_number = int(line_number)
 
-            print(f"Analyzing: {file_path} at line {line_number}...")
+            # .abap 확장자 자동 추가
+            if not file_path.endswith(".abap"):
+                file_path = file_path + ".abap"
+
+            print(f"Analyzing: ID={id_value}, {file_path} at line {line_number}...")
 
             try:
                 with open(file_path, "r", encoding="utf-8") as source_file:
                     all_lines = source_file.readlines()
 
-                # 분석할 코드 범위(앞 100줄, 뒤 500줄) 추출
-                start = max(0, line_number - 101)
-                end = min(len(all_lines), line_number + 500)
+                # 분석할 코드 범위(앞 200줄, 뒤 1000줄) 추출
+                start = max(0, line_number - 201)
+                end = min(len(all_lines), line_number + 1000)
                 snippet = all_lines[start:end]
 
                 # snippet 내에서 sy-uname이 있는 상대적 라인 번호
@@ -74,6 +86,7 @@ def main():
 
                     all_results.append(
                         {
+                            "id": id_value,
                             "source_file": file_path,
                             "source_line": line_number,
                             "result": result,
@@ -84,6 +97,7 @@ def main():
                     # 결과를 찾지 못했어도 추적 정보를 저장
                     all_results.append(
                         {
+                            "id": id_value,
                             "source_file": file_path,
                             "source_line": line_number,
                             "result": result,

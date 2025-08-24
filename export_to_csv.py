@@ -54,7 +54,15 @@ def analyze_and_export_to_csv():
 
     # 각 위치별로 분석 실행
     for idx, location in enumerate(locations, 1):
+        # ID 값 추출 (없으면 idx 사용)
+        id_value = location.get("id", str(idx))
+
         file_path = location["file_path"]
+
+        # .abap 확장자 자동 추가
+        if not file_path.endswith(".abap"):
+            file_path = file_path + ".abap"
+
         try:
             line_number = int(location["line_number"])
         except ValueError:
@@ -66,7 +74,7 @@ def analyze_and_export_to_csv():
         # 파일 존재 확인
         if not os.path.exists(file_path):
             print(f"   ❌ 파일 없음: {file_path}")
-            result = create_empty_result(idx, file_path, line_number, "파일 없음")
+            result = create_empty_result(id_value, file_path, line_number, "파일 없음")
             results.append(result)
             continue
 
@@ -76,8 +84,8 @@ def analyze_and_export_to_csv():
                 all_lines = f.readlines()
 
             # 분석 범위 추출 (main.py와 동일한 로직)
-            start = max(0, line_number - 101)
-            end = min(len(all_lines), line_number + 500)
+            start = max(0, line_number - 201)
+            end = min(len(all_lines), line_number + 1000)
             snippet = all_lines[start:end]
             relative_start_line = line_number - start - 1
 
@@ -86,7 +94,7 @@ def analyze_and_export_to_csv():
 
             # 결과를 CSV 행으로 변환
             csv_result = convert_analysis_to_csv_row(
-                idx, file_path, line_number, analysis_result
+                id_value, file_path, line_number, analysis_result
             )
             results.append(csv_result)
 

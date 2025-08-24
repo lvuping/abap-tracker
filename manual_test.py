@@ -60,8 +60,8 @@ def manual_test(file_path, line_number):
             return False
 
         # 분석 범위 계산 (main.py와 동일한 로직)
-        start = max(0, line_number - 101)  # 앞으로 100줄
-        end = min(total_lines, line_number + 500)  # 뒤로 500줄
+        start = max(0, line_number - 201)  # 앞으로 200줄
+        end = min(total_lines, line_number + 1000)  # 뒤로 1000줄
         snippet = all_lines[start:end]
         relative_start_line = line_number - start - 1
 
@@ -185,10 +185,14 @@ def main():
         print("  python manual_test.py input/business_scenario_code.abap 45")
         print("  python manual_test.py input/source_code.abap 90")
         print("  python manual_test.py input/extended_test_code.abap 37")
-        print("\n💡 팁: 현재 분석 범위는 지정 라인 앞 100줄, 뒤 500줄입니다.")
+        print("\n💡 팁: 현재 분석 범위는 지정 라인 앞 200줄, 뒤 1000줄입니다.")
         sys.exit(1)
 
     file_path = sys.argv[1]
+
+    # .abap 확장자 자동 추가
+    if not file_path.endswith(".abap"):
+        file_path = file_path + ".abap"
 
     try:
         line_number = int(sys.argv[2])
