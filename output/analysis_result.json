@@ -1,0 +1,93 @@
+[
+  {
+    "source_file": "input/source_code.abap",
+    "source_line": 90,
+    "result": {
+      "status": "Not Found in Snippet",
+      "tainted_variables": [
+        "sy-uname",
+        "lv_lifnr"
+      ],
+      "path": [
+        "Line 90: Assignment 'sy-uname' -> 'lv_lifnr'"
+      ]
+    }
+  },
+  {
+    "source_file": "input/extended_test_code.abap",
+    "source_line": 37,
+    "result": {
+      "status": "Found",
+      "type": "RFC",
+      "name": "Z_USER_AUTHORIZATION_CHECK",
+      "parameter": "I_USERNAME",
+      "final_variable": "lv_original_user",
+      "path": [
+        "Line 41: Assignment 'sy-uname' -> 'lv_original_user'",
+        "Line 44: Assignment 'lv_original_user' -> 'lv_temp_user'",
+        "Line 47: Assignment 'lv_temp_user' -> 'gs_user_data-user_id'",
+        "Line 47: Structure assignment 'lv_temp_user' -> 'gs_user_data-user_id'",
+        "Line 54: CONCATENATE 'lv_original_user' -> 'lv_user_info'",
+        "Line 57: CONCATENATE 'lv_temp_user' -> 'lv_formatted'",
+        "Line 60: CONCATENATE 'gs_user_data-user_id' -> 'gs_user_data-email'",
+        "Line 74: SPLIT 'lv_user_info' -> 'lv_prefix'",
+        "Line 74: SPLIT 'lv_user_info' -> 'lv_suffix'",
+        "Line 77: SPLIT 'gs_user_data-email' -> 'gs_user_data-display_name'",
+        "Line 107: PERFORM 'PROCESS_USER_DATA' USING parameter 1: 'gs_user_data-user_id'",
+        "Line 107: FORM parameter mapping: 'gs_user_data-user_id' -> 'is_user_data'",
+        "Line 122: WHERE condition uses tainted variable: 'lv_original_user'",
+        "Line 128: WHERE condition uses tainted variable: 'gs_user_data-user_id'"
+      ],
+      "tainted_variables": [
+        "lv_original_user",
+        "lv_prefix",
+        "gs_user_data-email",
+        "lv_temp_user",
+        "gs_user_data-user_id",
+        "lv_suffix",
+        "gs_user_data-display_name",
+        "is_user_data",
+        "lv_formatted",
+        "sy-uname",
+        "lv_user_info"
+      ]
+    }
+  },
+  {
+    "source_file": "input/business_scenario_code.abap",
+    "source_line": 45,
+    "result": {
+      "status": "Found",
+      "type": "DATABASE_INSERT_FIELD",
+      "table": "ZDOCUMENTS",
+      "fields": [
+        "CHANGED_BY",
+        "CREATED_BY"
+      ],
+      "operation": "INSERT",
+      "source_structure": "ls_document",
+      "final_variable": "ls_document",
+      "path": [
+        "Line 53: Assignment 'sy-uname' -> 'lv_current_user'",
+        "Line 56: Assignment 'lv_current_user' -> 'lv_processing_user'",
+        "Line 57: Assignment 'lv_processing_user' -> 'lv_audit_user'",
+        "Line 66: Assignment 'lv_current_user' -> 'ls_document-created_by'",
+        "Line 66: Structure assignment 'lv_current_user' -> 'ls_document-created_by'",
+        "Line 68: Assignment 'lv_processing_user' -> 'ls_document-changed_by'",
+        "Line 68: Structure assignment 'lv_processing_user' -> 'ls_document-changed_by'",
+        "Line 76: Assignment 'lv_audit_user' -> 'ls_audit-user_name'",
+        "Line 76: Structure assignment 'lv_audit_user' -> 'ls_audit-user_name'"
+      ],
+      "tainted_variables": [
+        "ls_document-changed_by",
+        "lv_processing_user",
+        "lv_current_user",
+        "ls_audit-user_name",
+        "ls_document-created_by",
+        "sy-uname",
+        "lv_audit_user"
+      ],
+      "description": "테이블 ZDOCUMENTS의 CHANGED_BY, CREATED_BY 필드에 사용자 정보 INSERT"
+    }
+  }
+]

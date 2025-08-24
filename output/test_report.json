@@ -1,0 +1,19 @@
+{
+  "test_timestamp": "2024-01-01",
+  "test_result": {
+    "status": "Not Found in Snippet",
+    "tainted_variables": [
+      "lv_lifnr",
+      "sy-uname"
+    ],
+    "path": [
+      "Line 90: Assignment 'sy-uname' -> 'lv_lifnr'"
+    ]
+  },
+  "test_summary": {
+    "status": "Not Found in Snippet",
+    "variables_tracked": 2,
+    "trace_steps": 1,
+    "success": false
+  }
+}

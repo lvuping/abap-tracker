@@ -1,0 +1,537 @@
+import re
+from patterns import *  # 정규식 패턴들을 가져옴
+
+# 전역 변수 - 감사 필드 임시 결과 저장
+temp_audit_result = None
+
+
+def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
+    """
+    주어진 코드 조각(snippet) 내에서 sy-uname의 흐름을 추적한다.
+    """
+    global temp_audit_result
+    temp_audit_result = None  # 함수 시작 시 초기화
+
+    tainted_vars = {"sy-uname"}  # 오염된 변수들을 저장할 집합(set), sy-uname으로 시작
+    trace_path = []  # 추적 경로를 저장할 리스트
+    form_params = {}  # FORM 파라미터 매핑을 저장
+
+    # 전체 스니펫에서 FORM 정의를 먼저 찾아서 파라미터 매핑을 구성
+    for line_num, line in enumerate(snippet):
+        line_upper = line.strip().upper()
+        form_match = FORM_PARAM_PATTERN.match(line_upper)
+        if form_match:
+            params_str = form_match.group("params")
+
+            # USING 파라미터 처리
+            using_match = USING_PARAM_PATTERN.search(params_str)
+            if using_match:
+                using_params = using_match.group("using_params").split()
+                for i, param in enumerate(using_params):
+                    if "VALUE(" in param:
+                        param = param.replace("VALUE(", "").replace(")", "")
+                    param = param.split()[0]  # TYPE 부분 제거
+                    form_params[f"USING_PARAM_{i}"] = param.strip().lower()
+
+            # CHANGING 파라미터 처리
+            changing_match = CHANGING_PARAM_PATTERN.search(params_str)
+            if changing_match:
+                changing_params = changing_match.group("changing_params").split()
+                for i, param in enumerate(changing_params):
+                    param = param.split()[0]  # TYPE 부분 제거
+                    form_params[f"CHANGING_PARAM_{i}"] = param.strip().lower()
+
+    # 시작점부터 아래로 내려가며 한 줄씩 분석
+    for line_num, line in enumerate(
+        snippet[start_line_in_snippet:], start=start_line_in_snippet
+    ):
+        line_upper = line.strip().upper()  # 대소문자 무시, 공백 제거
+
+        # 1. 기본 변수 전파 (Propagation) 분석
+        # 예: MOVE lv_source TO lv_target. 또는 lv_target = lv_source.
+        match = MOVE_PATTERN.match(line_upper) or ASSIGN_PATTERN.match(line_upper)
+        if match:
+            source_var = match.group("source").strip().lower()
+            target_var = match.group("target").strip().lower()
+
+            if source_var in tainted_vars and target_var not in tainted_vars:
+                tainted_vars.add(target_var)
+                trace_path.append(
+                    f"Line {line_num+1}: Assignment '{source_var}' -> '{target_var}'"
+                )
+
+        # 1-1. MOVE-CORRESPONDING 분석
+        move_corr_match = MOVE_CORRESPONDING_PATTERN.match(line_upper)
+        if move_corr_match:
+            source_var = move_corr_match.group("source").strip().lower()
+            target_var = move_corr_match.group("target").strip().lower()
+
+            if source_var in tainted_vars and target_var not in tainted_vars:
+                tainted_vars.add(target_var)
+                trace_path.append(
+                    f"Line {line_num+1}: MOVE-CORRESPONDING '{source_var}' -> '{target_var}'"
+                )
+
+        # 1-2. CONCATENATE 분석
+        concat_match = CONCATENATE_PATTERN.match(line_upper)
+        if concat_match:
+            sources_str = concat_match.group("sources").strip()
+            target_var = concat_match.group("target").strip().lower()
+
+            # CONCATENATE의 소스 변수들을 분석
+            source_vars = [s.strip().lower() for s in sources_str.split() if s.strip()]
+            for source_var in source_vars:
+                if source_var in tainted_vars and target_var not in tainted_vars:
+                    tainted_vars.add(target_var)
+                    trace_path.append(
+                        f"Line {line_num+1}: CONCATENATE '{source_var}' -> '{target_var}'"
+                    )
+                    break
+
+        # 1-3. REPLACE 분석 (IN 절의 변수가 오염되는 경우)
+        replace_match = REPLACE_PATTERN.match(line_upper)
+        if replace_match:
+            target_var = replace_match.group("target").strip().lower()
+            source_var = replace_match.group("source").strip().lower()
+
+            # REPLACE는 target 변수를 수정하고, source를 사용
+            if source_var in tainted_vars and target_var not in tainted_vars:
+                tainted_vars.add(target_var)
+                trace_path.append(
+                    f"Line {line_num+1}: REPLACE using '{source_var}' in '{target_var}'"
+                )
+
+        # 1-4. SPLIT 분석
+        split_match = SPLIT_PATTERN.match(line_upper)
+        if split_match:
+            source_var = split_match.group("source").strip().lower()
+            targets_str = split_match.group("targets").strip()
+
+            if source_var in tainted_vars:
+                # SPLIT의 타겟 변수들을 분석
+                target_vars = [
+                    t.strip().lower() for t in targets_str.split() if t.strip()
+                ]
+                for target_var in target_vars:
+                    if target_var not in tainted_vars:
+                        tainted_vars.add(target_var)
+                        trace_path.append(
+                            f"Line {line_num+1}: SPLIT '{source_var}' -> '{target_var}'"
+                        )
+
+        # 1-5. SELECT INTO 분석
+        select_match = SELECT_INTO_PATTERN.match(line_upper)
+        if select_match:
+            target_var = select_match.group("target").strip().lower()
+            # SELECT INTO는 새로운 데이터를 가져오므로 오염 추적하지 않음
+            # 하지만 WHERE 절에서 오염된 변수를 사용할 수 있음
+
+        # 2. 구조체 필드 할당 분석
+        # 예: gs_po_list-lifnr = lv_lifnr.
+        struct_match = STRUCTURE_ASSIGN_PATTERN.match(line_upper)
+        if struct_match:
+            source_var = struct_match.group("source").strip().lower()
+            target_field = struct_match.group("target").strip().lower()
+
+            if source_var in tainted_vars:
+                tainted_vars.add(target_field)
+                trace_path.append(
+                    f"Line {line_num+1}: Structure assignment '{source_var}' -> '{target_field}'"
+                )
+
+        # 3. PERFORM 호출 분석
+        # 예: PERFORM call_remote_system USING p_bukrs p_ekorg lv_lifnr
+        perform_match = PERFORM_PATTERN.match(line_upper)
+        if perform_match:
+            subroutine = perform_match.group("subroutine").strip()
+            params_str = perform_match.group("params")
+
+            # USING 파라미터 분석
+            using_match = USING_PARAM_PATTERN.search(params_str)
+            if using_match:
+                using_params = [
+                    p.strip().lower() for p in using_match.group("using_params").split()
+                ]
+                for i, param in enumerate(using_params):
+                    if param in tainted_vars:
+                        trace_path.append(
+                            f"Line {line_num+1}: PERFORM '{subroutine}' USING parameter {i+1}: '{param}'"
+                        )
+                        # FORM 정의에서 해당 파라미터에 매핑된 변수를 오염시킴
+                        form_param_key = f"USING_PARAM_{i}"
+                        if form_param_key in form_params:
+                            mapped_var = form_params[form_param_key]
+                            tainted_vars.add(mapped_var)
+                            trace_path.append(
+                                f"Line {line_num+1}: FORM parameter mapping: '{param}' -> '{mapped_var}'"
+                            )
+
+            # CHANGING 파라미터 분석
+            changing_match = CHANGING_PARAM_PATTERN.search(params_str)
+            if changing_match:
+                changing_params = [
+                    p.strip().lower()
+                    for p in changing_match.group("changing_params").split()
+                ]
+                for i, param in enumerate(changing_params):
+                    if param in tainted_vars:
+                        trace_path.append(
+                            f"Line {line_num+1}: PERFORM '{subroutine}' CHANGING parameter {i+1}: '{param}'"
+                        )
+
+        # 4. WHERE 조건절에서 변수 사용 분석 (SELECT 문 등)
+        where_match = WHERE_CONDITION_PATTERN.search(line_upper)
+        if where_match:
+            variable = where_match.group("variable").strip().lower()
+            if variable in tainted_vars:
+                trace_path.append(
+                    f"Line {line_num+1}: WHERE condition uses tainted variable: '{variable}'"
+                )
+
+        # 5. APPEND 등 내부 테이블 조작
+        append_match = APPEND_PATTERN.match(line_upper)
+        if append_match:
+            source_var = append_match.group("source").strip().lower()
+            target_table = append_match.group("target").strip().lower()
+
+            if source_var in tainted_vars:
+                tainted_vars.add(target_table)
+                trace_path.append(
+                    f"Line {line_num+1}: APPEND '{source_var}' -> '{target_table}'"
+                )
+
+        # 6. 종착점 (Sink) 분석 - RFC 호출
+        # 예: CALL FUNCTION 'Z_RFC_NAME' EXPORTING iv_user = lv_uname.
+        rfc_match = RFC_CALL_PATTERN.search(line_upper)
+        if rfc_match:
+            rfc_name = rfc_match.group("rfc_name")
+            params_str = rfc_match.group("params")
+
+            # 현재 라인에서 RFC 파라미터 확인
+            param_matches = RFC_PARAM_PATTERN.finditer(params_str)
+            for p_match in param_matches:
+                param_name = p_match.group("param_name").strip()
+                param_value = p_match.group("param_value").strip().lower()
+
+                # 파라미터 값으로 오염된 변수가 사용되었다면, 종착점을 찾은 것!
+                if param_value in tainted_vars:
+                    return {
+                        "status": "Found",
+                        "type": "RFC",
+                        "name": rfc_name,
+                        "parameter": param_name,
+                        "final_variable": param_value,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                    }
+
+            # 현재 라인에서 파라미터를 찾지 못한 경우, 다음 몇 줄을 확인
+            # (여러 줄에 걸친 RFC 호출 처리)
+            for next_offset in range(1, min(10, len(snippet) - line_num)):
+                if line_num + next_offset < len(snippet):
+                    next_line = snippet[line_num + next_offset].strip().upper()
+
+                    # 다른 CALL FUNCTION이 나오거나 프로시저가 끝나면 중단
+                    if (
+                        "CALL FUNCTION" in next_line
+                        or next_line.strip().endswith(".")
+                        and "EXCEPTIONS" not in next_line
+                    ):
+                        break
+
+                    # 다음 라인에서 RFC 파라미터 찾기
+                    next_param_matches = RFC_PARAM_PATTERN.finditer(next_line)
+                    for p_match in next_param_matches:
+                        param_name = p_match.group("param_name").strip()
+                        param_value = p_match.group("param_value").strip().lower()
+
+                        if param_value in tainted_vars:
+                            return {
+                                "status": "Found",
+                                "type": "RFC",
+                                "name": rfc_name,
+                                "parameter": param_name,
+                                "final_variable": param_value,
+                                "path": trace_path,
+                                "tainted_variables": list(tainted_vars),
+                            }
+
+        # 7. 데이터베이스 작업 분석 (UPDATE, INSERT, MODIFY, DELETE) - 최우선순위
+
+        # 8-1. UPDATE 문 분석 (필드별 분석)
+        update_match = UPDATE_PATTERN.match(line_upper)
+        if update_match:
+            table = update_match.group("table").strip().upper()
+            assignments = update_match.group("assignments").strip()
+
+            # SET 절을 파싱하여 개별 필드 할당 분석
+            # 예: "changed_by = lv_user, status = 'P'" -> [("changed_by", "lv_user"), ("status", "'P'")]
+            updated_fields = []
+
+            # 콤마로 분리된 할당문들을 분석
+            assignment_parts = [part.strip() for part in assignments.split(",")]
+
+            for assignment in assignment_parts:
+                if "=" in assignment:
+                    field_part, value_part = assignment.split("=", 1)
+                    field_name = field_part.strip().upper()
+                    value_var = value_part.strip().lower()
+
+                    # 값에서 따옴표 제거 (리터럴 값이 아닌 변수인지 확인)
+                    if not (value_var.startswith("'") or value_var.startswith('"')):
+                        if value_var in tainted_vars:
+                            updated_fields.append(field_name)
+
+            # 오염된 필드가 발견된 경우
+            if updated_fields:
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_UPDATE_FIELD",
+                    "table": table,
+                    "fields": updated_fields,
+                    "operation": "UPDATE",
+                    "final_variable": None,  # 여러 필드가 있을 수 있으므로
+                    "path": trace_path,
+                    "tainted_variables": list(tainted_vars),
+                    "description": f"테이블 {table}의 {', '.join(updated_fields)} 필드에 사용자 정보 UPDATE",
+                }
+
+            # 기존 방식: 전체 SET 절에서 오염된 변수 확인 (백업)
+            for var in tainted_vars:
+                if var.upper() in assignments.upper():
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_UPDATE",
+                        "table": table,
+                        "operation": "UPDATE",
+                        "final_variable": var,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {table} UPDATE에서 사용자 정보 사용",
+                    }
+
+        # 8-2. INSERT 문 분석 (구조체-테이블 매핑 포함)
+        insert_match = INSERT_PATTERN.match(line_upper)
+        if insert_match:
+            table = insert_match.group("table").strip().upper()
+            source = insert_match.group("source")
+            values = insert_match.group("values")
+
+            # INSERT FROM 구문에서 소스 확인
+            if source:
+                source_var = source.strip().lower()
+
+                # 직접 변수가 오염된 경우
+                if source_var in tainted_vars:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_INSERT",
+                        "table": table,
+                        "operation": "INSERT",
+                        "final_variable": source_var,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {table} INSERT에서 사용자 정보 사용",
+                    }
+
+                # 구조체의 특정 필드가 오염된 경우 (예: ls_document에서 ls_document-created_by가 오염됨)
+                structure_fields = []
+                for tainted_var in tainted_vars:
+                    if tainted_var.startswith(source_var + "-"):
+                        # ls_document-created_by에서 created_by 추출
+                        field_name = tainted_var.split("-", 1)[1].upper()
+                        structure_fields.append(field_name)
+
+                # 구조체 자체가 오염되지 않았지만, 구조체의 필드가 오염된 경우도 확인
+                # 예: ls_document는 tainted_vars에 없지만 ls_document-created_by가 있는 경우
+                if not structure_fields:
+                    for tainted_var in tainted_vars:
+                        if "-" in tainted_var:
+                            var_structure = tainted_var.split("-")[0]
+                            if var_structure == source_var:
+                                field_name = tainted_var.split("-", 1)[1].upper()
+                                structure_fields.append(field_name)
+
+                if structure_fields:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_INSERT_FIELD",
+                        "table": table,
+                        "fields": structure_fields,
+                        "operation": "INSERT",
+                        "source_structure": source_var,
+                        "final_variable": source_var,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {table}의 {', '.join(structure_fields)} 필드에 사용자 정보 INSERT",
+                    }
+
+            # INSERT VALUES 구문에서 값 확인
+            elif values:
+                for var in tainted_vars:
+                    if var.upper() in values.upper():
+                        return {
+                            "status": "Found",
+                            "type": "DATABASE_INSERT",
+                            "table": table,
+                            "operation": "INSERT",
+                            "final_variable": var,
+                            "path": trace_path,
+                            "tainted_variables": list(tainted_vars),
+                            "description": f"테이블 {table} INSERT VALUES에서 사용자 정보 사용",
+                        }
+
+        # 8-3. MODIFY 문 분석 (구조체-테이블 매핑 포함)
+        modify_match = MODIFY_PATTERN.match(line_upper)
+        if modify_match:
+            table = modify_match.group("table").strip().upper()
+            source_var = modify_match.group("source").strip().lower()
+
+            # 직접 변수가 오염된 경우
+            if source_var in tainted_vars:
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_MODIFY",
+                    "table": table,
+                    "operation": "MODIFY",
+                    "final_variable": source_var,
+                    "path": trace_path,
+                    "tainted_variables": list(tainted_vars),
+                    "description": f"테이블 {table} MODIFY에서 사용자 정보 사용",
+                }
+
+            # 구조체의 특정 필드가 오염된 경우
+            structure_fields = []
+            for tainted_var in tainted_vars:
+                if tainted_var.startswith(source_var + "-"):
+                    # ls_document-created_by에서 created_by 추출
+                    field_name = tainted_var.split("-", 1)[1].upper()
+                    structure_fields.append(field_name)
+
+            if structure_fields:
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_MODIFY_FIELD",
+                    "table": table,
+                    "fields": structure_fields,
+                    "operation": "MODIFY",
+                    "source_structure": source_var,
+                    "final_variable": source_var,
+                    "path": trace_path,
+                    "tainted_variables": list(tainted_vars),
+                    "description": f"테이블 {table}의 {', '.join(structure_fields)} 필드에 사용자 정보 MODIFY",
+                }
+
+        # 8-4. DELETE 문 분석
+        delete_match = DELETE_PATTERN.match(line_upper)
+        if delete_match:
+            table = delete_match.group("table").strip().upper()
+            conditions = delete_match.group("conditions").strip()
+
+            # WHERE 조건에서 오염된 변수 사용 확인
+            for var in tainted_vars:
+                if var.upper() in conditions.upper():
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_DELETE",
+                        "table": table,
+                        "operation": "DELETE",
+                        "final_variable": var,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {table} DELETE WHERE 조건에서 사용자 정보 사용",
+                    }
+
+        # 9. CALL TRANSACTION 분석
+        call_trans_match = CALL_TRANSACTION_PATTERN.match(line_upper)
+        if call_trans_match:
+            tcode = call_trans_match.group("tcode").strip()
+            params = call_trans_match.group("params").strip()
+
+            # 파라미터에서 오염된 변수 사용 확인
+            for var in tainted_vars:
+                if var.upper() in params.upper():
+                    return {
+                        "status": "Found",
+                        "type": "CALL_TRANSACTION",
+                        "transaction": tcode,
+                        "final_variable": var,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"트랜잭션 {tcode} 호출에서 사용자 정보 사용",
+                    }
+
+        # 10. 감사 필드 할당 분석 (ERDAT, AENAM 등 중요 필드들) - 낮은 우선순위
+        # 바로 return하지 않고 저장만 함 (더 중요한 DB 작업이 나중에 발견될 수 있음)
+        audit_match = AUDIT_FIELD_PATTERN.match(line_upper)
+        if audit_match:
+            structure = audit_match.group("structure").strip().lower()
+            field = audit_match.group("field").strip().upper()
+            source_var = audit_match.group("source").strip().lower()
+
+            if source_var in tainted_vars:
+                # 감사 필드는 임시로 저장만 하고 계속 스캔
+                temp_audit_result = {
+                    "status": "Found",
+                    "type": "AUDIT_FIELD",
+                    "structure": structure,
+                    "field": field,
+                    "final_variable": source_var,
+                    "path": trace_path.copy(),
+                    "tainted_variables": list(tainted_vars),
+                    "description": f"감사 필드 {structure}-{field}에 사용자 정보 할당",
+                }
+
+        # 11. 단독 RFC 파라미터 라인 처리 (EXPORTING, IMPORTING 등)
+        if any(
+            keyword in line_upper
+            for keyword in ["EXPORTING", "IMPORTING", "CHANGING", "TABLES"]
+        ):
+            # 현재 RFC 컨텍스트에서 파라미터 라인인지 확인
+            # 이전 몇 라인에서 CALL FUNCTION을 찾기
+            current_rfc_name = None
+            for prev_offset in range(1, min(10, line_num + 1)):
+                prev_line_idx = line_num - prev_offset
+                if prev_line_idx >= 0:
+                    prev_line = snippet[prev_line_idx].strip().upper()
+                    prev_rfc_match = RFC_CALL_PATTERN.search(prev_line)
+                    if prev_rfc_match:
+                        current_rfc_name = prev_rfc_match.group("rfc_name")
+                        break
+                    # 다른 CALL FUNCTION이나 완전히 다른 문장이 나오면 중단
+                    if "CALL FUNCTION" in prev_line or (
+                        prev_line.strip().endswith(".")
+                        and "EXCEPTIONS" not in prev_line
+                        and "DESTINATION" not in prev_line
+                    ):
+                        break
+
+            # RFC 컨텍스트에서 파라미터 확인
+            if current_rfc_name:
+                param_matches = RFC_PARAM_PATTERN.finditer(line_upper)
+                for p_match in param_matches:
+                    param_name = p_match.group("param_name").strip()
+                    param_value = p_match.group("param_value").strip().lower()
+
+                    if param_value in tainted_vars:
+                        return {
+                            "status": "Found",
+                            "type": "RFC",
+                            "name": current_rfc_name,
+                            "parameter": param_name,
+                            "final_variable": param_value,
+                            "path": trace_path,
+                            "tainted_variables": list(tainted_vars),
+                        }
+
+    # 전체 스캔 완료 후 - 데이터베이스 작업이 없으면 감사 필드 결과 반환
+    if temp_audit_result:
+        result = temp_audit_result
+        temp_audit_result = None  # 초기화
+        return result
+
+    return {
+        "status": "Not Found in Snippet",
+        "tainted_variables": list(tainted_vars),
+        "path": trace_path,
+    }
