@@ -94,10 +94,16 @@ def analyze_and_export_to_csv():
             status = analysis_result.get("status", "Unknown")
             if status == "Found":
                 result_type = analysis_result.get("type", "")
-                if result_type == "DATABASE_INSERT_FIELD":
+                if result_type in [
+                    "DATABASE_INSERT_FIELD",
+                    "DATABASE_UPDATE_FIELD",
+                    "DATABASE_MODIFY_FIELD",
+                    "DATABASE_SELECT_WHERE",
+                ]:
                     table = analysis_result.get("table", "")
                     fields = ", ".join(analysis_result.get("fields", []))
-                    print(f"   ✅ 데이터베이스: {table}.{fields}")
+                    operation = analysis_result.get("operation", "")
+                    print(f"   ✅ 데이터베이스: {table}.{fields} ({operation})")
                 elif result_type == "RFC":
                     rfc_name = analysis_result.get("name", "")
                     print(f"   ✅ RFC: {rfc_name}")
@@ -163,6 +169,7 @@ def convert_analysis_to_csv_row(id_num, file_path, line_number, analysis_result)
         "DATABASE_INSERT_FIELD",
         "DATABASE_UPDATE_FIELD",
         "DATABASE_MODIFY_FIELD",
+        "DATABASE_SELECT_WHERE",
     ]:
         # 데이터베이스 테이블/필드 정보
         row["Final_Table"] = analysis_result.get("table", "")

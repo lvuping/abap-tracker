@@ -52,6 +52,7 @@ def main():
                         "DATABASE_UPDATE_FIELD",
                         "DATABASE_INSERT_FIELD",
                         "DATABASE_MODIFY_FIELD",
+                        "DATABASE_SELECT_WHERE",
                     ]:
                         print(f"  🎯 데이터베이스 테이블/필드 감지!")
                         print(f"      📊 테이블: {result['table']}")

@@ -172,3 +172,15 @@ BDC_FIELD_PATTERN = re.compile(
     r"^\s*(?P<bdc_table>[\w\d_]+)\-(?:FNAM|FVAL)\s*=\s*(?P<value>[\w\d\-\>\[\]'\"]+)\s*\.",
     re.IGNORECASE,
 )
+
+# SELECT WHERE 절 패턴 (테이블과 필드 매핑)
+SELECT_WHERE_PATTERN = re.compile(
+    r"^\s*SELECT.*?FROM\s+(?P<table>[\w\d_]+).*?WHERE.*?(?P<field>[\w\d_]+)\s*=\s*@?(?P<variable>[\w\d\-\>\[\]]+)",
+    re.IGNORECASE | re.DOTALL,
+)
+
+# 단독 WHERE 조건 패턴 (SELECT와 분리된 WHERE 절)
+STANDALONE_WHERE_PATTERN = re.compile(
+    r"^\s*(?:AND\s+|OR\s+)?(?P<field>[\w\d_]+)\s*=\s*@?(?P<variable>[\w\d\-\>\[\]]+)",
+    re.IGNORECASE,
+)

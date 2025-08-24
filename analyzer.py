@@ -482,7 +482,59 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                     "description": f"감사 필드 {structure}-{field}에 사용자 정보 할당",
                 }
 
-        # 11. 단독 RFC 파라미터 라인 처리 (EXPORTING, IMPORTING 등)
+        # 11. SELECT WHERE 절 분석 (데이터베이스 조회 조건)
+        select_where_match = SELECT_WHERE_PATTERN.search(line_upper)
+        if select_where_match:
+            table = select_where_match.group("table").strip().upper()
+            field = select_where_match.group("field").strip().upper()
+            variable = select_where_match.group("variable").strip().lower()
+            if variable in tainted_vars:
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_SELECT_WHERE",
+                    "table": table,
+                    "fields": [field],
+                    "operation": "SELECT",
+                    "final_variable": variable,
+                    "path": trace_path,
+                    "tainted_variables": list(tainted_vars),
+                    "description": f"테이블 {table}의 {field} 필드를 WHERE 조건으로 사용자 정보 조회",
+                }
+
+        # 12. 단독 WHERE 조건 분석 (여러 줄 SELECT문에서)
+        standalone_where_match = STANDALONE_WHERE_PATTERN.match(line_upper)
+        if standalone_where_match:
+            field = standalone_where_match.group("field").strip().upper()
+            variable = standalone_where_match.group("variable").strip().lower()
+            if variable in tainted_vars:
+                # 이전 라인들에서 FROM 절을 찾아서 테이블명 추출
+                current_table = None
+                for prev_offset in range(1, min(15, line_num + 1)):
+                    prev_line_idx = line_num - prev_offset
+                    if prev_line_idx >= 0:
+                        prev_line = snippet[prev_line_idx].strip().upper()
+                        from_match = re.search(r"FROM\s+(\w+)", prev_line)
+                        if from_match:
+                            current_table = from_match.group(1).strip().upper()
+                            break
+                        # SELECT 문의 시작을 발견하면 중단
+                        if "SELECT" in prev_line and "FROM" in prev_line:
+                            break
+
+                if current_table:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_SELECT_WHERE",
+                        "table": current_table,
+                        "fields": [field],
+                        "operation": "SELECT",
+                        "final_variable": variable,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {current_table}의 {field} 필드를 WHERE 조건으로 사용자 정보 조회",
+                    }
+
+        # 13. 단독 RFC 파라미터 라인 처리 (EXPORTING, IMPORTING 등)
         if any(
             keyword in line_upper
             for keyword in ["EXPORTING", "IMPORTING", "CHANGING", "TABLES"]
