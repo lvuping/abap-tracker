@@ -374,53 +374,43 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
             source = insert_match.group("source")
             values = insert_match.group("values")
 
-            # INSERT FROM 구문에서 소스 확인
+            # INSERT ... FROM wa / INSERT ... FROM TABLE itab
             if source:
                 source_var = source.strip().lower()
+                base_structure_name = source_var.replace('[]', '') # lt_data[] -> lt_data
 
-                # 직접 변수가 오염된 경우
-                if source_var in tainted_vars:
+                # Check if the entire structure/table is tainted
+                if base_structure_name in tainted_vars:
                     return {
                         "status": "Found",
                         "type": "DATABASE_INSERT",
                         "table": table,
                         "operation": "INSERT",
-                        "final_variable": source_var,
+                        "final_variable": base_structure_name,
                         "path": trace_path,
                         "tainted_variables": list(tainted_vars),
-                        "description": f"테이블 {table} INSERT에서 사용자 정보 사용",
+                        "description": f"테이블 {table} INSERT에서 전체 구조/테이블 '{base_structure_name}' 사용",
                     }
 
-                # 구조체의 특정 필드가 오염된 경우 (예: ls_document에서 ls_document-created_by가 오염됨)
+                # Check if any field of the structure is tainted
                 structure_fields = []
                 for tainted_var in tainted_vars:
-                    if tainted_var.startswith(source_var + "-"):
-                        # ls_document-created_by에서 created_by 추출
+                    if tainted_var.startswith(base_structure_name + "-"):
                         field_name = tainted_var.split("-", 1)[1].upper()
                         structure_fields.append(field_name)
-
-                # 구조체 자체가 오염되지 않았지만, 구조체의 필드가 오염된 경우도 확인
-                # 예: ls_document는 tainted_vars에 없지만 ls_document-created_by가 있는 경우
-                if not structure_fields:
-                    for tainted_var in tainted_vars:
-                        if "-" in tainted_var:
-                            var_structure = tainted_var.split("-")[0]
-                            if var_structure == source_var:
-                                field_name = tainted_var.split("-", 1)[1].upper()
-                                structure_fields.append(field_name)
 
                 if structure_fields:
                     return {
                         "status": "Found",
                         "type": "DATABASE_INSERT_FIELD",
                         "table": table,
-                        "fields": structure_fields,
+                        "fields": list(set(structure_fields)),
                         "operation": "INSERT",
-                        "source_structure": source_var,
-                        "final_variable": source_var,
+                        "source_structure": base_structure_name,
+                        "final_variable": base_structure_name,
                         "path": trace_path,
                         "tainted_variables": list(tainted_vars),
-                        "description": f"테이블 {table}의 {', '.join(structure_fields)} 필드에 사용자 정보 INSERT",
+                        "description": f"테이블 {table}의 {', '.join(list(set(structure_fields)))} 필드에 사용자 정보 INSERT",
                     }
 
             # INSERT VALUES 구문에서 값 확인
@@ -442,42 +432,45 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
         modify_match = MODIFY_PATTERN.match(line_upper)
         if modify_match:
             table = modify_match.group("table").strip().upper()
-            source_var = modify_match.group("source").strip().lower()
+            source = modify_match.group("source")
 
-            # 직접 변수가 오염된 경우
-            if source_var in tainted_vars:
-                return {
-                    "status": "Found",
-                    "type": "DATABASE_MODIFY",
-                    "table": table,
-                    "operation": "MODIFY",
-                    "final_variable": source_var,
-                    "path": trace_path,
-                    "tainted_variables": list(tainted_vars),
-                    "description": f"테이블 {table} MODIFY에서 사용자 정보 사용",
-                }
+            if source:
+                source_var = source.strip().lower()
+                base_structure_name = source_var.replace('[]', '')
 
-            # 구조체의 특정 필드가 오염된 경우
-            structure_fields = []
-            for tainted_var in tainted_vars:
-                if tainted_var.startswith(source_var + "-"):
-                    # ls_document-created_by에서 created_by 추출
-                    field_name = tainted_var.split("-", 1)[1].upper()
-                    structure_fields.append(field_name)
+                # Check if the entire structure/table is tainted
+                if base_structure_name in tainted_vars:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_MODIFY",
+                        "table": table,
+                        "operation": "MODIFY",
+                        "final_variable": base_structure_name,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {table} MODIFY에서 전체 구조/테이블 '{base_structure_name}' 사용",
+                    }
 
-            if structure_fields:
-                return {
-                    "status": "Found",
-                    "type": "DATABASE_MODIFY_FIELD",
-                    "table": table,
-                    "fields": structure_fields,
-                    "operation": "MODIFY",
-                    "source_structure": source_var,
-                    "final_variable": source_var,
-                    "path": trace_path,
-                    "tainted_variables": list(tainted_vars),
-                    "description": f"테이블 {table}의 {', '.join(structure_fields)} 필드에 사용자 정보 MODIFY",
-                }
+                # Check if any field of the structure is tainted
+                structure_fields = []
+                for tainted_var in tainted_vars:
+                    if tainted_var.startswith(base_structure_name + "-"):
+                        field_name = tainted_var.split("-", 1)[1].upper()
+                        structure_fields.append(field_name)
+
+                if structure_fields:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_MODIFY_FIELD",
+                        "table": table,
+                        "fields": list(set(structure_fields)),
+                        "operation": "MODIFY",
+                        "source_structure": base_structure_name,
+                        "final_variable": base_structure_name,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {table}의 {', '.join(list(set(structure_fields)))} 필드에 사용자 정보 MODIFY",
+                    }
         
         # 새로운 패턴: MODIFY table.
         modify_table_match = MODIFY_TABLE_PATTERN.match(line_upper)

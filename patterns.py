@@ -133,13 +133,13 @@ UPDATE_PATTERN = re.compile(
 
 # INSERT 문 패턴
 INSERT_PATTERN = re.compile(
-    r"^\s*INSERT\s+(?:INTO\s+)?(?P<table>[\w\d_]+)\s+(?:VALUES\s+(?P<values>.*?)|FROM\s+(?P<source>[\w\d\-\>\[\]]+))\s*\.",
+    r"^\s*INSERT\s+(?:INTO\s+)?(?P<table>[\w\d_]+)\s+(?:FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]\(\)]+)|VALUES\s+(?P<values>.*?))\s*\.",
     re.IGNORECASE | re.DOTALL,
 )
 
 # MODIFY 문 패턴
 MODIFY_PATTERN = re.compile(
-    r"^\s*MODIFY\s+(?P<table>[\w\d_]+)\s+FROM\s+(?P<source>[\w\d\-\>\[\]]+)(?:\s+.*?)?\s*\.",
+    r"^\s*MODIFY\s+(?P<table>[\w\d_]+)\s+FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]\(\)]+)(?:\s+.*?)?\s*\.",
     re.IGNORECASE,
 )
 
