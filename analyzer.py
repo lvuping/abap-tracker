@@ -1,5 +1,6 @@
 import re
 from patterns import *  # 정규식 패턴들을 가져옴
+from extended_patterns import * # 확장된 정규식 패턴들을 가져옴
 
 # 전역 변수 - 감사 필드 임시 결과 저장
 temp_audit_result = None
@@ -58,6 +59,53 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                 tainted_vars.add(target_var)
                 trace_path.append(
                     f"Line {line_num+1}: Assignment '{source_var}' -> '{target_var}'"
+                )
+        
+        # 새로운 패턴: 연속적인 MOVE
+        chain_move_match = CHAIN_MOVE_PATTERN.match(line_upper)
+        if chain_move_match:
+            moves_str = chain_move_match.group("moves")
+            move_pairs = MOVE_PAIR_PATTERN.finditer(moves_str)
+            for move in move_pairs:
+                source_var = move.group("source").strip().lower()
+                target_var = move.group("target").strip().lower()
+                if source_var in tainted_vars and target_var not in tainted_vars:
+                    tainted_vars.add(target_var)
+                    trace_path.append(
+                        f"Line {line_num+1}: Chained MOVE '{source_var}' -> '{target_var}'"
+                    )
+
+        # 새로운 패턴: DATA 선언 (TYPE)
+        data_type_match = DATA_TYPE_PATTERN.match(line_upper)
+        if data_type_match:
+            source_var = data_type_match.group("source").strip().lower()
+            target_var = data_type_match.group("target").strip().lower()
+            if source_var in tainted_vars and target_var not in tainted_vars:
+                tainted_vars.add(target_var)
+                trace_path.append(
+                    f"Line {line_num+1}: DATA (TYPE) declaration '{source_var}' -> '{target_var}'"
+                )
+
+        # 새로운 패턴: DATA 선언 (LIKE)
+        data_like_match = DATA_LIKE_PATTERN.match(line_upper)
+        if data_like_match:
+            source_var = data_like_match.group("source").strip().lower()
+            target_var = data_like_match.group("target").strip().lower()
+            if source_var in tainted_vars and target_var not in tainted_vars:
+                tainted_vars.add(target_var)
+                trace_path.append(
+                    f"Line {line_num+1}: DATA (LIKE) declaration '{source_var}' -> '{target_var}'"
+                )
+
+        # 새로운 패턴: SELECT-OPTIONS
+        select_options_match = SELECT_OPTIONS_PATTERN.match(line_upper)
+        if select_options_match:
+            source_var = select_options_match.group("source").strip().lower()
+            target_var = select_options_match.group("target").strip().lower()
+            if source_var in tainted_vars and target_var not in tainted_vars:
+                tainted_vars.add(target_var)
+                trace_path.append(
+                    f"Line {line_num+1}: SELECT-OPTIONS declaration '{source_var}' -> '{target_var}'"
                 )
 
         # 1-1. MOVE-CORRESPONDING 분석
@@ -186,6 +234,15 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
             if variable in tainted_vars:
                 trace_path.append(
                     f"Line {line_num+1}: WHERE condition uses tainted variable: '{variable}'"
+                )
+
+        # 새로운 패턴: READ TABLE WITH KEY
+        read_table_match = READ_TABLE_WITH_KEY_PATTERN.search(line_upper)
+        if read_table_match:
+            source_var = read_table_match.group("source").strip().lower()
+            if source_var in tainted_vars:
+                trace_path.append(
+                    f"Line {line_num+1}: READ TABLE WITH KEY uses tainted variable: '{source_var}'"
                 )
 
         # 5. APPEND 등 내부 테이블 조작
@@ -420,6 +477,23 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                     "path": trace_path,
                     "tainted_variables": list(tainted_vars),
                     "description": f"테이블 {table}의 {', '.join(structure_fields)} 필드에 사용자 정보 MODIFY",
+                }
+        
+        # 새로운 패턴: MODIFY table.
+        modify_table_match = MODIFY_TABLE_PATTERN.match(line_upper)
+        if modify_table_match:
+            table_name = modify_table_match.group("table").strip().lower()
+            # 테이블의 작업 영역(header line)이 오염되었는지 확인
+            if table_name in tainted_vars:
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_MODIFY",
+                    "table": table_name.upper(),
+                    "operation": "MODIFY",
+                    "final_variable": table_name,
+                    "path": trace_path,
+                    "tainted_variables": list(tainted_vars),
+                    "description": f"테이블 {table_name.upper()} MODIFY에서 사용자 정보 사용 (work area)",
                 }
 
         # 8-4. DELETE 문 분석
