@@ -12,6 +12,12 @@ ASSIGN_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# a = b = c. 연속 할당 패턴
+CHAIN_ASSIGN_PATTERN = re.compile(
+    r"^\s*(?P<targets>(?:[\w\d\-\>\[\]]+\s*=\s*)+)(?P<source>[\w\d\-\>\[\]]+)\s*\.",
+    re.IGNORECASE,
+)
+
 # CALL FUNCTION 'Z_RFC_NAME' ...
 RFC_CALL_PATTERN = re.compile(
     r"^\s*CALL\s+FUNCTION\s+'(?P<rfc_name>[\w\d_]+)'\s*(?P<params>.*)",
