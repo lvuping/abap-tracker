@@ -13,6 +13,60 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
     global temp_audit_result
     temp_audit_result = None  # 함수 시작 시 초기화
 
+    # --- 사전 문맥 분석 로직 (Backward Scan) ---
+    # sy-uname 라인 이전에 DB 변경 구문이 있는지 먼저 확인
+    context_search_range = range(max(0, start_line_in_snippet - 15), start_line_in_snippet)
+    for i in reversed(context_search_range):
+        line = snippet[i].strip().upper()
+        
+        # UPDATE 문 확인
+        update_match = UPDATE_SET_PATTERN.match(line) or UPDATE_FROM_PATTERN.match(line)
+        if update_match:
+            table = update_match.group("table").strip().upper()
+            if table.startswith(('Z', 'Y')):
+                # UPDATE 문이 sy-uname 라인보다 먼저 나타났으므로, 이 UPDATE를 사용처로 간주
+                # 이 경우, 어떤 필드에 들어가는지는 특정하기 어려우므로, 테이블 정보만 기록
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_UPDATE_PREDICTIVE",
+                    "table": table,
+                    "operation": "UPDATE",
+                    "description": f"sy-uname 라인 직전에 테이블 {table}에 대한 UPDATE 구문 발견",
+                    "path": [f"Line {i+1}: Preceding UPDATE statement found."],
+                    "tainted_variables": ["sy-uname"],
+                }
+
+        # MODIFY 문 확인
+        modify_match = MODIFY_PATTERN.match(line) or MODIFY_TABLE_PATTERN.match(line)
+        if modify_match:
+            table = modify_match.group("table").strip().upper()
+            if table.startswith(('Z', 'Y')):
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_MODIFY_PREDICTIVE",
+                    "table": table,
+                    "operation": "MODIFY",
+                    "description": f"sy-uname 라인 직전에 테이블 {table}에 대한 MODIFY 구문 발견",
+                    "path": [f"Line {i+1}: Preceding MODIFY statement found."],
+                    "tainted_variables": ["sy-uname"],
+                }
+
+        # DELETE 문 확인
+        delete_match = DELETE_PATTERN.match(line)
+        if delete_match:
+            table = delete_match.group("table").strip().upper()
+            if table.startswith(('Z', 'Y')):
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_DELETE_PREDICTIVE",
+                    "table": table,
+                    "operation": "DELETE",
+                    "description": f"sy-uname 라인 직전에 테이블 {table}에 대한 DELETE 구문 발견",
+                    "path": [f"Line {i+1}: Preceding DELETE statement found."],
+                    "tainted_variables": ["sy-uname"],
+                }
+
+    # --- 일반 순방향 분석 로직 ---
     tainted_vars = {"sy-uname"}  # 오염된 변수들을 저장할 집합(set), sy-uname으로 시작
     trace_path = []  # 추적 경로를 저장할 리스트
     form_params = {}  # FORM 파라미터 매핑을 저장
