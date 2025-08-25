@@ -66,6 +66,20 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                     "tainted_variables": ["sy-uname"],
                 }
 
+        # RFC 호출 확인
+        rfc_match = RFC_CALL_PATTERN.search(line)
+        if rfc_match:
+            rfc_name = rfc_match.group("rfc_name")
+            return {
+                "status": "Found",
+                "type": "RFC_PREDICTIVE",
+                "name": rfc_name,
+                "operation": "CALL FUNCTION",
+                "description": f"sy-uname 라인 직전에 RFC {rfc_name} 호출 발견",
+                "path": [f"Line {i+1}: Preceding RFC call found."],
+                "tainted_variables": ["sy-uname"],
+            }
+
     # --- 일반 순방향 분석 로직 ---
     tainted_vars = {"sy-uname"}  # 오염된 변수들을 저장할 집합(set), sy-uname으로 시작
     trace_path = []  # 추적 경로를 저장할 리스트
