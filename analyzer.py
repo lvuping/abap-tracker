@@ -338,11 +338,11 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
 
         # 7. 데이터베이스 작업 분석 (UPDATE, INSERT, MODIFY, DELETE) - 최우선순위
 
-        # 8-1. UPDATE 문 분석 (필드별 분석)
-        update_match = UPDATE_PATTERN.match(line_upper)
-        if update_match:
-            table = update_match.group("table").strip().upper()
-            assignments = update_match.group("assignments").strip()
+        # 8-1. UPDATE...SET... 문 분석 (필드별 분석)
+        update_set_match = UPDATE_SET_PATTERN.match(line_upper)
+        if update_set_match:
+            table = update_set_match.group("table").strip().upper()
+            assignments = update_set_match.group("assignments").strip()
 
             # SET 절을 파싱하여 개별 필드 할당 분석
             # 예: "changed_by = lv_user, status = 'P'" -> [("changed_by", "lv_user"), ("status", "'P'")]
@@ -388,6 +388,50 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "path": trace_path,
                         "tainted_variables": list(tainted_vars),
                         "description": f"테이블 {table} UPDATE에서 사용자 정보 사용",
+                    }
+        
+        # 8-1b. UPDATE ... FROM ... 문 분석
+        update_from_match = UPDATE_FROM_PATTERN.match(line_upper)
+        if update_from_match:
+            table = update_from_match.group("table").strip().upper()
+            source = update_from_match.group("source")
+
+            if source:
+                source_var = source.strip().lower()
+                base_structure_name = source_var.replace('[]', '')
+
+                # Check if the entire structure/table is tainted
+                if base_structure_name in tainted_vars:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_UPDATE",
+                        "table": table,
+                        "operation": "UPDATE",
+                        "final_variable": base_structure_name,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {table} UPDATE FROM에서 전체 구조/테이블 '{base_structure_name}' 사용",
+                    }
+
+                # Check if any field of the structure is tainted
+                structure_fields = []
+                for tainted_var in tainted_vars:
+                    if tainted_var.startswith(base_structure_name + "-"):
+                        field_name = tainted_var.split("-", 1)[1].upper()
+                        structure_fields.append(field_name)
+
+                if structure_fields:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_UPDATE_FIELD",
+                        "table": table,
+                        "fields": list(set(structure_fields)),
+                        "operation": "UPDATE",
+                        "source_structure": base_structure_name,
+                        "final_variable": base_structure_name,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {table}의 {', '.join(list(set(structure_fields)))} 필드에 사용자 정보 UPDATE",
                     }
 
         # 8-2. INSERT 문 분석 (구조체-테이블 매핑 포함)

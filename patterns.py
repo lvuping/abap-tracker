@@ -126,9 +126,15 @@ SELECT_INTO_PATTERN = re.compile(
 
 # 데이터베이스 작업 패턴들 (중요한 Sink 포인트들)
 # UPDATE 문 패턴
-UPDATE_PATTERN = re.compile(
+UPDATE_SET_PATTERN = re.compile(
     r"^\s*UPDATE\s+(?P<table>[\w\d_]+)\s+SET\s+(?P<assignments>.*?)\s*(?:WHERE\s+.*?)?\s*\.",
     re.IGNORECASE | re.DOTALL,
+)
+
+# UPDATE ... FROM ... 구문 패턴
+UPDATE_FROM_PATTERN = re.compile(
+    r"^\s*UPDATE\s+(?P<table>[\w\d_]+)\s+FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]]+)\s*\.",
+    re.IGNORECASE,
 )
 
 # INSERT 문 패턴
