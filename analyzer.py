@@ -355,19 +355,17 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                 )
 
         # 6. 종착점 (Sink) 분석 - RFC 호출
-        # 예: CALL FUNCTION 'Z_RFC_NAME' EXPORTING iv_user = lv_uname.
         rfc_match = RFC_CALL_PATTERN.search(line_upper)
         if rfc_match:
             rfc_name = rfc_match.group("rfc_name")
             params_str = rfc_match.group("params")
 
-            # 현재 라인에서 RFC 파라미터 확인
             param_matches = RFC_PARAM_PATTERN.finditer(params_str)
             for p_match in param_matches:
                 param_name = p_match.group("param_name").strip()
                 param_value = p_match.group("param_value").strip().lower()
 
-                # 파라미터 값으로 오염된 변수가 사용되었다면, 종착점을 찾은 것!
+                # 1. 파라미터 변수 자체가 오염된 경우
                 if param_value in tainted_vars:
                     return {
                         "status": "Found",
@@ -378,22 +376,29 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "path": trace_path,
                         "tainted_variables": list(tainted_vars),
                     }
+                
+                # 2. 파라미터 구조체의 필드가 오염된 경우
+                base_structure_name = param_value.replace('[]', '')
+                for tainted_var in tainted_vars:
+                    if tainted_var.startswith(base_structure_name + "-"):
+                        return {
+                            "status": "Found",
+                            "type": "RFC",
+                            "name": rfc_name,
+                            "parameter": param_name,
+                            "final_variable": param_value,
+                            "path": trace_path,
+                            "tainted_variables": list(tainted_vars),
+                            "description": f"RFC {rfc_name} 호출에 사용자 정보가 포함된 구조체 {param_value} 전달",
+                        }
 
-            # 현재 라인에서 파라미터를 찾지 못한 경우, 다음 몇 줄을 확인
-            # (여러 줄에 걸친 RFC 호출 처리)
+            # 여러 줄에 걸친 RFC 호출 처리 (다음 몇 줄을 확인)
             for next_offset in range(1, min(10, len(snippet) - line_num)):
                 if line_num + next_offset < len(snippet):
                     next_line = snippet[line_num + next_offset].strip().upper()
-
-                    # 다른 CALL FUNCTION이 나오거나 프로시저가 끝나면 중단
-                    if (
-                        "CALL FUNCTION" in next_line
-                        or next_line.strip().endswith(".")
-                        and "EXCEPTIONS" not in next_line
-                    ):
+                    if ("CALL FUNCTION" in next_line or next_line.strip().endswith(".")) and "EXCEPTIONS" not in next_line:
                         break
 
-                    # 다음 라인에서 RFC 파라미터 찾기
                     next_param_matches = RFC_PARAM_PATTERN.finditer(next_line)
                     for p_match in next_param_matches:
                         param_name = p_match.group("param_name").strip()
@@ -409,6 +414,20 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                                 "path": trace_path,
                                 "tainted_variables": list(tainted_vars),
                             }
+                        
+                        base_structure_name = param_value.replace('[]', '')
+                        for tainted_var in tainted_vars:
+                            if tainted_var.startswith(base_structure_name + "-"):
+                                return {
+                                    "status": "Found",
+                                    "type": "RFC",
+                                    "name": rfc_name,
+                                    "parameter": param_name,
+                                    "final_variable": param_value,
+                                    "path": trace_path,
+                                    "tainted_variables": list(tainted_vars),
+                                    "description": f"RFC {rfc_name} 호출에 사용자 정보가 포함된 구조체 {param_value} 전달",
+                                }
 
         # 7. 데이터베이스 작업 분석 (UPDATE, INSERT, MODIFY, DELETE) - Z/Y 테이블만 해당
 
