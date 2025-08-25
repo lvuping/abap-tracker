@@ -127,25 +127,25 @@ SELECT_INTO_PATTERN = re.compile(
 # 데이터베이스 작업 패턴들 (중요한 Sink 포인트들)
 # UPDATE 문 패턴
 UPDATE_SET_PATTERN = re.compile(
-    r"^\s*UPDATE\s+(?P<table>[\w\d_]+)\s+SET\s+(?P<assignments>.*?)\s*(?:WHERE\s+.*?)?\s*\.",
+    r"^\s*UPDATE:?\s+(?P<table>[\w\d_]+|\([\w\d_]+\))\s+SET\s+(?P<assignments>.*?)\s*(?:WHERE\s+.*?)?\s*\.",
     re.IGNORECASE | re.DOTALL,
 )
 
 # UPDATE ... FROM ... 구문 패턴
 UPDATE_FROM_PATTERN = re.compile(
-    r"^\s*UPDATE\s+(?P<table>[\w\d_]+)\s+FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]]+)\s*\.",
+    r"^\s*UPDATE:?\s+(?P<table>[\w\d_]+|\([\w\d_]+\))\s+FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]]+)\s*\.",
     re.IGNORECASE,
 )
 
 # INSERT 문 패턴
 INSERT_PATTERN = re.compile(
-    r"^\s*INSERT\s+(?:INTO\s+)?(?P<table>[\w\d_]+)\s+(?:FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]\(\)]+)|VALUES\s+(?P<values>.*?))\s*\.",
+    r"^\s*INSERT\s+(?:INTO\s+)?(?P<table>[\w\d_]+|\([\w\d_]+\))\s+(?:FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]\(\)]+)|VALUES\s+(?P<values>.*?))\s*\.",
     re.IGNORECASE | re.DOTALL,
 )
 
 # MODIFY 문 패턴
 MODIFY_PATTERN = re.compile(
-    r"^\s*MODIFY\s+(?P<table>[\w\d_]+)\s+FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]\(\)]+)(?:\s+.*?)?\s*\.",
+    r"^\s*MODIFY:?\s+(?P<table>[\w\d_]+|\([\w\d_]+\))\s+FROM\s+(?:TABLE\s+)?(?P<source>[\w\d\-\>\[\]\(\)]+)(?:\s+.*?)?\s*\.",
     re.IGNORECASE,
 )
 
