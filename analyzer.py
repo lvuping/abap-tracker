@@ -16,6 +16,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
     tainted_vars = {"sy-uname"}  # 오염된 변수들을 저장할 집합(set), sy-uname으로 시작
     trace_path = []  # 추적 경로를 저장할 리스트
     form_params = {}  # FORM 파라미터 매핑을 저장
+    in_move_chain = False # 연속적인 MOVE 구문 추적 플래그
 
     # 전체 스니펫에서 FORM 정의를 먼저 찾아서 파라미터 매핑을 구성
     for line_num, line in enumerate(snippet):
@@ -47,6 +48,28 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
         snippet[start_line_in_snippet:], start=start_line_in_snippet
     ):
         line_upper = line.strip().upper()  # 대소문자 무시, 공백 제거
+        original_line_for_chain_check = line.strip()
+
+        # 연속적인 MOVE 구문(multi-line) 처리
+        if not in_move_chain and line_upper.startswith("MOVE:"):
+            in_move_chain = True
+
+        if in_move_chain:
+            line_to_parse = re.sub(r"^\s*MOVE\s*:", "", line_upper, count=1)
+            pairs = MOVE_PAIR_PATTERN.finditer(line_to_parse)
+            for match in pairs:
+                source_var = match.group("source").strip().lower()
+                target_var = match.group("target").strip().lower()
+                if source_var in tainted_vars and target_var not in tainted_vars:
+                    tainted_vars.add(target_var)
+                    trace_path.append(
+                        f"Line {line_num+1}: Chained MOVE '{source_var}' -> '{target_var}'"
+                    )
+            
+            if original_line_for_chain_check.endswith("."):
+                in_move_chain = False
+            
+            continue
 
         # 1. 기본 변수 전파 (Propagation) 분석
         # 예: MOVE lv_source TO lv_target. 또는 lv_target = lv_source.
