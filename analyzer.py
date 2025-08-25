@@ -19,6 +19,9 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
     
     # 1. 문장의 시작점 찾기
     for i in range(start_line_in_snippet, max(-1, start_line_in_snippet - 15), -1):
+        # snippet 인덱스가 유효한지 확인
+        if i < 0 or i >= len(snippet):
+            continue
         line_content = snippet[i].strip().upper()
         if any(line_content.startswith(k) for k in ['UPDATE', 'MODIFY', 'DELETE', 'CALL FUNCTION']):
             statement_start_line_idx = i
@@ -26,17 +29,18 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
 
     # 2. 문장 재구성 및 분석
     if statement_start_line_idx != -1:
-        # 문장 시작부터 sy-uname 라인까지 포함하여 하나의 문자열로 합침
         full_statement_lines = snippet[statement_start_line_idx : start_line_in_snippet + 1]
         full_statement_str = " ".join(line.strip() for line in full_statement_lines)
 
-        # 2-1. UPDATE 구문 분석
-        update_match = UPDATE_SET_PATTERN.match(full_statement_str)
+        # 2-1. UPDATE 구문 분석 (마침표가 없는 유연한 패턴 사용)
+        lenient_pattern_str = UPDATE_SET_PATTERN.pattern.rstrip('\\.')
+        lenient_pattern = re.compile(lenient_pattern_str, re.IGNORECASE | re.DOTALL)
+        update_match = lenient_pattern.match(full_statement_str)
+        
         if update_match:
             table = update_match.group("table").strip().upper()
             if table.startswith(('Z', 'Y')):
                 assignments = update_match.group("assignments")
-                # 할당 부분에서 sy-uname을 사용하는 필드 찾기
                 field_match = re.search(r"([\w\d_]+)\s*=\s*sy-uname", assignments, re.IGNORECASE)
                 if field_match:
                     field = field_match.group(1).upper()
@@ -48,14 +52,13 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "operation": "UPDATE",
                         "description": f"Multi-line UPDATE on table {table} for field {field}",
                         "path": [f"Line {statement_start_line_idx + 1}: Multi-line UPDATE statement started."],
-                        "tainted_variables": ["sy-uname"],
+                        "tainted_variables": ["sy-uname"]
                     }
 
         # 2-2. RFC 호출 분석
         rfc_match = RFC_CALL_PATTERN.search(full_statement_str)
         if rfc_match:
             rfc_name = rfc_match.group("rfc_name")
-            # 파라미터 부분에서 sy-uname을 사용하는지 확인
             params_str = rfc_match.group("params")
             if "SY-UNAME" in params_str.upper():
                 return {
@@ -65,7 +68,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                     "operation": "CALL FUNCTION",
                     "description": f"sy-uname 라인 직전에 RFC {rfc_name} 호출 발견",
                     "path": [f"Line {statement_start_line_idx + 1}: Preceding RFC call found."],
-                    "tainted_variables": ["sy-uname"],
+                    "tainted_variables": ["sy-uname"]
                 }
 
     # --- 일반 순방향 분석 로직 ---
