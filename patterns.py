@@ -599,3 +599,79 @@ ENDTRY_PATTERN = re.compile(
     r"^\s*ENDTRY\s*\.",
     re.IGNORECASE,
 )
+
+# ===== 핵심 ECC 6.0 패턴들 (Z/Y 테이블 + RFC만) =====
+
+# DELETE dbtab FROM wa. (실제 데이터베이스 삭제, work area 기반)
+DELETE_FROM_WA_PATTERN = re.compile(
+    r"^\s*DELETE\s+(?P<table>[ZY][\w\d_]*)\s+FROM\s+(?P<wa>[\w\d_\-]+)\s*\.",
+    re.IGNORECASE,
+)
+
+# PARAMETERS TYPE 패턴 (일반화)
+PARAMETERS_TYPE_PATTERN = re.compile(
+    r"^\s*PARAMETERS\s+(?P<target>[\w\d_]+)\s+TYPE\s+(?P<source>sy-uname)\b.*\.",
+    re.IGNORECASE,
+)
+
+# PARAMETERS LIKE 패턴 (일반화)
+PARAMETERS_LIKE_PATTERN = re.compile(
+    r"^\s*PARAMETERS\s+(?P<target>[\w\d_]+)\s+LIKE\s+(?P<source>sy-uname)\b.*\.",
+    re.IGNORECASE,
+)
+
+# SELECT-OPTIONS 패턴 (일반화)
+SELECT_OPTIONS_GENERAL_PATTERN = re.compile(
+    r"^\s*SELECT-OPTIONS\s+(?P<target>[\w\d_]+)\s+FOR\s+(?P<source>sy-uname)\b.*\.",
+    re.IGNORECASE | re.DOTALL,
+)
+
+# DATA TYPE sy-uname 패턴
+DATA_TYPE_SYUNAME_PATTERN = re.compile(
+    r"^\s*DATA\s*:?\s*(?P<target>\w+)\s+TYPE\s+(?P<source>sy-uname)\s*[,.]",
+    re.IGNORECASE,
+)
+
+# DATA LIKE sy-uname 패턴
+DATA_LIKE_SYUNAME_PATTERN = re.compile(
+    r"^\s*DATA\s*:?\s*(?P<target>\w+)\s+LIKE\s+(?P<source>sy-uname)\s*[,.]",
+    re.IGNORECASE,
+)
+
+# FIELD-SYMBOLS 패턴
+# 예: ASSIGN sy-uname TO <fs>.
+ASSIGN_TO_FIELD_SYMBOL_PATTERN = re.compile(
+    r"^\s*ASSIGN\s+(?P<source>[\w\d\-\>\[\]<>+\(\)@]+)\s+TO\s+(?P<target><[\w\d_]+>)\s*\.",
+    re.IGNORECASE,
+)
+
+# 예: <fs> = sy-uname.
+FIELD_SYMBOL_ASSIGN_PATTERN = re.compile(
+    r"^\s*(?P<target><[\w\d_]+>)\s*=\s*(?P<source>[\w\d\-\>\[\]<>+\(\)@]+)\s*\.",
+    re.IGNORECASE,
+)
+
+# 예: <fs>-field = var.
+FIELD_SYMBOL_STRUCTURE_PATTERN = re.compile(
+    r"^\s*(?P<target><[\w\d_]+>\-[\w\d_]+)\s*=\s*(?P<source>[\w\d\-\>\[\]<>+\(\)@]+)\s*\.",
+    re.IGNORECASE,
+)
+
+# 확장된 토큰 패턴 (오프셋/길이 지원)
+# 예: lv_user+1(3), lv_user(8)
+EXTENDED_TOKEN_PATTERN = re.compile(
+    r"[\w\d_\-\>\[\]<>]+(?:\+\d+)?(?:\(\d+\))?",
+    re.IGNORECASE,
+)
+
+# WHERE 절 단독 패턴 (읽기 전용 사용)
+WHERE_READ_ONLY_PATTERN = re.compile(
+    r"^\s*WHERE\s+(?P<field>[\w\d_]+)\s*=\s*@?(?P<variable>[\w\d\-\>\[\]<>+\(\)@]+)",
+    re.IGNORECASE,
+)
+
+# READ TABLE WITH KEY 일반화 패턴
+READ_TABLE_KEY_PATTERN = re.compile(
+    r"^\s*READ\s+TABLE\s+(?P<table>[\w\d_\[\]]+)\s+.*?WITH\s+KEY\s+.*?(?P<field>[\w\d_]+)\s*=\s*(?P<value>[\w\d\-\>\[\]<>+\(\)@]+).*",
+    re.IGNORECASE | re.DOTALL,
+)

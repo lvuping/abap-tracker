@@ -214,6 +214,30 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
                         print(
                             f"      라인 {result.get('specified_line')}: '{result.get('actual_content', 'N/A')}'"
                         )
+                    elif error_type == "NO_ZY_TABLE_RFC_SINK_FOUND":
+                        print(f"   ⚠️ SY-UNAME 추적됨 but Z/Y 테이블/RFC Sink 미발견")
+                        analysis = result.get("analysis_summary", {})
+                        print(
+                            f"      • 분석된 문장: {analysis.get('total_statements_analyzed', 0)}개"
+                        )
+                        print(
+                            f"      • 전파된 변수: {analysis.get('variables_propagated', 0)}개"
+                        )
+                        print(
+                            f"      • 추적 단계: {analysis.get('trace_steps', 0)}단계"
+                        )
+
+                        # 힌트 정보 표시
+                        hints = result.get("hints", [])
+                        if hints:
+                            print(f"      💡 힌트:")
+                            for hint in hints:
+                                print(f"         - {hint}")
+
+                        if verbose and result.get("tainted_variables"):
+                            print(
+                                f"      • 오염된 변수들: {', '.join(result['tainted_variables'])}"
+                            )
                     elif error_type == "NO_SINK_FOUND_AFTER_TRACING":
                         print(f"   ⚠️ SY-UNAME 추적됨 but 유효한 Sink 미발견")
                         analysis = result.get("analysis_summary", {})
@@ -308,7 +332,8 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
     traced_but_no_sink_count = sum(
         1
         for r in all_results
-        if r["result"].get("error_type") == "NO_SINK_FOUND_AFTER_TRACING"
+        if r["result"].get("error_type")
+        in ["NO_SINK_FOUND_AFTER_TRACING", "NO_ZY_TABLE_RFC_SINK_FOUND"]
     )
 
     print(f"📊 총 분석: {len(all_results)}개")

@@ -1,124 +1,123 @@
 [
   {
     "id": "1",
-    "source_file": "input/source_code.abap",
-    "source_line": 90,
+    "source_file": "input/enhanced_test.abap",
+    "source_line": 7,
     "result": {
-      "status": "Scope Boundary Reached",
-      "type": "PERFORM_CALL",
-      "subroutine": "CALL_REMOTE_SYSTEM",
-      "reason": "PERFORM 호출로 인한 스코프 경계 도달: CALL_REMOTE_SYSTEM",
-      "boundary_line": 131,
-      "verified_syuname_line": 90,
-      "tainted_variables": [
-        "sy-uname",
-        "lv_lifnr"
-      ],
+      "status": "Found",
+      "type": "RFC",
+      "name": "Z_USER_RFC",
+      "parameter": "IV_USER",
       "trace_path": [
-        "✅ SY-UNAME found at line 90 (specified line 90)",
-        "Starting analysis from verified SY-UNAME location (line 90)",
-        "Line 90: Chained Assignment 'sy-uname' -> 'lv_lifnr'",
-        "Line 131: ⛔ PERFORM CALL_REMOTE_SYSTEM - 추적 종료 (스코프 경계)"
+        "✅ SY-UNAME found at line 7 (specified line 7)",
+        "Starting analysis from verified SY-UNAME location (line 7)",
+        "Line 13: ASSIGN to field-symbol 'sy-uname' -> '<fs_user>'",
+        "Line 18: Chained Assignment 'sy-uname' -> 'lv_user'"
       ]
     }
   },
   {
     "id": "2",
-    "source_file": "input/extended_test_code.abap",
-    "source_line": 37,
+    "source_file": "input/enhanced_test.abap",
+    "source_line": 13,
     "result": {
-      "status": "Not Found",
-      "reason": "SY-UNAME not found at specified line 37",
-      "specified_line": 37,
-      "actual_content": "\" Test Case 1: Basic Assignment Patterns",
-      "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE"
+      "status": "Found",
+      "type": "RFC",
+      "name": "Z_USER_RFC",
+      "parameter": "IV_USER",
+      "trace_path": [
+        "✅ SY-UNAME found at line 13 (specified line 13)",
+        "Starting analysis from verified SY-UNAME location (line 13)",
+        "Line 13: ASSIGN to field-symbol 'sy-uname' -> '<fs_user>'",
+        "Line 18: Chained Assignment 'sy-uname' -> 'lv_user'"
+      ]
     }
   },
   {
     "id": "3",
-    "source_file": "input/business_scenario_code.abap",
-    "source_line": 45,
+    "source_file": "input/enhanced_test.abap",
+    "source_line": 18,
     "result": {
-      "status": "Not Found",
-      "reason": "Specified line 45 is a comment or empty line",
-      "specified_line": 45,
-      "actual_content": "*----------------------------------------------------------------------*",
-      "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE"
+      "status": "Found",
+      "type": "RFC",
+      "name": "Z_USER_RFC",
+      "parameter": "IV_USER",
+      "trace_path": [
+        "✅ SY-UNAME found at line 18 (specified line 18)",
+        "Starting analysis from verified SY-UNAME location (line 18)",
+        "Line 18: Chained Assignment 'sy-uname' -> 'lv_user'"
+      ]
     }
   },
   {
     "id": "4",
-    "source_file": "input/test.abap",
-    "source_line": 23,
+    "source_file": "input/enhanced_test.abap",
+    "source_line": 24,
     "result": {
-      "status": "Scope Boundary Reached",
-      "type": "PERFORM_CALL",
-      "subroutine": "CALL_RFC_GET_USER_DETAIL",
-      "reason": "PERFORM 호출로 인한 스코프 경계 도달: CALL_RFC_GET_USER_DETAIL",
-      "boundary_line": 80,
-      "verified_syuname_line": 21,
-      "tainted_variables": [
-        "sy-uname",
-        "lv_user_id"
+      "status": "Found",
+      "type": "DATABASE_DELETE_FIELD",
+      "table": "ZDOCUMENTS",
+      "fields": [
+        "CHANGED_BY"
       ],
+      "operation": "DELETE_FROM_WA",
       "trace_path": [
-        "✅ SY-UNAME found at line 21 (specified line 23)",
-        "Starting analysis from verified SY-UNAME location (line 21)",
-        "Line 68: Chained Assignment 'sy-uname' -> 'lv_user_id'",
-        "Line 80: ⛔ PERFORM CALL_RFC_GET_USER_DETAIL - 추적 종료 (스코프 경계)"
+        "✅ SY-UNAME found at line 24 (specified line 24)",
+        "Starting analysis from verified SY-UNAME location (line 24)",
+        "Line 24: Chained Assignment 'sy-uname' -> 'lv_current'",
+        "Line 29: Chained Assignment 'sy-uname' -> 'wa_zdoc-changed_by'",
+        "Line 29: Structure assignment 'sy-uname' -> 'wa_zdoc-changed_by'"
       ]
     }
   },
   {
     "id": "5",
-    "source_file": "input/hardcode_test.abap",
-    "source_line": 14,
+    "source_file": "input/enhanced_test.abap",
+    "source_line": 29,
     "result": {
       "status": "Found",
-      "type": "SYUNAME_HARDCODE",
-      "subtype": "IF_STATEMENT",
-      "operator": "=",
-      "hardcode_value": "'ADMIN'",
-      "description": "SY-UNAME hardcoded comparison in IF: sy-uname = 'ADMIN'",
-      "final_variable": "sy-uname"
+      "type": "DATABASE_DELETE_FIELD",
+      "table": "ZDOCUMENTS",
+      "fields": [
+        "CHANGED_BY"
+      ],
+      "operation": "DELETE_FROM_WA",
+      "trace_path": [
+        "✅ SY-UNAME found at line 29 (specified line 29)",
+        "Starting analysis from verified SY-UNAME location (line 29)",
+        "Line 29: Chained Assignment 'sy-uname' -> 'wa_zdoc-changed_by'",
+        "Line 29: Structure assignment 'sy-uname' -> 'wa_zdoc-changed_by'"
+      ]
     }
   },
   {
     "id": "6",
-    "source_file": "input/hardcode_test.abap",
-    "source_line": 27,
+    "source_file": "input/enhanced_test.abap",
+    "source_line": 33,
     "result": {
       "status": "Not Found",
-      "reason": "Specified line 27 is a comment or empty line",
-      "specified_line": 27,
-      "actual_content": "",
-      "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE"
-    }
-  },
-  {
-    "id": "7",
-    "source_file": "input/hardcode_test.abap",
-    "source_line": 35,
-    "result": {
-      "status": "Found",
-      "type": "SYUNAME_HARDCODE",
-      "subtype": "WHERE_CLAUSE",
-      "operator": "<>",
-      "hardcode_value": "'GUEST'",
-      "description": "SY-UNAME hardcoded comparison in WHERE: sy-uname <> 'GUEST'",
-      "final_variable": "sy-uname"
-    }
-  },
-  {
-    "id": "8",
-    "source_file": "input/hardcode_test.abap",
-    "source_line": 40,
-    "result": {
-      "status": "Not Found",
-      "reason": "Specified line 40 is a comment or empty line",
-      "specified_line": 40,
-      "actual_content": "",
-      "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE"
+      "reason": "SY-UNAME variable flow traced but no Z/Y table or RFC sink found",
+      "verified_syuname_line": 33,
+      "tainted_variables": [
+        "ls_normal-user",
+        "sy-uname"
+      ],
+      "trace_path": [
+        "✅ SY-UNAME found at line 33 (specified line 33)",
+        "Starting analysis from verified SY-UNAME location (line 33)",
+        "Line 33: Chained Assignment 'sy-uname' -> 'ls_normal-user'",
+        "Line 33: Structure assignment 'sy-uname' -> 'ls_normal-user'"
+      ],
+      "error_type": "NO_ZY_TABLE_RFC_SINK_FOUND",
+      "analysis_hints": [],
+      "hints": [],
+      "analysis_summary": {
+        "total_statements_analyzed": 2,
+        "variables_propagated": 1,
+        "trace_steps": 4,
+        "declaration_patterns_found": 0,
+        "read_only_patterns_found": 0
+      }
     }
   }
 ]

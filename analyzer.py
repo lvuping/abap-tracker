@@ -68,6 +68,11 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
     global temp_audit_result
     temp_audit_result = None
 
+    # 분석 과정에서 발견된 힌트들 수집
+    analysis_hints = []
+    bdc_rows = []  # BDC 필드 수집
+    audit_fields_found = []  # 감사 필드 수집
+
     # 빈 snippet 처리
     if not snippet:
         return {"status": "Not Found", "reason": "Empty snippet"}
@@ -385,6 +390,74 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                 "trace_path": trace_path,
             }
 
+        # --- 선언 분류 패턴들 먼저 처리 (전파에 추가하지 않음) ---
+
+        # DATA TYPE sy-uname 패턴
+        data_type_match = DATA_TYPE_SYUNAME_PATTERN.match(statement_upper)
+        if data_type_match:
+            analysis_hints.append(f"Line {line_num+1}: Declaration TYPE sy-uname found")
+            continue  # 전파에 추가하지 않고 계속
+
+        # DATA LIKE sy-uname 패턴
+        data_like_match = DATA_LIKE_SYUNAME_PATTERN.match(statement_upper)
+        if data_like_match:
+            analysis_hints.append(f"Line {line_num+1}: Declaration LIKE sy-uname found")
+            continue  # 전파에 추가하지 않고 계속
+
+        # PARAMETERS TYPE/LIKE 패턴
+        param_type_match = PARAMETERS_TYPE_PATTERN.match(statement_upper)
+        if param_type_match:
+            analysis_hints.append(f"Line {line_num+1}: PARAMETERS TYPE sy-uname found")
+            continue  # 전파에 추가하지 않고 계속
+
+        param_like_match = PARAMETERS_LIKE_PATTERN.match(statement_upper)
+        if param_like_match:
+            analysis_hints.append(f"Line {line_num+1}: PARAMETERS LIKE sy-uname found")
+            continue  # 전파에 추가하지 않고 계속
+
+        # SELECT-OPTIONS 패턴
+        select_options_match = SELECT_OPTIONS_GENERAL_PATTERN.match(statement_upper)
+        if select_options_match:
+            analysis_hints.append(
+                f"Line {line_num+1}: SELECT-OPTIONS FOR sy-uname found"
+            )
+            continue  # 전파에 추가하지 않고 계속
+
+        # --- FIELD-SYMBOLS 처리 ---
+
+        # ASSIGN TO <fs> 패턴
+        assign_fs_match = ASSIGN_TO_FIELD_SYMBOL_PATTERN.match(statement_upper)
+        if assign_fs_match:
+            source_var = assign_fs_match.group("source").strip().lower()
+            target_fs = assign_fs_match.group("target").strip().lower()
+            if source_var in tainted_vars and target_fs not in tainted_vars:
+                tainted_vars.add(target_fs)
+                trace_path.append(
+                    f"Line {line_num+1}: ASSIGN to field-symbol '{source_var}' -> '{target_fs}'"
+                )
+
+        # <fs> = variable 패턴
+        fs_assign_match = FIELD_SYMBOL_ASSIGN_PATTERN.match(statement_upper)
+        if fs_assign_match:
+            source_var = fs_assign_match.group("source").strip().lower()
+            target_fs = fs_assign_match.group("target").strip().lower()
+            if source_var in tainted_vars and target_fs not in tainted_vars:
+                tainted_vars.add(target_fs)
+                trace_path.append(
+                    f"Line {line_num+1}: Field-symbol assignment '{source_var}' -> '{target_fs}'"
+                )
+
+        # <fs>-field = variable 패턴
+        fs_struct_match = FIELD_SYMBOL_STRUCTURE_PATTERN.match(statement_upper)
+        if fs_struct_match:
+            source_var = fs_struct_match.group("source").strip().lower()
+            target_field = fs_struct_match.group("target").strip().lower()
+            if source_var in tainted_vars and target_field not in tainted_vars:
+                tainted_vars.add(target_field)
+                trace_path.append(
+                    f"Line {line_num+1}: Field-symbol structure assignment '{source_var}' -> '{target_field}'"
+                )
+
         # --- 모든 패턴 매칭은 이제 statement_upper를 대상으로 수행 ---
 
         # LOOP 구문 처리
@@ -698,7 +771,31 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "table": table,
                         "fields": list(set(affected_fields)),  # 중복 제거
                         "operation": "INSERT_TABLE",
+                        "trace_path": trace_path,
                     }
+
+        # DELETE dbtab FROM wa 패턴 (ECC 6.0 추가)
+        delete_from_wa_match = DELETE_FROM_WA_PATTERN.match(statement_upper)
+        if delete_from_wa_match:
+            table = delete_from_wa_match.group("table").strip().upper()
+            wa_var = delete_from_wa_match.group("wa").strip().lower()
+
+            # work area의 오염된 필드들 찾기
+            affected_fields = []
+            for tainted_var in tainted_vars:
+                if tainted_var.startswith(wa_var + "-"):
+                    field = tainted_var.split("-", 1)[1].upper()
+                    affected_fields.append(field)
+
+            if affected_fields:
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_DELETE_FIELD",
+                    "table": table,
+                    "fields": list(set(affected_fields)),
+                    "operation": "DELETE_FROM_WA",
+                    "trace_path": trace_path,
+                }
 
         # INSERT (FROM or VALUES) - 기존 패턴
         insert_match = INSERT_PATTERN.match(statement_upper)
@@ -866,7 +963,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                             "condition_variable": tainted_var,
                         }
 
-        # 2. RFC 호출 분석
+        # 2. RFC 호출 분석 (핵심 기능)
         rfc_match = RFC_CALL_PATTERN.search(statement_upper)
         if rfc_match:
             rfc_name = rfc_match.group("rfc_name")
@@ -881,6 +978,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "type": "RFC",
                         "name": rfc_name,
                         "parameter": p_match.group("param_name").strip(),
+                        "trace_path": trace_path,
                     }
                 for tainted_var in tainted_vars:
                     if tainted_var.startswith(base_structure_name + "-"):
@@ -889,235 +987,82 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                             "type": "RFC",
                             "name": rfc_name,
                             "parameter": p_match.group("param_name").strip(),
+                            "tainted_field": tainted_var,
+                            "trace_path": trace_path,
                         }
 
-        # 3. SY-UNAME 하드코딩 분석 (조건문보다 먼저 체크)
-        # IF문 내 하드코딩
-        if_hardcode_match = IF_SYUNAME_HARDCODE_PATTERN.match(statement_upper)
-        if if_hardcode_match:
-            operator = if_hardcode_match.group("operator")
-            value = if_hardcode_match.group("value")
-            return {
-                "status": "Found",
-                "type": "SYUNAME_HARDCODE",
-                "subtype": "IF_STATEMENT",
-                "operator": operator,
-                "hardcode_value": value,
-                "description": f"SY-UNAME hardcoded comparison in IF: sy-uname {operator} {value}",
-                "final_variable": "sy-uname",
-            }
-
-        # CHECK문 내 하드코딩
-        check_hardcode_match = CHECK_SYUNAME_HARDCODE_PATTERN.match(statement_upper)
-        if check_hardcode_match:
-            operator = check_hardcode_match.group("operator")
-            value = check_hardcode_match.group("value")
-            return {
-                "status": "Found",
-                "type": "SYUNAME_HARDCODE",
-                "subtype": "CHECK_STATEMENT",
-                "operator": operator,
-                "hardcode_value": value,
-                "description": f"SY-UNAME hardcoded comparison in CHECK: sy-uname {operator} {value}",
-                "final_variable": "sy-uname",
-            }
-
-        # WHERE절 내 하드코딩
-        where_hardcode_match = WHERE_SYUNAME_HARDCODE_PATTERN.search(statement_upper)
-        if where_hardcode_match:
-            operator = where_hardcode_match.group("operator")
-            value = where_hardcode_match.group("value")
-            return {
-                "status": "Found",
-                "type": "SYUNAME_HARDCODE",
-                "subtype": "WHERE_CLAUSE",
-                "operator": operator,
-                "hardcode_value": value,
-                "description": f"SY-UNAME hardcoded comparison in WHERE: sy-uname {operator} {value}",
-                "final_variable": "sy-uname",
-            }
-
-        # ASSERT문 내 하드코딩
-        assert_hardcode_match = ASSERT_SYUNAME_HARDCODE_PATTERN.match(statement_upper)
-        if assert_hardcode_match:
-            operator = assert_hardcode_match.group("operator")
-            value = assert_hardcode_match.group("value")
-            return {
-                "status": "Found",
-                "type": "SYUNAME_HARDCODE",
-                "subtype": "ASSERT_STATEMENT",
-                "operator": operator,
-                "hardcode_value": value,
-                "description": f"SY-UNAME hardcoded comparison in ASSERT: sy-uname {operator} {value}",
-                "final_variable": "sy-uname",
-            }
-
-        # 일반 하드코딩 패턴 (다른 문맥에서)
-        general_hardcode_match = SYUNAME_HARDCODE_PATTERN.search(statement_upper)
-        if general_hardcode_match:
-            operator = general_hardcode_match.group("operator")
-            value = general_hardcode_match.group("value")
-            return {
-                "status": "Found",
-                "type": "SYUNAME_HARDCODE",
-                "subtype": "GENERAL_COMPARISON",
-                "operator": operator,
-                "hardcode_value": value,
-                "description": f"SY-UNAME hardcoded comparison: sy-uname {operator} {value}",
-                "final_variable": "sy-uname",
-            }
-
-        # 4. WRITE 문 분석 (출력 sink)
-        # 단순 WRITE 패턴
-        write_simple_match = WRITE_SIMPLE_PATTERN.match(statement_upper)
-        if write_simple_match:
-            variable = write_simple_match.group("variable").strip().lower()
+        # 다른 읽기 전용 패턴들 수집 (힌트용)
+        # WHERE 조건에서 사용 (읽기 전용)
+        where_match = WHERE_READ_ONLY_PATTERN.match(statement_upper)
+        if where_match:
+            variable = where_match.group("variable").strip().lower()
             if variable in tainted_vars:
-                return {
-                    "status": "Found",
-                    "type": "WRITE_OUTPUT",
-                    "description": f"SY-UNAME written to output via WRITE statement",
-                    "final_variable": variable,
-                }
+                analysis_hints.append(
+                    f"Line {line_num+1}: WHERE clause read-only usage found"
+                )
 
-        # 연속 WRITE 패턴 (콜론 사용)
-        write_chain_match = WRITE_CHAIN_PATTERN.match(statement_upper)
-        if write_chain_match:
-            variables_str = write_chain_match.group("variables")
-            write_vars = WRITE_VAR_PATTERN.finditer(variables_str)
-            for var_match in write_vars:
-                variable = var_match.group("variable").strip().lower()
-                if variable in tainted_vars:
-                    return {
-                        "status": "Found",
-                        "type": "WRITE_OUTPUT",
-                        "description": f"SY-UNAME written to output via chained WRITE statement",
-                        "final_variable": variable,
-                    }
-
-        # 여러 변수 WRITE 패턴
-        write_multiple_match = WRITE_MULTIPLE_PATTERN.match(statement_upper)
-        if write_multiple_match:
-            variables_str = write_multiple_match.group("variables")
-            # 콤마로 구분된 변수들 처리
-            if "," in variables_str:
-                write_vars = WRITE_VAR_PATTERN.finditer(variables_str)
-                for var_match in write_vars:
-                    variable = var_match.group("variable").strip().lower()
-                    if variable in tainted_vars:
-                        return {
-                            "status": "Found",
-                            "type": "WRITE_OUTPUT",
-                            "description": f"SY-UNAME written to output via multiple WRITE statement",
-                            "final_variable": variable,
-                        }
-
-                # 5. UPDATE 후 검증 패턴 처리 (일반 조건문 분석 이전에)
-        # 현재 라인 이전 5줄 내에서 UPDATE 찾기
-        update_found = False
-        update_table = None
-
-        for j in range(max(0, i - 5), i):
-            if j < len(statements):
-                prev_stmt, prev_line = statements[j]
-                prev_stmt_upper = prev_stmt.upper()
-
-                # UPDATE 패턴들 확인
-                if (
-                    UPDATE_SET_SYUNAME_PATTERN.match(prev_stmt_upper)
-                    or UPDATE_FROM_PATTERN.match(prev_stmt_upper)
-                    or UPDATE_FROM_TABLE_PATTERN.match(prev_stmt_upper)
-                ):
-                    update_found = True
-                    # 테이블명 추출
-                    for pattern in [
-                        UPDATE_SET_SYUNAME_PATTERN,
-                        UPDATE_FROM_PATTERN,
-                        UPDATE_FROM_TABLE_PATTERN,
-                    ]:
-                        match = pattern.match(prev_stmt_upper)
-                        if match:
-                            update_table = match.group("table").strip().upper()
-                            break
-                    break
-
-        if update_found and update_table:
-            # 현재 라인에서 sy-uname 검증 패턴 찾기
-            # IF sy-uname 검증
-            if_validation_match = POST_UPDATE_IF_VALIDATION_PATTERN.match(
-                statement_upper
-            )
-            if if_validation_match:
-                return {
-                    "status": "Found",
-                    "type": "POST_UPDATE_VALIDATION",
-                    "subtype": "IF_VALIDATION",
-                    "table": update_table,
-                    "description": f"SY-UNAME validation in IF statement after UPDATE on {update_table}",
-                    "validation_line": line_num + 1,
-                    "trace_path": trace_path
-                    + [f"Line {line_num+1}: IF validation after UPDATE {update_table}"],
-                }
-
-            # CHECK sy-uname 검증
-            check_validation_match = POST_UPDATE_CHECK_VALIDATION_PATTERN.match(
-                statement_upper
-            )
-            if check_validation_match:
-                return {
-                    "status": "Found",
-                    "type": "POST_UPDATE_VALIDATION",
-                    "subtype": "CHECK_VALIDATION",
-                    "table": update_table,
-                    "description": f"SY-UNAME validation in CHECK statement after UPDATE on {update_table}",
-                    "validation_line": line_num + 1,
-                    "trace_path": trace_path
-                    + [
-                        f"Line {line_num+1}: CHECK validation after UPDATE {update_table}"
-                    ],
-                }
-
-            # ASSERT sy-uname 검증
-            assert_validation_match = POST_UPDATE_ASSERT_VALIDATION_PATTERN.match(
-                statement_upper
-            )
-            if assert_validation_match:
-                return {
-                    "status": "Found",
-                    "type": "POST_UPDATE_VALIDATION",
-                    "subtype": "ASSERT_VALIDATION",
-                    "table": update_table,
-                    "description": f"SY-UNAME validation in ASSERT statement after UPDATE on {update_table}",
-                    "validation_line": line_num + 1,
-                    "trace_path": trace_path
-                    + [
-                        f"Line {line_num+1}: ASSERT validation after UPDATE {update_table}"
-                    ],
-                }
-
-        # 6. 일반 조건문 분석 (하드코딩 패턴 이후에 체크)
-        conditional_match = CONDITIONAL_CHECK_PATTERN.match(statement_upper)
-        if conditional_match:
-            variable = conditional_match.group("variable").strip().lower()
-            if variable in tainted_vars:
-                value = conditional_match.group("value").strip()
-                return {
-                    "status": "Found",
-                    "type": "CONDITIONAL_CHECK",
-                    "description": f"Hardcoded check against {value}",
-                }
+        # READ TABLE 사용 (읽기 전용)
+        read_table_match = READ_TABLE_KEY_PATTERN.match(statement_upper)
+        if read_table_match:
+            value = read_table_match.group("value").strip().lower()
+            if value in tainted_vars:
+                analysis_hints.append(
+                    f"Line {line_num+1}: READ TABLE read-only usage found"
+                )
 
     # 5단계: 추적 완료 후에도 sink를 찾지 못한 경우 구체적인 이유 제공
+
+    # 힌트 분류
+    hints = []
+    if analysis_hints:
+        declaration_count = len(
+            [
+                h
+                for h in analysis_hints
+                if "Declaration" in h or "PARAMETERS" in h or "SELECT-OPTIONS" in h
+            ]
+        )
+        read_only_count = len([h for h in analysis_hints if "read-only" in h])
+
+        if declaration_count > 0:
+            hints.append(
+                f"DECLARATION_ONLY: {declaration_count} type/like/parameter declarations found"
+            )
+        if read_only_count > 0:
+            hints.append(
+                f"READ_ONLY_USAGE: {read_only_count} read-only usages in WHERE/READ TABLE"
+            )
+        if len(tainted_vars) > 1:
+            hints.append(
+                f"VARIABLE_PROPAGATION: {len(tainted_vars)-1} variables were tainted but no Z/Y table sink found"
+            )
+
+        # 스코프 경계 도달 여부 체크 (이미 앞에서 처리되므로 여기서는 도달하지 않음)
+        hints.append(
+            "SCOPE_ANALYSIS: Variables traced within current scope only - check PERFORM/METHOD bodies"
+        )
+
+    # 추가 분석 정보
+    analysis_details = {
+        "total_statements_analyzed": len(statements) - start_statement_idx,
+        "variables_propagated": len(tainted_vars) - 1,  # sy-uname 제외
+        "trace_steps": len(trace_path),
+        "declaration_patterns_found": len(
+            [h for h in analysis_hints if "Declaration" in h or "PARAMETERS" in h]
+        ),
+        "read_only_patterns_found": len(
+            [h for h in analysis_hints if "read-only" in h]
+        ),
+    }
+
     return {
         "status": "Not Found",
-        "reason": "SY-UNAME variable flow traced but no valid sink found",
+        "reason": "SY-UNAME variable flow traced but no Z/Y table or RFC sink found",
         "verified_syuname_line": actual_sy_uname_line + 1,
         "tainted_variables": list(tainted_vars),
         "trace_path": trace_path,
-        "error_type": "NO_SINK_FOUND_AFTER_TRACING",
-        "analysis_summary": {
-            "total_statements_analyzed": len(statements) - start_statement_idx,
-            "variables_propagated": len(tainted_vars) - 1,  # sy-uname 제외
-            "trace_steps": len(trace_path),
-        },
+        "error_type": "NO_ZY_TABLE_RFC_SINK_FOUND",
+        "analysis_hints": analysis_hints,
+        "hints": hints,
+        "analysis_summary": analysis_details,
     }
