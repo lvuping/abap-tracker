@@ -1,0 +1,237 @@
+{
+  "summary": {
+    "total_tests": 10,
+    "passed": 7,
+    "partial": 2,
+    "sink_found": 1,
+    "failed": 0,
+    "full_success_rate": 70.0,
+    "partial_success_rate": 90.0
+  },
+  "category_analysis": {
+    "조건문 내 스코프": {
+      "test_ids": [
+        "complex_test_01",
+        "complex_test_04",
+        "complex_test_05"
+      ],
+      "results": [
+        {
+          "test_id": "complex_test_01",
+          "status": "PASS",
+          "actual_type": "PERFORM_CALL",
+          "expected_type": "PERFORM_CALL",
+          "boundary_line": 15,
+          "tainted_vars": 2,
+          "description": "IF 조건문 내 PERFORM"
+        },
+        {
+          "test_id": "complex_test_04",
+          "status": "PASS",
+          "actual_type": "INCLUDE",
+          "expected_type": "INCLUDE",
+          "boundary_line": 20,
+          "tainted_vars": 1,
+          "description": "중첩 조건문 내 INCLUDE"
+        },
+        {
+          "test_id": "complex_test_05",
+          "status": "PASS",
+          "actual_type": "SUBMIT",
+          "expected_type": "SUBMIT",
+          "boundary_line": 20,
+          "tainted_vars": 1,
+          "description": "CASE 문 내 SUBMIT"
+        }
+      ]
+    },
+    "LOOP 내 스코프": {
+      "test_ids": [
+        "complex_test_02"
+      ],
+      "results": [
+        {
+          "test_id": "complex_test_02",
+          "status": "PASS",
+          "actual_type": "PERFORM_CALL",
+          "expected_type": "PERFORM_CALL",
+          "boundary_line": 21,
+          "tainted_vars": 1,
+          "description": "LOOP 내 PERFORM"
+        }
+      ]
+    },
+    "구조체 전파": {
+      "test_ids": [
+        "complex_test_03",
+        "complex_test_10"
+      ],
+      "results": [
+        {
+          "test_id": "complex_test_03",
+          "status": "PASS",
+          "actual_type": "PERFORM_CALL",
+          "expected_type": "PERFORM_CALL",
+          "boundary_line": 20,
+          "tainted_vars": 1,
+          "description": "구조체 전파 후 PERFORM"
+        },
+        {
+          "test_id": "complex_test_10",
+          "status": "PASS",
+          "actual_type": "PERFORM_CALL",
+          "expected_type": "PERFORM_CALL",
+          "boundary_line": 21,
+          "tainted_vars": 2,
+          "description": "복잡한 구조체 후 PERFORM"
+        }
+      ]
+    },
+    "동적 호출": {
+      "test_ids": [
+        "complex_test_06"
+      ],
+      "results": [
+        {
+          "test_id": "complex_test_06",
+          "status": "PASS",
+          "actual_type": "DYNAMIC_PERFORM",
+          "expected_type": "DYNAMIC_PERFORM",
+          "boundary_line": 19,
+          "tainted_vars": 1,
+          "description": "동적 PERFORM 호출"
+        }
+      ]
+    },
+    "예외 처리": {
+      "test_ids": [
+        "complex_test_07"
+      ],
+      "results": [
+        {
+          "test_id": "complex_test_07",
+          "status": "PARTIAL",
+          "actual_type": "TRY_BLOCK",
+          "expected_type": "PERFORM_CALL",
+          "boundary_line": 18,
+          "tainted_vars": 1,
+          "description": "TRY 블록 내 PERFORM"
+        }
+      ]
+    },
+    "복합 정의": {
+      "test_ids": [
+        "complex_test_08",
+        "complex_test_09"
+      ],
+      "results": [
+        {
+          "test_id": "complex_test_08",
+          "status": "SINK_FOUND",
+          "actual_type": "RFC",
+          "expected_type": "FORM_DEFINITION",
+          "description": "FUNCTION 호출 후 FORM 정의"
+        },
+        {
+          "test_id": "complex_test_09",
+          "status": "PARTIAL",
+          "actual_type": "OBJECT_METHOD_CALL",
+          "expected_type": "METHOD_DEFINITION",
+          "boundary_line": 18,
+          "tainted_vars": 1,
+          "description": "객체 메소드 호출 후 METHOD 정의"
+        }
+      ]
+    }
+  },
+  "detailed_results": [
+    {
+      "test_id": "complex_test_01",
+      "status": "PASS",
+      "actual_type": "PERFORM_CALL",
+      "expected_type": "PERFORM_CALL",
+      "boundary_line": 15,
+      "tainted_vars": 2,
+      "description": "IF 조건문 내 PERFORM"
+    },
+    {
+      "test_id": "complex_test_02",
+      "status": "PASS",
+      "actual_type": "PERFORM_CALL",
+      "expected_type": "PERFORM_CALL",
+      "boundary_line": 21,
+      "tainted_vars": 1,
+      "description": "LOOP 내 PERFORM"
+    },
+    {
+      "test_id": "complex_test_03",
+      "status": "PASS",
+      "actual_type": "PERFORM_CALL",
+      "expected_type": "PERFORM_CALL",
+      "boundary_line": 20,
+      "tainted_vars": 1,
+      "description": "구조체 전파 후 PERFORM"
+    },
+    {
+      "test_id": "complex_test_04",
+      "status": "PASS",
+      "actual_type": "INCLUDE",
+      "expected_type": "INCLUDE",
+      "boundary_line": 20,
+      "tainted_vars": 1,
+      "description": "중첩 조건문 내 INCLUDE"
+    },
+    {
+      "test_id": "complex_test_05",
+      "status": "PASS",
+      "actual_type": "SUBMIT",
+      "expected_type": "SUBMIT",
+      "boundary_line": 20,
+      "tainted_vars": 1,
+      "description": "CASE 문 내 SUBMIT"
+    },
+    {
+      "test_id": "complex_test_06",
+      "status": "PASS",
+      "actual_type": "DYNAMIC_PERFORM",
+      "expected_type": "DYNAMIC_PERFORM",
+      "boundary_line": 19,
+      "tainted_vars": 1,
+      "description": "동적 PERFORM 호출"
+    },
+    {
+      "test_id": "complex_test_07",
+      "status": "PARTIAL",
+      "actual_type": "TRY_BLOCK",
+      "expected_type": "PERFORM_CALL",
+      "boundary_line": 18,
+      "tainted_vars": 1,
+      "description": "TRY 블록 내 PERFORM"
+    },
+    {
+      "test_id": "complex_test_08",
+      "status": "SINK_FOUND",
+      "actual_type": "RFC",
+      "expected_type": "FORM_DEFINITION",
+      "description": "FUNCTION 호출 후 FORM 정의"
+    },
+    {
+      "test_id": "complex_test_09",
+      "status": "PARTIAL",
+      "actual_type": "OBJECT_METHOD_CALL",
+      "expected_type": "METHOD_DEFINITION",
+      "boundary_line": 18,
+      "tainted_vars": 1,
+      "description": "객체 메소드 호출 후 METHOD 정의"
+    },
+    {
+      "test_id": "complex_test_10",
+      "status": "PASS",
+      "actual_type": "PERFORM_CALL",
+      "expected_type": "PERFORM_CALL",
+      "boundary_line": 21,
+      "tainted_vars": 2,
+      "description": "복잡한 구조체 후 PERFORM"
+    }
+  ]
+}

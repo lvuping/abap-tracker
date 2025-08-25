@@ -3,3 +3,7 @@ id,file_path,line_number
 2,input/extended_test_code,37
 3,input/business_scenario_code,45
 4,input/test,23
+5,input/hardcode_test,14
+6,input/hardcode_test,27
+7,input/hardcode_test,35
+8,input/hardcode_test,40

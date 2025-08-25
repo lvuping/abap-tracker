@@ -1,0 +1,60 @@
+{
+  "summary": {
+    "total_tests": 7,
+    "passed": 7,
+    "failed": 0,
+    "unexpected": 0,
+    "success_rate": 100.0
+  },
+  "detailed_results": [
+    {
+      "test_id": "scope_test_01",
+      "status": "PASS",
+      "boundary_type": "PERFORM_CALL",
+      "boundary_line": 9,
+      "tainted_vars": 2
+    },
+    {
+      "test_id": "scope_test_02",
+      "status": "PASS",
+      "boundary_type": "INCLUDE",
+      "boundary_line": 12,
+      "tainted_vars": 1
+    },
+    {
+      "test_id": "scope_test_03",
+      "status": "PASS",
+      "boundary_type": "SUBMIT",
+      "boundary_line": 12,
+      "tainted_vars": 1
+    },
+    {
+      "test_id": "scope_test_04",
+      "status": "PASS",
+      "boundary_type": "FORM_DEFINITION",
+      "boundary_line": 12,
+      "tainted_vars": 1
+    },
+    {
+      "test_id": "scope_test_05",
+      "status": "PASS",
+      "boundary_type": "FUNCTION_DEFINITION",
+      "boundary_line": 12,
+      "tainted_vars": 1
+    },
+    {
+      "test_id": "scope_test_06",
+      "status": "PASS",
+      "boundary_type": "METHOD_DEFINITION",
+      "boundary_line": 12,
+      "tainted_vars": 1
+    },
+    {
+      "test_id": "scope_test_07",
+      "status": "PASS",
+      "boundary_type": "CLASS_DEFINITION",
+      "boundary_line": 12,
+      "tainted_vars": 1
+    }
+  ]
+}

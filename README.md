@@ -68,10 +68,16 @@ cat output/analysis_result.json
 
 ```bash
 # SY-UNAME 추적 결과를 CSV로 출력
-python export_to_csv.py
+python main.py --csv
 
-# 결과 파일: output/sy_uname_analysis_results.csv
-# Excel에서 바로 열어서 확인 가능
+# JSON과 CSV 모두 출력
+python main.py --format both
+
+# CSV만 출력
+python main.py --format csv
+
+# 상세 출력
+python main.py --verbose
 ```
 
 **📊 CSV 컬럼 구조**:
@@ -84,18 +90,22 @@ python export_to_csv.py
 - **G**: RFC_Parameter (RFC 파라미터명)
 - **H~**: Trace_Step_01, 02, ... (추적 경로 단계별)
 
-### 3. 수동 테스트 (간편 테스트)
+### 3. 테스트 실행
 
 ```bash
-# 특정 파일의 특정 라인에서 SY-UNAME 추적 테스트
-python manual_test.py <파일명> <라인번호>
+# 통합 테스트 실행 (모든 테스트)
+python tests.py
 
-# 예시
-python manual_test.py input/business_scenario_code.abap 53
-python manual_test.py input/source_code.abap 90
+# 특정 테스트만 실행
+python tests.py --pattern          # 패턴 매칭 테스트
+python tests.py --business         # 비즈니스 시나리오
+python tests.py --comprehensive    # 종합 분석
+
+# 수동 시나리오 테스트  
+python tests.py --manual
 ```
 
-**📊 분석 범위**: 지정 라인 **앞 100줄, 뒤 500줄** 검색
+**📊 분석 범위**: 지정 라인 **앞 200줄, 뒤 1000줄** 검색
 
 ### 4. 결과 해석
 
@@ -143,11 +153,10 @@ python manual_test.py input/source_code.abap 90
 
 ```
 abap-tracker/
-├── 📄 main.py                     # 메인 실행 엔진
-├── 🧠 analyzer.py                 # 고도화된 분석 엔진 (538줄)
-├── 🎯 patterns.py                 # 21가지 패턴 정의 (175줄)
-├── 🧪 manual_test.py              # 수동 테스트 스크립트 ⭐
-├── 📊 export_to_csv.py            # CSV 출력 도구 ⭐
+├── 📄 main.py                     # 메인 실행 엔진 (JSON/CSV 출력 통합)
+├── 🧠 analyzer.py                 # 고도화된 분석 엔진 (193줄)
+├── 🎯 patterns.py                 # 통합 패턴 정의 (21가지 + 확장)
+├── 🧪 tests.py                    # 통합 테스트 스크립트 ⭐
 ├── 📚 USAGE_GUIDE.md              # 상세 사용 가이드 (244줄)
 ├── 📋 requirements.txt            # 패키지 의존성
 ├── 📁 input/
@@ -155,12 +164,10 @@ abap-tracker/
 │   ├── extended_test_code.abap    # 확장 테스트 (223줄)
 │   ├── business_scenario_code.abap # 비즈니스 시나리오 (249줄)
 │   └── sy_uname_locations.csv     # SY-UNAME 위치 정보
-├── 📁 output/
-│   └── analysis_result.json       # 분석 결과
-└── 📁 tests/
-    ├── test_comprehensive.py      # 종합 테스트
-    ├── test_extended_patterns.py  # 확장 패턴 테스트
-    └── test_business_scenarios.py # 비즈니스 시나리오 테스트
+└── 📁 output/
+    ├── analysis_result.json       # JSON 분석 결과
+    ├── sy_uname_analysis_results.csv # CSV 분석 결과
+    └── test_report.json           # 테스트 리포트
 ```
 
 ## 🔧 설정 파일
@@ -180,14 +187,14 @@ input/business_scenario_code.abap,45
 
 ## 📖 사용 예시
 
-### 예시 1: CSV 출력 (권장)
+### 예시 1: 기본 사용법 (권장)
 ```bash
 # 1. sy_uname_locations.csv 설정
 echo "file_path,line_number" > input/sy_uname_locations.csv
 echo "your_file.abap,53" >> input/sy_uname_locations.csv
 
-# 2. CSV로 결과 출력
-python export_to_csv.py
+# 2. JSON + CSV 결과 출력
+python main.py --csv
 
 # 3. Excel에서 결과 확인
 open output/sy_uname_analysis_results.csv
@@ -212,13 +219,13 @@ print(f"필드: {result['fields']}")
 
 ### 예시 3: 테스트 실행
 ```bash
-# 수동 테스트 (권장)
-python manual_test.py input/business_scenario_code.abap 53
+# 통합 테스트 (모든 테스트)
+python tests.py
 
-# 종합 테스트
-python test_comprehensive.py
-python test_business_scenarios.py
-python test_extended_patterns.py
+# 특정 테스트 실행
+python tests.py --pattern          # 패턴 테스트
+python tests.py --business         # 비즈니스 시나리오
+python tests.py --comprehensive    # 종합 테스트
 ```
 
 ## 🎯 실제 비즈니스 활용

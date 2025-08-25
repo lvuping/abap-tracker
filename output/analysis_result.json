@@ -4,22 +4,22 @@
     "source_file": "input/source_code.abap",
     "source_line": 90,
     "result": {
-      "status": "Found",
-      "type": "DATABASE_SELECT_WHERE",
-      "table": "EKKO",
-      "fields": [
-        "LIFNR"
-      ],
-      "operation": "SELECT",
-      "final_variable": "lv_lifnr",
-      "path": [
-        "Line 90: Assignment 'sy-uname' -> 'lv_lifnr'"
-      ],
+      "status": "Scope Boundary Reached",
+      "type": "PERFORM_CALL",
+      "subroutine": "CALL_REMOTE_SYSTEM",
+      "reason": "PERFORM 호출로 인한 스코프 경계 도달: CALL_REMOTE_SYSTEM",
+      "boundary_line": 131,
+      "verified_syuname_line": 90,
       "tainted_variables": [
-        "lv_lifnr",
-        "sy-uname"
+        "sy-uname",
+        "lv_lifnr"
       ],
-      "description": "테이블 EKKO의 LIFNR 필드를 WHERE 조건으로 사용자 정보 조회"
+      "trace_path": [
+        "✅ SY-UNAME found at line 90 (specified line 90)",
+        "Starting analysis from verified SY-UNAME location (line 90)",
+        "Line 90: Chained Assignment 'sy-uname' -> 'lv_lifnr'",
+        "Line 131: ⛔ PERFORM CALL_REMOTE_SYSTEM - 추적 종료 (스코프 경계)"
+      ]
     }
   },
   {
@@ -27,22 +27,11 @@
     "source_file": "input/extended_test_code.abap",
     "source_line": 37,
     "result": {
-      "status": "Found",
-      "type": "DATABASE_SELECT_WHERE",
-      "table": "SY",
-      "fields": [
-        "LV_ORIGINAL_USER"
-      ],
-      "operation": "SELECT",
-      "final_variable": "sy-uname",
-      "path": [
-        "Line 41: Assignment 'sy-uname' -> 'lv_original_user'"
-      ],
-      "tainted_variables": [
-        "lv_original_user",
-        "sy-uname"
-      ],
-      "description": "테이블 SY의 LV_ORIGINAL_USER 필드를 WHERE 조건으로 사용자 정보 조회"
+      "status": "Not Found",
+      "reason": "SY-UNAME not found at specified line 37",
+      "specified_line": 37,
+      "actual_content": "\" Test Case 1: Basic Assignment Patterns",
+      "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE"
     }
   },
   {
@@ -50,37 +39,11 @@
     "source_file": "input/business_scenario_code.abap",
     "source_line": 45,
     "result": {
-      "status": "Found",
-      "type": "DATABASE_INSERT_FIELD",
-      "table": "ZDOCUMENTS",
-      "fields": [
-        "CREATED_BY",
-        "CHANGED_BY"
-      ],
-      "operation": "INSERT",
-      "source_structure": "ls_document",
-      "final_variable": "ls_document",
-      "path": [
-        "Line 53: Assignment 'sy-uname' -> 'lv_current_user'",
-        "Line 56: Assignment 'lv_current_user' -> 'lv_processing_user'",
-        "Line 57: Assignment 'lv_processing_user' -> 'lv_audit_user'",
-        "Line 66: Assignment 'lv_current_user' -> 'ls_document-created_by'",
-        "Line 66: Structure assignment 'lv_current_user' -> 'ls_document-created_by'",
-        "Line 68: Assignment 'lv_processing_user' -> 'ls_document-changed_by'",
-        "Line 68: Structure assignment 'lv_processing_user' -> 'ls_document-changed_by'",
-        "Line 76: Assignment 'lv_audit_user' -> 'ls_audit-user_name'",
-        "Line 76: Structure assignment 'lv_audit_user' -> 'ls_audit-user_name'"
-      ],
-      "tainted_variables": [
-        "sy-uname",
-        "ls_document-created_by",
-        "lv_processing_user",
-        "ls_audit-user_name",
-        "ls_document-changed_by",
-        "lv_current_user",
-        "lv_audit_user"
-      ],
-      "description": "테이블 ZDOCUMENTS의 CREATED_BY, CHANGED_BY 필드에 사용자 정보 INSERT"
+      "status": "Not Found",
+      "reason": "Specified line 45 is a comment or empty line",
+      "specified_line": 45,
+      "actual_content": "*----------------------------------------------------------------------*",
+      "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE"
     }
   },
   {
@@ -88,18 +51,74 @@
     "source_file": "input/test.abap",
     "source_line": 23,
     "result": {
-      "status": "Found",
-      "type": "RFC",
-      "name": "BAPI_USER_GET_DETAIL",
-      "parameter": "USERNAME",
-      "final_variable": "lv_user_id",
-      "path": [
-        "Line 68: Assignment 'sy-uname' -> 'lv_user_id'"
-      ],
+      "status": "Scope Boundary Reached",
+      "type": "PERFORM_CALL",
+      "subroutine": "CALL_RFC_GET_USER_DETAIL",
+      "reason": "PERFORM 호출로 인한 스코프 경계 도달: CALL_RFC_GET_USER_DETAIL",
+      "boundary_line": 80,
+      "verified_syuname_line": 21,
       "tainted_variables": [
-        "lv_user_id",
-        "sy-uname"
+        "sy-uname",
+        "lv_user_id"
+      ],
+      "trace_path": [
+        "✅ SY-UNAME found at line 21 (specified line 23)",
+        "Starting analysis from verified SY-UNAME location (line 21)",
+        "Line 68: Chained Assignment 'sy-uname' -> 'lv_user_id'",
+        "Line 80: ⛔ PERFORM CALL_RFC_GET_USER_DETAIL - 추적 종료 (스코프 경계)"
       ]
+    }
+  },
+  {
+    "id": "5",
+    "source_file": "input/hardcode_test.abap",
+    "source_line": 14,
+    "result": {
+      "status": "Found",
+      "type": "SYUNAME_HARDCODE",
+      "subtype": "IF_STATEMENT",
+      "operator": "=",
+      "hardcode_value": "'ADMIN'",
+      "description": "SY-UNAME hardcoded comparison in IF: sy-uname = 'ADMIN'",
+      "final_variable": "sy-uname"
+    }
+  },
+  {
+    "id": "6",
+    "source_file": "input/hardcode_test.abap",
+    "source_line": 27,
+    "result": {
+      "status": "Not Found",
+      "reason": "Specified line 27 is a comment or empty line",
+      "specified_line": 27,
+      "actual_content": "",
+      "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE"
+    }
+  },
+  {
+    "id": "7",
+    "source_file": "input/hardcode_test.abap",
+    "source_line": 35,
+    "result": {
+      "status": "Found",
+      "type": "SYUNAME_HARDCODE",
+      "subtype": "WHERE_CLAUSE",
+      "operator": "<>",
+      "hardcode_value": "'GUEST'",
+      "description": "SY-UNAME hardcoded comparison in WHERE: sy-uname <> 'GUEST'",
+      "final_variable": "sy-uname"
+    }
+  },
+  {
+    "id": "8",
+    "source_file": "input/hardcode_test.abap",
+    "source_line": 40,
+    "result": {
+      "status": "Not Found",
+      "reason": "Specified line 40 is a comment or empty line",
+      "specified_line": 40,
+      "actual_content": "",
+      "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE"
     }
   }
 ]

@@ -2,6 +2,13 @@
 """
 SY-UNAME 추적 결과를 CSV로 출력하는 스크립트
 
+기능:
+- SY-UNAME 변수 흐름 추적
+- 데이터베이스 테이블/필드 감지
+- RFC 호출 감지
+- 하드코딩 패턴 감지 ⭐ 신기능
+- CSV 결과 출력 (Excel 친화적)
+
 사용법:
     python export_to_csv.py
 
@@ -119,6 +126,11 @@ def analyze_and_export_to_csv():
                     structure = analysis_result.get("structure", "")
                     field = analysis_result.get("field", "")
                     print(f"   ✅ 감사 필드: {structure}-{field}")
+                elif result_type == "SYUNAME_HARDCODE":
+                    subtype = analysis_result.get("subtype", "")
+                    operator = analysis_result.get("operator", "")
+                    value = analysis_result.get("hardcode_value", "")
+                    print(f"   🎯 하드코딩: {subtype} - sy-uname {operator} {value}")
                 else:
                     print(f"   ✅ 발견: {result_type}")
             else:
@@ -139,7 +151,10 @@ def analyze_and_export_to_csv():
 
         # 결과 요약
         found_count = sum(1 for r in results if r["Status"] == "Found")
-        print(f"🎯 성공: {found_count}개, 미발견: {len(results) - found_count}개")
+        hardcode_count = sum(1 for r in results if r["Type"] == "SYUNAME_HARDCODE")
+        print(
+            f"🎯 성공: {found_count}개, 하드코딩: {hardcode_count}개, 미발견: {len(results) - found_count}개"
+        )
 
         return True
 
@@ -164,6 +179,9 @@ def convert_analysis_to_csv_row(id_num, file_path, line_number, analysis_result)
         "Final_Fields": "",
         "RFC_Name": "",
         "RFC_Parameter": "",
+        "Hardcode_Type": "",
+        "Hardcode_Operator": "",
+        "Hardcode_Value": "",
         "Description": analysis_result.get("description", ""),
         "Final_Variable": analysis_result.get("final_variable", ""),
         "Tainted_Variables_Count": len(analysis_result.get("tainted_variables", [])),
@@ -198,6 +216,12 @@ def convert_analysis_to_csv_row(id_num, file_path, line_number, analysis_result)
         field = analysis_result.get("field", "")
         row["Final_Fields"] = f"{structure}-{field}"
 
+    elif result_type == "SYUNAME_HARDCODE":
+        # 하드코딩 정보 ⭐ 신기능
+        row["Hardcode_Type"] = analysis_result.get("subtype", "")
+        row["Hardcode_Operator"] = analysis_result.get("operator", "")
+        row["Hardcode_Value"] = analysis_result.get("hardcode_value", "")
+
     # 추적 경로를 개별 컬럼으로 추가 (최대 20단계)
     trace_path = analysis_result.get("path", [])
     for i, step in enumerate(trace_path[:20], 1):  # 최대 20단계
@@ -220,6 +244,9 @@ def create_empty_result(id_num, file_path, line_number, error_message):
         "Final_Fields": "",
         "RFC_Name": "",
         "RFC_Parameter": "",
+        "Hardcode_Type": "",
+        "Hardcode_Operator": "",
+        "Hardcode_Value": "",
         "Description": error_message,
         "Final_Variable": "",
         "Tainted_Variables_Count": 0,
@@ -252,6 +279,9 @@ def write_results_to_csv(results, output_file):
         "Final_Fields",
         "RFC_Name",
         "RFC_Parameter",
+        "Hardcode_Type",
+        "Hardcode_Operator",
+        "Hardcode_Value",
         "Description",
         "Final_Variable",
         "Tainted_Variables_Count",
@@ -297,7 +327,7 @@ def main():
         print()
         print("🎉 CSV 출력이 성공적으로 완료되었습니다!")
         print()
-        print("📋 CSV 파일 구조:")
+        print("📋 CSV 파일 구조 (업데이트됨):")
         print("   A: ID (1,2,3,...)")
         print("   B: Source_File (소스코드 파일이름)")
         print("   C: SY_UNAME_Line (SY-UNAME 라인번호)")
@@ -305,9 +335,13 @@ def main():
         print("   E: Final_Fields (최종 사용 필드)")
         print("   F: RFC_Name (최종 사용된 RFC 이름)")
         print("   G: RFC_Parameter (최종 사용된 RFC 파라미터)")
-        print("   H~: Trace_Step_01, 02, ... (추적 경로)")
+        print("   H: Hardcode_Type (하드코딩 타입) ⭐ 신기능")
+        print("   I: Hardcode_Operator (하드코딩 연산자) ⭐ 신기능")
+        print("   J: Hardcode_Value (하드코딩 값) ⭐ 신기능")
+        print("   K~: Trace_Step_01, 02, ... (추적 경로)")
         print()
         print("💡 Excel에서 열어서 확인하실 수 있습니다.")
+        print("🎯 하드코딩 패턴 감지 기능이 추가되었습니다!")
     else:
         print()
         print("❌ CSV 출력 중 오류가 발생했습니다.")

@@ -1,5 +1,9 @@
-﻿ID,Source_File,SY_UNAME_Line,Status,Type,Final_Table,Final_Fields,RFC_Name,RFC_Parameter,Description,Final_Variable,Tainted_Variables_Count,Trace_Steps,Trace_Step_01,Trace_Step_02,Trace_Step_03,Trace_Step_04,Trace_Step_05,Trace_Step_06,Trace_Step_07,Trace_Step_08,Trace_Step_09
-1,input/source_code.abap,90,Found,DATABASE_SELECT_WHERE,EKKO,LIFNR,,,테이블 EKKO의 LIFNR 필드를 WHERE 조건으로 사용자 정보 조회,lv_lifnr,2,1,Line 90: Assignment 'sy-uname' -> 'lv_lifnr',,,,,,,,
-2,input/extended_test_code.abap,37,Found,DATABASE_SELECT_WHERE,SY,LV_ORIGINAL_USER,,,테이블 SY의 LV_ORIGINAL_USER 필드를 WHERE 조건으로 사용자 정보 조회,sy-uname,2,1,Line 41: Assignment 'sy-uname' -> 'lv_original_user',,,,,,,,
-3,input/business_scenario_code.abap,45,Found,DATABASE_INSERT_FIELD,ZDOCUMENTS,"CREATED_BY, CHANGED_BY",,,"테이블 ZDOCUMENTS의 CREATED_BY, CHANGED_BY 필드에 사용자 정보 INSERT",ls_document,7,9,Line 53: Assignment 'sy-uname' -> 'lv_current_user',Line 56: Assignment 'lv_current_user' -> 'lv_processing_user',Line 57: Assignment 'lv_processing_user' -> 'lv_audit_user',Line 66: Assignment 'lv_current_user' -> 'ls_document-created_by',Line 66: Structure assignment 'lv_current_user' -> 'ls_document-created_by',Line 68: Assignment 'lv_processing_user' -> 'ls_document-changed_by',Line 68: Structure assignment 'lv_processing_user' -> 'ls_document-changed_by',Line 76: Assignment 'lv_audit_user' -> 'ls_audit-user_name',Line 76: Structure assignment 'lv_audit_user' -> 'ls_audit-user_name'
-4,input/test.abap,23,Found,RFC,,,BAPI_USER_GET_DETAIL,USERNAME,,lv_user_id,2,1,Line 68: Assignment 'sy-uname' -> 'lv_user_id',,,,,,,,
+﻿ID,Source_File,SY_UNAME_Line,Status,Type,Final_Table,Final_Fields,RFC_Name,RFC_Parameter,Hardcode_Type,Hardcode_Operator,Hardcode_Value,Description,Final_Variable,Tainted_Variables_Count,Trace_Steps
+1,input/source_code.abap,90,Not Found,,,,,,,,,,,0,0
+2,input/extended_test_code.abap,37,Found,RFC,,,Z_USER_AUTHORIZATION_CHECK,I_USERNAME,,,,,,0,0
+3,input/business_scenario_code.abap,45,Found,DATABASE_INSERT_FIELD,ZDOCUMENTS,CREATED_BY,,,,,,,,0,0
+4,input/test.abap,23,Found,RFC,,,BAPI_USER_GET_DETAIL,USERNAME,,,,,,0,0
+5,input/hardcode_test.abap,14,Found,SYUNAME_HARDCODE,,,,,IF_STATEMENT,=,'ADMIN',SY-UNAME hardcoded comparison in IF: sy-uname = 'ADMIN',sy-uname,0,0
+6,input/hardcode_test.abap,27,Found,SYUNAME_HARDCODE,,,,,IF_STATEMENT,=,'ADMIN',SY-UNAME hardcoded comparison in IF: sy-uname = 'ADMIN',sy-uname,0,0
+7,input/hardcode_test.abap,35,Found,SYUNAME_HARDCODE,,,,,WHERE_CLAUSE,<>,'GUEST',SY-UNAME hardcoded comparison in WHERE: sy-uname <> 'GUEST',sy-uname,0,0
+8,input/hardcode_test.abap,40,Found,SYUNAME_HARDCODE,,,,,ASSERT_STATEMENT,=,'DEVELOPER',SY-UNAME hardcoded comparison in ASSERT: sy-uname = 'DEVELOPER',sy-uname,0,0
