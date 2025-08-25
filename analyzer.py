@@ -652,17 +652,41 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
         modify_table_match = MODIFY_TABLE_PATTERN.match(line_upper)
         if modify_table_match:
             table_name = modify_table_match.group("table").strip().lower()
-            if table_name.upper().startswith(('Z', 'Y')):
-                if table_name in tainted_vars:
+            base_structure_name = table_name
+
+            if base_structure_name.upper().startswith(('Z', 'Y')):
+                # 1. 작업 영역(work area) 자체가 오염된 경우
+                if base_structure_name in tainted_vars:
                     return {
                         "status": "Found",
                         "type": "DATABASE_MODIFY",
-                        "table": table_name.upper(),
+                        "table": base_structure_name.upper(),
                         "operation": "MODIFY",
-                        "final_variable": table_name,
+                        "final_variable": base_structure_name,
                         "path": trace_path,
                         "tainted_variables": list(tainted_vars),
-                        "description": f"테이블 {table_name.upper()} MODIFY에서 사용자 정보 사용 (work area)",
+                        "description": f"테이블 {base_structure_name.upper()} MODIFY에서 사용자 정보 사용 (work area)",
+                    }
+                
+                # 2. 작업 영역의 필드가 오염된 경우
+                structure_fields = []
+                for tainted_var in tainted_vars:
+                    if tainted_var.startswith(base_structure_name + "-"):
+                        field_name = tainted_var.split("-", 1)[1].upper()
+                        structure_fields.append(field_name)
+                
+                if structure_fields:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_MODIFY_FIELD",
+                        "table": base_structure_name.upper(),
+                        "fields": list(set(structure_fields)),
+                        "operation": "MODIFY",
+                        "source_structure": base_structure_name,
+                        "final_variable": base_structure_name,
+                        "path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                        "description": f"테이블 {base_structure_name.upper()}의 {', '.join(list(set(structure_fields)))} 필드에 사용자 정보 MODIFY (work area)",
                     }
 
         # 8-4. DELETE 문 분석
