@@ -196,3 +196,9 @@ STANDALONE_WHERE_PATTERN = re.compile(
     r"^\s*(?:AND\s+|OR\s+)?(?P<field>[\w\d_]+)\s*=\s*@?(?P<variable>[\w\d\-\>\[\]]+)",
     re.IGNORECASE,
 )
+
+# 조건문 (IF, CHECK) 패턴
+CONDITIONAL_CHECK_PATTERN = re.compile(
+    r"^\s*(?P<keyword>IF|CHECK)\s+(?P<variable>[\w\d\-\>\[\]]+)\s*(?:EQ|=)\s*(?P<value>.*?)\s*\.",
+    re.IGNORECASE,
+)
