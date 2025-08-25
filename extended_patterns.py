@@ -44,6 +44,7 @@ CHAIN_MOVE_PATTERN = re.compile(
 )
 
 # 연속 MOVE 내에서 개별 할당을 찾기 위한 패턴
+# 쉼표(,)로 구분된 여러 할당을 처리하도록 수정
 MOVE_PAIR_PATTERN = re.compile(
-    r"(?P<source>[\w\d\-\>\[\]]+)\s+TO\s+(?P<target>[\w\d\-\>\[\]]+)"
+    r",?\s*(?P<source>[\w\d\-\>\[\]]+)\s+TO\s+(?P<target>[\w\d\-\>\[\]]+)"
 )
