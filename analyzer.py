@@ -566,6 +566,45 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                             "description": f"테이블 {table}의 {', '.join(list(set(structure_fields)))} 필드에 사용자 정보 INSERT",
                         }
                 elif values:
+                    # VALUES 절에 구조체 변수가 사용되는 경우 (예: VALUES ls_data)
+                    source_var = values.strip().lower()
+                    base_structure_name = source_var.replace('[]', '')
+
+                    # 구조체 자체가 오염된 경우
+                    if base_structure_name in tainted_vars:
+                        return {
+                            "status": "Found",
+                            "type": "DATABASE_INSERT",
+                            "table": table,
+                            "operation": "INSERT",
+                            "final_variable": base_structure_name,
+                            "path": trace_path,
+                            "tainted_variables": list(tainted_vars),
+                            "description": f"테이블 {table} INSERT VALUES에서 전체 구조 '{base_structure_name}' 사용",
+                        }
+
+                    # 구조체의 필드가 오염된 경우
+                    structure_fields = []
+                    for tainted_var in tainted_vars:
+                        if tainted_var.startswith(base_structure_name + "-"):
+                            field_name = tainted_var.split("-", 1)[1].upper()
+                            structure_fields.append(field_name)
+                    
+                    if structure_fields:
+                        return {
+                            "status": "Found",
+                            "type": "DATABASE_INSERT_FIELD",
+                            "table": table,
+                            "fields": list(set(structure_fields)),
+                            "operation": "INSERT",
+                            "source_structure": base_structure_name,
+                            "final_variable": base_structure_name,
+                            "path": trace_path,
+                            "tainted_variables": list(tainted_vars),
+                            "description": f"테이블 {table}의 {', '.join(list(set(structure_fields)))} 필드에 사용자 정보 INSERT",
+                        }
+
+                    # VALUES 절에 리터럴이나 괄호가 사용되는 경우 (기존 로직)
                     for var in tainted_vars:
                         if var.upper() in values.upper():
                             return {
