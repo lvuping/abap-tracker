@@ -1,7 +1,0 @@
-﻿ID,File_Name,File_Path,Line_Number,Statement_Type,Matched_Domains,Line_Content,Analysis_Date
-1,test_colon_comma,input/test_colon_comma.abap,7,PARAMETERS,"sy-uname, sy-datum","PARAMETERS : p_uname TYPE sy-uname, p_date TYPE sy-datum.",2025-08-26 23:55:56
-2,test_basic,input/test_basic.abap,3,PARAMETERS,sy-uname,PARAMETERS: p_user TYPE sy-uname.,2025-08-26 23:55:56
-3,test_multiline,input/test_multiline.abap,8,PARAMETERS,"sy-uname, sy-datum, sy-langu","PARAMETERS: p_user TYPE sy-uname, p_date TYPE sy-datum, p_lang LIKE sy-langu.",2025-08-26 23:55:56
-4,test_mixed,input/test_mixed.abap,3,PARAMETERS,"sy-uname, sy-datum","PARAMETERS: p_user TYPE sy-uname, p_field TYPE c LENGTH 20, p_date TYPE sy-datum.",2025-08-26 23:55:56
-5,enhanced_test,input/enhanced_test.abap,8,PARAMETERS,sy-uname,PARAMETERS: p_user LIKE sy-uname.,2025-08-26 23:55:56
-6,test_abap,input/test_abap.txt,9,PARAMETERS,sy-uname,PARAMETERS: p_user TYPE sy-uname.,2025-08-26 23:55:56

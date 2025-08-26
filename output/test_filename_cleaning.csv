@@ -1,3 +1,0 @@
-﻿ID,File_Name,File_Path,Line_Number,Statement_Type,Matched_Domains,Line_Content,Analysis_Date
-1,test_file,input/test_file.abap,10,PARAMETERS,sy-uname,PARAMETERS: p_user TYPE sy-uname.,2025-08-26 23:55:56
-2,another_file,input/another_file.txt,15,SELECT-OPTIONS,sy-datum,SELECT-OPTIONS: s_date FOR sy-datum.,2025-08-26 23:55:56

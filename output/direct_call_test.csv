@@ -1,0 +1,6 @@
+﻿ID,File_Name,File_Path,Line_Number,Statement_Type,Matched_Domains,Line_Content,Analysis_Date
+1,test_basic,input/test_basic.abap,3,PARAMETERS,sy-uname,PARAMETERS: p_user TYPE sy-uname.,2025-08-27 00:31:53
+2,test_multiline,input/test_multiline.abap,8,PARAMETERS,sy-uname,"PARAMETERS: p_user TYPE sy-uname, p_date TYPE sy-datum, p_lang LIKE sy-langu.",2025-08-27 00:31:53
+3,test_mixed,input/test_mixed.abap,3,PARAMETERS,sy-uname,"PARAMETERS: p_user TYPE sy-uname, p_field TYPE c LENGTH 20, p_date TYPE sy-datum.",2025-08-27 00:31:53
+4,business_scenario,input/business_scenario.abap,7,PARAMETERS,sy-uname,"PARAMETERS: p_user TYPE sy-uname DEFAULT sy-uname, p_date TYPE sy-datum DEFAULT sy-datum, p_lang LIKE sy-langu DEFAULT sy-langu.",2025-08-27 00:31:53
+5,complex_structure,input/complex_structure.abap,3,PARAMETERS,sy-uname,"PARAMETERS: p_header TYPE zheader, p_user TYPE sy-uname, p_date TYPE sy-datum, p_detail TYPE zdetail.",2025-08-27 00:31:53

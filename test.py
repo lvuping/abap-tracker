@@ -550,6 +550,43 @@ SELECT-OPTIONS: s_user FOR sy-uname,
                 s_date FOR sy-datum.
     """
 
+    # 테스트 케이스 6: 실제 비즈니스 시나리오
+    print("\n📋 테스트 케이스 6: 실제 비즈니스 시나리오")
+    business_scenario_code = """
+* 사용자 관리 프로그램
+REPORT zuser_management.
+
+* 선택 화면 정의
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
+PARAMETERS: p_user TYPE sy-uname DEFAULT sy-uname,
+            p_date TYPE sy-datum DEFAULT sy-datum,
+            p_lang LIKE sy-langu DEFAULT sy-langu.
+SELECTION-SCREEN END OF BLOCK b1.
+
+* 선택 옵션 정의
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE text-002.
+SELECT-OPTIONS: s_user FOR sy-uname,
+                s_date FOR sy-datum,
+                s_lang FOR sy-langu.
+SELECTION-SCREEN END OF BLOCK b2.
+    """
+
+    # 테스트 케이스 7: 복잡한 구조체 패턴
+    print("\n📋 테스트 케이스 7: 복잡한 구조체 패턴")
+    complex_structure_code = """
+* 복잡한 구조체를 사용한 PARAMETERS
+PARAMETERS: p_header TYPE zheader,
+            p_user TYPE sy-uname,
+            p_date TYPE sy-datum,
+            p_detail TYPE zdetail.
+
+* 복잡한 구조체를 사용한 SELECT-OPTIONS
+SELECT-OPTIONS: s_header FOR zheader,
+                s_user FOR sy-uname,
+                s_date FOR sy-datum,
+                s_detail FOR zdetail.
+    """
+
     # 테스트 파일들 생성
     test_files = {
         "input/test_basic.abap": basic_test_code,
@@ -557,6 +594,8 @@ SELECT-OPTIONS: s_user FOR sy-uname,
         "input/test_colon_comma.abap": colon_comma_test_code,
         "input/test_no_target.abap": no_target_test_code,
         "input/test_mixed.abap": mixed_test_code,
+        "input/business_scenario.abap": business_scenario_code,
+        "input/complex_structure.abap": complex_structure_code,
     }
 
     os.makedirs("input", exist_ok=True)
@@ -654,12 +693,29 @@ SELECT-OPTIONS: s_user FOR sy-uname,
     else:
         print(f"\n⚠️ {len(test_results) - success_count}개 테스트가 실패했습니다.")
 
-    print("\n=== 사용법 예시 ===")
-    print("# 기본 사용법:")
-    print("analyze_and_export_to_csv(['sy-uname'], 'input')")
-    print("\n# 커스텀 출력 파일:")
-    print("analyze_and_export_to_csv(['sy-uname'], 'input', 'custom_output.csv')")
-    print("\n# 단일 파일 분석:")
-    print("analyzer = ABAPSourceAnalyzer(['sy-uname'])")
-    print("results = analyzer.analyze_file('your_file.abap')")
-    print("analyzer.export_to_csv(results)")
+    print("\n=== 사용법 안내 ===")
+    print("🚀 이 도구를 사용하는 방법:")
+    print()
+    print("1️⃣ 기본 사용법:")
+    print("   python test.py")
+    print("   → 전체 테스트 실행 및 CSV 출력")
+    print()
+    print("2️⃣ 커스텀 도메인 검색:")
+    print("   from test import ABAPSourceAnalyzer")
+    print("   analyzer = ABAPSourceAnalyzer(['sy-uname'])")
+    print("   results = analyzer.analyze_directory('input')")
+    print("   analyzer.export_to_csv(results, 'output/custom.csv')")
+    print()
+    print("3️⃣ 단일 파일 분석:")
+    print("   analyzer = ABAPSourceAnalyzer(['sy-uname', 'sy-datum'])")
+    print("   results = analyzer.analyze_file('input/your_file.abap')")
+    print("   analyzer.export_to_csv(results)")
+    print()
+    print("4️⃣ 직접 함수 호출:")
+    print("   from test import analyze_and_export_to_csv")
+    print("   analyze_and_export_to_csv(['sy-uname'], 'input', 'output/result.csv')")
+    print()
+    print("📁 입력 폴더: input/ (ABAP 파일들)")
+    print("📁 출력 폴더: output/ (CSV 결과 파일들)")
+    print("🎯 지원 도메인: sy-uname, sy-datum, sy-langu 등")
+    print("💡 File_Name 컬럼에서 경로와 확장자가 자동으로 제거됩니다!")
