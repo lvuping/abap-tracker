@@ -1,0 +1,11 @@
+﻿ID,File_Name,File_Path,Line_Number,Statement_Type,Matched_Domains,Line_Content,Analysis_Date
+1,enhanced_test.abap,input/enhanced_test.abap,8,PARAMETERS,sy-uname,PARAMETERS: p_user LIKE sy-uname.,2025-08-26 20:10:42
+2,enhanced_test.abap,input/enhanced_test.abap,9,SELECT-OPTIONS,sy-uname,SELECT-OPTIONS: s_user FOR sy-uname.,2025-08-26 20:10:42
+3,test_abap.txt,input/test_abap.txt,9,PARAMETERS,sy-uname,PARAMETERS: p_user TYPE sy-uname.,2025-08-26 20:10:42
+4,test_abap.txt,input/test_abap.txt,11,PARAMETERS,sy-langu,parameters p_lang like sy-langu.,2025-08-26 20:10:42
+5,test_abap.txt,input/test_abap.txt,19,PARAMETERS,"sy-uname, sy-datum, sy-langu","PARAMETERS: p_user TYPE sy-uname, p_date TYPE sy-datum, p_lang LIKE sy-langu.",2025-08-26 20:10:42
+6,test_abap.txt,input/test_abap.txt,28,PARAMETERS,"sy-uname, sy-datum","PARAMETERS : p_uname TYPE sy-uname, p_date TYPE sy-datum.",2025-08-26 20:10:42
+7,test_abap.txt,input/test_abap.txt,1,SELECT-OPTIONS,sy-uname,SELECT-OPTIONS : s_uname FOR sy-uname.,2025-08-26 20:10:42
+8,test_abap.txt,input/test_abap.txt,10,SELECT-OPTIONS,sy-datum,SELECT-OPTIONS: s_date FOR sy-datum.,2025-08-26 20:10:42
+9,test_abap.txt,input/test_abap.txt,14,SELECT-OPTIONS,"sy-uname, sy-datum, sy-langu","SELECT-OPTIONS: s_user FOR sy-uname, s_date FOR sy-datum, s_lang FOR sy-langu.",2025-08-26 20:10:42
+10,test_abap.txt,input/test_abap.txt,24,SELECT-OPTIONS,"sy-uname, sy-datum","SELECT-OPTIONS : s_uname FOR sy-uname, s_date FOR sy-datum.",2025-08-26 20:10:42
