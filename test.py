@@ -33,8 +33,9 @@ class ABAPSourceAnalyzer:
 
     def analyze_file(self, file_path: str) -> List[Dict]:
         """
-        단일 파일을 분석하여 매칭되는 라인을 찾음
-        타겟 도메인을 찾으면 즉시 처리 중단 (최적화)
+        단일 파일을 분석하여 매칭되는 라인을 찾음.
+        'parameters' 또는 'select-options' 키워드 발견 시, 위아래 20줄을 포함한 컨텍스트에서
+        타겟 도메인을 검색함.
 
         Args:
             file_path: 분석할 ABAP 파일 경로
@@ -43,96 +44,52 @@ class ABAPSourceAnalyzer:
             매칭된 결과 리스트 (파일명, 라인번호, 라인내용, 매칭된 도메인 포함)
         """
         results = []
-        processed_positions = set()  # 중복 처리 방지
+        processed_lines = set()  # 중복 처리를 방지하기 위해 이미 처리된 라인 번호를 저장
 
         try:
             with open(file_path, "r", encoding="utf-8") as file:
                 lines = file.readlines()
 
-            full_content = "".join(lines)
+            for i, line in enumerate(lines):
+                if i in processed_lines:
+                    continue
 
-            # PARAMETERS와 SELECT-OPTIONS를 모두 찾아서 위치 순서대로 정렬
-            param_matches = self.parameters_pattern.finditer(full_content)
-            select_matches = self.select_options_pattern.finditer(full_content)
-            
-            all_matches = sorted(list(param_matches) + list(select_matches), key=lambda m: m.start())
+                # 'parameters' 또는 'select-options' 키워드 검색
+                is_param = self.parameters_pattern.search(line)
+                is_select = self.select_options_pattern.search(line)
 
-            for match in all_matches:
-                # 매칭된 전체 구문 추출
-                full_statement = self._extract_full_statement(
-                    full_content, match.start(), lines
-                )
-                if full_statement:
-                    matched_domains = self._extract_domains_from_statement(
-                        full_statement
-                    )
+                if is_param or is_select:
+                    # 컨텍스트 윈도우 설정 (위/아래 20줄)
+                    start_line = max(0, i - 20)
+                    end_line = min(len(lines), i + 21)
+                    
+                    context_lines = lines[start_line:end_line]
+                    context_block = "".join(context_lines)
+
+                    # 컨텍스트 블록 내에서 도메인 검색
+                    matched_domains = self._extract_domains_from_statement(context_block)
+
                     if matched_domains:
-                        # 구문 타입 결정
-                        statement_type = "PARAMETERS" if "parameters" in match.group(0).lower() else "SELECT-OPTIONS"
+                        statement_type = "PARAMETERS" if is_param else "SELECT-OPTIONS"
                         
-                        # 첫 번째 라인 번호 찾기
-                        first_line_num = self._find_first_line_number(
-                            full_content, match.start(), lines
-                        )
-                        results.append(
-                            {
-                                "file_name": os.path.basename(file_path),
-                                "file_path": file_path,
-                                "line_number": first_line_num,
-                                "line_content": full_statement.strip(),
-                                "statement_type": statement_type,
-                                "matched_domains": matched_domains,
-                            }
-                        )
+                        # 결과 추가
+                        results.append({
+                            "file_name": os.path.basename(file_path),
+                            "file_path": file_path,
+                            "line_number": i + 1,  # 0-based to 1-based
+                            "line_content": context_block.strip(),
+                            "statement_type": statement_type,
+                            "matched_domains": matched_domains,
+                        })
+                        
+                        # 이 컨텍스트 블록에 포함된 라인들은 더 이상 처리하지 않음
+                        for j in range(start_line, end_line):
+                            processed_lines.add(j)
+
         except Exception as e:
             print(f"파일 처리 중 오류 발생 ({file_path}): {e}")
 
         return results
-
-    def _extract_full_statement(
-        self, full_content: str, start_pos: int, lines: List[str]
-    ) -> str:
-        """
-        매칭된 위치부터 전체 구문을 추출 (여러 줄 포함, 주석 포함)
-
-        Args:
-            full_content: 전체 파일 내용
-            start_pos: 매칭 시작 위치
-            lines: 라인별 리스트
-
-        Returns:
-            전체 구문 문자열
-        """
-        try:
-            # 현재 위치부터 남은 파일 내용 추출
-            remaining_content = full_content[start_pos:]
-
-            # 마침표(.)를 기준으로 문장의 끝을 찾음
-            period_pos = remaining_content.find(".")
-
-            if period_pos != -1:
-                # 마침표가 포함된 라인의 끝(개행문자)까지 추출
-                end_of_line_pos = remaining_content.find("\n", period_pos)
-                if end_of_line_pos != -1:
-                    # 개행문자까지 포함하여 문장으로 설정
-                    statement = remaining_content[:end_of_line_pos]
-                else:
-                    # 파일의 끝까지 문장으로 설정
-                    statement = remaining_content
-            else:
-                # 마침표가 없는 경우, 파일 끝까지를 문장으로 간주
-                statement = remaining_content
-
-            # 여러 줄을 하나의 문자열로 정리
-            statement = statement.replace("\n", " ").replace("\r", " ")
-            # 연속된 공백을 하나로 정리
-            statement = re.sub(r"\s+", " ", statement).strip()
-
-            return statement
-
-        except Exception as e:
-            print(f"전체 구문 추출 중 오류: {e}")
-            return ""
 
     def _extract_domains_from_statement(self, full_statement: str) -> List[str]:
         """
@@ -177,87 +134,7 @@ class ABAPSourceAnalyzer:
 
         return list(set(matched_domains))
 
-    def _extract_domains_from_line(self, statement_content: str) -> List[str]:
-        """
-        PARAMETERS/SELECT-OPTIONS 문에서 타겟 도메인이 포함되어 있는지 확인 (단어 단위 검색)
-
-        Args:
-            statement_content: PARAMETERS 또는 SELECT-OPTIONS 문의 내용
-
-        Returns:
-            매칭된 도메인 리스트
-        """
-        matched_domains = []
-        statement_lower = statement_content.lower()
-        valid_identifier_chars = 'abcdefghijklmnopqrstuvwxyz0123456789_-'
-
-        for domain in self.target_domains:
-            domain_to_find = domain.lower()
-            start_index = 0
-            while True:
-                index = statement_lower.find(domain_to_find, start_index)
-                if index == -1:
-                    break
-
-                # 단어 경계 확인 (시작)
-                if index > 0:
-                    char_before = statement_lower[index - 1]
-                    if char_before in valid_identifier_chars:
-                        start_index = index + 1
-                        continue
-                
-                # 단어 경계 확인 (끝)
-                end_pos = index + len(domain_to_find)
-                if end_pos < len(statement_lower):
-                    char_after = statement_lower[end_pos]
-                    if char_after in valid_identifier_chars:
-                        start_index = index + 1
-                        continue
-
-                # 전체 단어 일치
-                matched_domains.append(domain)
-                break  # 현재 구문에서 도메인을 찾았으므로 다음 도메인으로 이동
-
-        return list(set(matched_domains))
-
-    def _find_line_number(self, full_content: str, pos: int, lines: List[str]) -> int:
-        """
-        위치를 기반으로 라인 번호 찾기
-
-        Args:
-            full_content: 전체 파일 내용
-            pos: 찾고자 하는 위치
-            lines: 라인별 리스트
-
-        Returns:
-            라인 번호 (1부터 시작)
-        """
-        try:
-            # pos 위치까지의 문자 수를 세어서 라인 번호 계산
-            char_count = 0
-            for i, line in enumerate(lines):
-                char_count += len(line)
-                if char_count > pos:
-                    return i + 1
-            return len(lines)  # 마지막 라인
-        except Exception:
-            return 1
-
-    def _find_first_line_number(
-        self, full_content: str, pos: int, lines: List[str]
-    ) -> int:
-        """
-        매칭된 구문의 첫 번째 라인 번호 찾기
-
-        Args:
-            full_content: 전체 파일 내용
-            pos: 매칭 시작 위치
-            lines: 라인별 리스트
-
-        Returns:
-            첫 번째 라인 번호 (1부터 시작)
-        """
-        return self._find_line_number(full_content, pos, lines)
+    
 
     def analyze_directory(
         self, directory_path: str, file_extensions: List[str] = None
@@ -534,6 +411,73 @@ SELECT-OPTIONS: s_user FOR ztable-user, " 기본값 sy-uname 고려
             "targets": ["sy-uname", "sy-datum", "sy-langu"],
             "expected_found": True,
             "expected_domains": ["sy-uname", "sy-datum", "sy-langu"],
+        },
+        "long_code_find": {
+            "content": '''
+* 아주 긴 ABAP 코드 중간에 키워드가 있는 경우
+REPORT z_long_report.
+
+INITIALIZATION.
+  DATA: gv_flag TYPE c.
+
+START-OF-SELECTION.
+  PERFORM get_data.
+  PERFORM process_data.
+  PERFORM display_data.
+
+*----------------------------------------------------------------------*
+*       FORM get_data
+*----------------------------------------------------------------------*
+FORM get_data.
+  DATA: lt_mara TYPE TABLE OF mara,
+        ls_mara TYPE mara.
+
+  SELECT * FROM mara
+    INTO TABLE lt_mara
+    UP TO 100 ROWS.
+
+  LOOP AT lt_mara INTO ls_mara.
+    " Some processing logic here
+  ENDLOOP.
+  
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+
+  PARAMETERS p_user TYPE sy-uname.
+
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+  " ... 많은 라인의 코드가 여기에 있다고 가정 ...
+ENDFORM.
+            ''',
+            "targets": ["sy-uname"],
+            "expected_found": True,
+            "expected_domains": ["sy-uname"],
         },
     }
 
