@@ -20,7 +20,7 @@ class ABAPSourceAnalyzer:
         #     PARAMETERS p_user TYPE sy-uname,
         #                p_date FOR sy-datum.
         self.parameters_pattern = re.compile(
-            r"^\s*parameters\s*[::]?\s*([^.]+)", re.IGNORECASE | re.MULTILINE
+            r"^\s*parameters\s*[:]?", re.IGNORECASE | re.MULTILINE
         )
 
         # SELECT-OPTIONS 패턴 (대소문자 구분 없음, 콜론과 쉼표로 구분된 여러 줄 지원)
@@ -28,7 +28,7 @@ class ABAPSourceAnalyzer:
         #     SELECT-OPTIONS s_uname FOR sy-uname,
         #                    s_date FOR sy-datum.
         self.select_options_pattern = re.compile(
-            r"^\s*select-options\s*[::]?\s*([^.]+)", re.IGNORECASE | re.MULTILINE
+            r"^\s*select-options\s*[:]?", re.IGNORECASE | re.MULTILINE
         )
 
     def analyze_file(self, file_path: str) -> List[Dict]:
@@ -49,17 +49,15 @@ class ABAPSourceAnalyzer:
             with open(file_path, "r", encoding="utf-8") as file:
                 lines = file.readlines()
 
-            # 전체 파일 내용을 하나의 문자열로 결합 (여러 줄 처리용)
             full_content = "".join(lines)
 
-            # PARAMETERS 검사 (여러 줄 지원)
-            parameters_matches = self.parameters_pattern.finditer(full_content)
-            for match in parameters_matches:
-                if match.start() in processed_positions:
-                    continue
+            # PARAMETERS와 SELECT-OPTIONS를 모두 찾아서 위치 순서대로 정렬
+            param_matches = self.parameters_pattern.finditer(full_content)
+            select_matches = self.select_options_pattern.finditer(full_content)
+            
+            all_matches = sorted(list(param_matches) + list(select_matches), key=lambda m: m.start())
 
-                processed_positions.add(match.start())
-
+            for match in all_matches:
                 # 매칭된 전체 구문 추출
                 full_statement = self._extract_full_statement(
                     full_content, match.start(), lines
@@ -69,6 +67,9 @@ class ABAPSourceAnalyzer:
                         full_statement
                     )
                     if matched_domains:
+                        # 구문 타입 결정
+                        statement_type = "PARAMETERS" if "parameters" in match.group(0).lower() else "SELECT-OPTIONS"
+                        
                         # 첫 번째 라인 번호 찾기
                         first_line_num = self._find_first_line_number(
                             full_content, match.start(), lines
@@ -79,51 +80,10 @@ class ABAPSourceAnalyzer:
                                 "file_path": file_path,
                                 "line_number": first_line_num,
                                 "line_content": full_statement.strip(),
-                                "statement_type": "PARAMETERS",
+                                "statement_type": statement_type,
                                 "matched_domains": matched_domains,
                             }
                         )
-
-                        # 🚀 최적화: 타겟 도메인을 찾았으면 즉시 반환
-                        print(f"   ✅ {file_path}에서 타겟 도메인 발견! 파일 처리 완료")
-                        return results
-
-            # SELECT-OPTIONS 검사 (여러 줄 지원)
-            select_options_matches = self.select_options_pattern.finditer(full_content)
-            for match in select_options_matches:
-                if match.start() in processed_positions:
-                    continue
-
-                processed_positions.add(match.start())
-
-                # 매칭된 전체 구문 추출
-                full_statement = self._extract_full_statement(
-                    full_content, match.start(), lines
-                )
-                if full_statement:
-                    matched_domains = self._extract_domains_from_statement(
-                        full_statement
-                    )
-                    if matched_domains:
-                        # 첫 번째 라인 번호 찾기
-                        first_line_num = self._find_first_line_number(
-                            full_content, match.start(), lines
-                        )
-                        results.append(
-                            {
-                                "file_name": os.path.basename(file_path),
-                                "file_path": file_path,
-                                "line_number": first_line_num,
-                                "line_content": full_statement.strip(),
-                                "statement_type": "SELECT-OPTIONS",
-                                "matched_domains": matched_domains,
-                            }
-                        )
-
-                        # 🚀 최적화: 타겟 도메인을 찾았으면 즉시 반환
-                        print(f"   ✅ {file_path}에서 타겟 도메인 발견! 파일 처리 완료")
-                        return results
-
         except Exception as e:
             print(f"파일 처리 중 오류 발생 ({file_path}): {e}")
 
@@ -133,7 +93,7 @@ class ABAPSourceAnalyzer:
         self, full_content: str, start_pos: int, lines: List[str]
     ) -> str:
         """
-        매칭된 위치부터 전체 구문을 추출 (여러 줄 포함)
+        매칭된 위치부터 전체 구문을 추출 (여러 줄 포함, 주석 포함)
 
         Args:
             full_content: 전체 파일 내용
@@ -144,15 +104,23 @@ class ABAPSourceAnalyzer:
             전체 구문 문자열
         """
         try:
-            # 현재 위치부터 다음 마침표(.)까지 또는 파일 끝까지 추출
+            # 현재 위치부터 남은 파일 내용 추출
             remaining_content = full_content[start_pos:]
 
-            # 마침표로 끝나는 경우
-            if "." in remaining_content:
-                end_pos = remaining_content.find(".") + 1
-                statement = remaining_content[:end_pos]
+            # 마침표(.)를 기준으로 문장의 끝을 찾음
+            period_pos = remaining_content.find(".")
+
+            if period_pos != -1:
+                # 마침표가 포함된 라인의 끝(개행문자)까지 추출
+                end_of_line_pos = remaining_content.find("\n", period_pos)
+                if end_of_line_pos != -1:
+                    # 개행문자까지 포함하여 문장으로 설정
+                    statement = remaining_content[:end_of_line_pos]
+                else:
+                    # 파일의 끝까지 문장으로 설정
+                    statement = remaining_content
             else:
-                # 마침표가 없는 경우 파일 끝까지
+                # 마침표가 없는 경우, 파일 끝까지를 문장으로 간주
                 statement = remaining_content
 
             # 여러 줄을 하나의 문자열로 정리
@@ -168,7 +136,7 @@ class ABAPSourceAnalyzer:
 
     def _extract_domains_from_statement(self, full_statement: str) -> List[str]:
         """
-        전체 구문에서 도메인을 추출하고 타겟 도메인과 매칭
+        전체 구문에서 타겟 도메인이 포함되어 있는지 확인 (단어 단위 검색)
 
         Args:
             full_statement: 전체 PARAMETERS 또는 SELECT-OPTIONS 구문
@@ -177,35 +145,41 @@ class ABAPSourceAnalyzer:
             매칭된 도메인 리스트
         """
         matched_domains = []
+        statement_lower = full_statement.lower()
+        valid_identifier_chars = 'abcdefghijklmnopqrstuvwxyz0123456789_-'
 
-        # 쉼표로 구분된 각 항목을 분리
-        items = [item.strip() for item in full_statement.split(",")]
+        for domain in self.target_domains:
+            domain_to_find = domain.lower()
+            start_index = 0
+            while True:
+                index = statement_lower.find(domain_to_find, start_index)
+                if index == -1:
+                    break
 
-        for item in items:
-            # FOR 키워드 이후의 도메인 추출 (SELECT-OPTIONS용)
-            for_pattern = re.compile(r"\bfor\s+([a-zA-Z0-9_-]+)", re.IGNORECASE)
-            for_matches = for_pattern.findall(item)
+                # 단어 경계 확인 (시작)
+                if index > 0:
+                    char_before = statement_lower[index - 1]
+                    if char_before in valid_identifier_chars:
+                        start_index = index + 1
+                        continue
+                
+                # 단어 경계 확인 (끝)
+                end_pos = index + len(domain_to_find)
+                if end_pos < len(statement_lower):
+                    char_after = statement_lower[end_pos]
+                    if char_after in valid_identifier_chars:
+                        start_index = index + 1
+                        continue
 
-            # TYPE 키워드 이후의 도메인 추출 (PARAMETERS용)
-            type_pattern = re.compile(r"\btype\s+([a-zA-Z0-9_-]+)", re.IGNORECASE)
-            type_matches = type_pattern.findall(item)
+                # 전체 단어 일치
+                matched_domains.append(domain)
+                break  # 현재 구문에서 도메인을 찾았으므로 다음 도메인으로 이동
 
-            # LIKE 키워드 이후의 도메인 추출
-            like_pattern = re.compile(r"\blike\s+([a-zA-Z0-9_-]+)", re.IGNORECASE)
-            like_matches = like_pattern.findall(item)
-
-            # 모든 추출된 도메인을 확인
-            all_found_domains = for_matches + type_matches + like_matches
-
-            for domain in all_found_domains:
-                if domain.lower() in self.target_domains:
-                    matched_domains.append(domain.lower())
-
-        return matched_domains
+        return list(set(matched_domains))
 
     def _extract_domains_from_line(self, statement_content: str) -> List[str]:
         """
-        PARAMETERS/SELECT-OPTIONS 문에서 도메인을 추출하고 타겟 도메인과 매칭
+        PARAMETERS/SELECT-OPTIONS 문에서 타겟 도메인이 포함되어 있는지 확인 (단어 단위 검색)
 
         Args:
             statement_content: PARAMETERS 또는 SELECT-OPTIONS 문의 내용
@@ -214,27 +188,37 @@ class ABAPSourceAnalyzer:
             매칭된 도메인 리스트
         """
         matched_domains = []
+        statement_lower = statement_content.lower()
+        valid_identifier_chars = 'abcdefghijklmnopqrstuvwxyz0123456789_-'
 
-        # FOR 키워드 이후의 도메인 추출 (SELECT-OPTIONS용)
-        for_pattern = re.compile(r"\bfor\s+([a-zA-Z0-9_-]+)", re.IGNORECASE)
-        for_matches = for_pattern.findall(statement_content)
+        for domain in self.target_domains:
+            domain_to_find = domain.lower()
+            start_index = 0
+            while True:
+                index = statement_lower.find(domain_to_find, start_index)
+                if index == -1:
+                    break
 
-        # TYPE 키워드 이후의 도메인 추출 (PARAMETERS용)
-        type_pattern = re.compile(r"\btype\s+([a-zA-Z0-9_-]+)", re.IGNORECASE)
-        type_matches = type_pattern.findall(statement_content)
+                # 단어 경계 확인 (시작)
+                if index > 0:
+                    char_before = statement_lower[index - 1]
+                    if char_before in valid_identifier_chars:
+                        start_index = index + 1
+                        continue
+                
+                # 단어 경계 확인 (끝)
+                end_pos = index + len(domain_to_find)
+                if end_pos < len(statement_lower):
+                    char_after = statement_lower[end_pos]
+                    if char_after in valid_identifier_chars:
+                        start_index = index + 1
+                        continue
 
-        # LIKE 키워드 이후의 도메인 추출
-        like_pattern = re.compile(r"\blike\s+([a-zA-Z0-9_-]+)", re.IGNORECASE)
-        like_matches = like_pattern.findall(statement_content)
+                # 전체 단어 일치
+                matched_domains.append(domain)
+                break  # 현재 구문에서 도메인을 찾았으므로 다음 도메인으로 이동
 
-        # 모든 추출된 도메인을 확인
-        all_found_domains = for_matches + type_matches + like_matches
-
-        for domain in all_found_domains:
-            if domain.lower() in self.target_domains:
-                matched_domains.append(domain.lower())
-
-        return matched_domains
+        return list(set(matched_domains))
 
     def _find_line_number(self, full_content: str, pos: int, lines: List[str]) -> int:
         """
@@ -484,238 +468,120 @@ def analyze_and_export_to_csv(
     return success
 
 
-# 사용 예시
 if __name__ == "__main__":
-    print("🧪 ABAP PARAMETERS/SELECT-OPTIONS 분석기 종합 테스트")
+    print("🧪 ABAP 분석기 단순 검색 로직 테스트")
     print("=" * 80)
 
-    # 테스트 케이스 1: 기본 패턴
-    print("\n📋 테스트 케이스 1: 기본 패턴")
-    basic_test_code = """
-* 기본 PARAMETERS와 SELECT-OPTIONS
-PARAMETERS: p_user TYPE sy-uname.
-SELECT-OPTIONS: s_date FOR sy-datum.
+    # --- 테스트 케이스 정의 ---
+    test_cases = {
+        "simple_find": {
+            "content": """
+* 다양한 위치에 타겟 도메인이 있는 경우
+PARAMETERS p_user TYPE sy-uname.
+SELECT-OPTIONS s_date FOR sy-datum.
 PARAMETERS p_lang LIKE sy-langu.
-    """
-
-    # 테스트 케이스 2: 여러 줄 패턴
-    print("\n📋 테스트 케이스 2: 여러 줄 패턴")
-    multiline_test_code = """
-* 여러 줄로 작성된 SELECT-OPTIONS
-SELECT-OPTIONS: s_user FOR sy-uname,
-                s_date FOR sy-datum,
-                s_lang FOR sy-langu.
-
-* 여러 줄로 작성된 PARAMETERS
-PARAMETERS: p_user TYPE sy-uname,
-            p_date TYPE sy-datum,
-            p_lang LIKE sy-langu.
-    """
-
-    # 테스트 케이스 3: 콜론과 쉼표 패턴
-    print("\n📋 테스트 케이스 3: 콜론과 쉼표 패턴")
-    colon_comma_test_code = """
-* 콜론과 쉼표를 사용한 여러 줄 SELECT-OPTIONS
-SELECT-OPTIONS : s_uname FOR sy-uname,
-                 s_date FOR sy-datum.
-
-* 콜론과 쉼표를 사용한 여러 줄 PARAMETERS
-PARAMETERS : p_uname TYPE sy-uname,
-             p_date TYPE sy-datum.
-    """
-
-    # 테스트 케이스 4: 타겟 도메인이 없는 패턴
-    print("\n📋 테스트 케이스 4: 타겟 도메인이 없는 패턴")
-    no_target_test_code = """
-* 타겟 도메인이 없는 PARAMETERS
-PARAMETERS: p_field1 TYPE c LENGTH 10.
-PARAMETERS: p_field2 TYPE i.
-PARAMETERS: p_field3 TYPE string.
-
-* 타겟 도메인이 없는 SELECT-OPTIONS
-SELECT-OPTIONS: s_field1 FOR table-field1.
-SELECT-OPTIONS: s_field2 FOR table-field2.
-    """
-
-    # 테스트 케이스 5: 복합 패턴 (타겟 도메인 + 일반 필드)
-    print("\n📋 테스트 케이스 5: 복합 패턴")
-    mixed_test_code = """
-* 타겟 도메인과 일반 필드가 섞인 경우
-PARAMETERS: p_user TYPE sy-uname,
-            p_field TYPE c LENGTH 20,
-            p_date TYPE sy-datum.
-
-SELECT-OPTIONS: s_user FOR sy-uname,
-                s_field FOR table-field,
-                s_date FOR sy-datum.
-    """
-
-    # 테스트 케이스 6: 실제 비즈니스 시나리오
-    print("\n📋 테스트 케이스 6: 실제 비즈니스 시나리오")
-    business_scenario_code = """
-* 사용자 관리 프로그램
-REPORT zuser_management.
-
-* 선택 화면 정의
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
-PARAMETERS: p_user TYPE sy-uname DEFAULT sy-uname,
-            p_date TYPE sy-datum DEFAULT sy-datum,
-            p_lang LIKE sy-langu DEFAULT sy-langu.
-SELECTION-SCREEN END OF BLOCK b1.
-
-* 선택 옵션 정의
-SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE text-002.
-SELECT-OPTIONS: s_user FOR sy-uname,
-                s_date FOR sy-datum,
-                s_lang FOR sy-langu.
-SELECTION-SCREEN END OF BLOCK b2.
-    """
-
-    # 테스트 케이스 7: 복잡한 구조체 패턴
-    print("\n📋 테스트 케이스 7: 복잡한 구조체 패턴")
-    complex_structure_code = """
-* 복잡한 구조체를 사용한 PARAMETERS
-PARAMETERS: p_header TYPE zheader,
-            p_user TYPE sy-uname,
-            p_date TYPE sy-datum,
-            p_detail TYPE zdetail.
-
-* 복잡한 구조체를 사용한 SELECT-OPTIONS
-SELECT-OPTIONS: s_header FOR zheader,
-                s_user FOR sy-uname,
-                s_date FOR sy-datum,
-                s_detail FOR zdetail.
-    """
-
-    # 테스트 파일들 생성
-    test_files = {
-        "input/test_basic.abap": basic_test_code,
-        "input/test_multiline.abap": multiline_test_code,
-        "input/test_colon_comma.abap": colon_comma_test_code,
-        "input/test_no_target.abap": no_target_test_code,
-        "input/test_mixed.abap": mixed_test_code,
-        "input/business_scenario.abap": business_scenario_code,
-        "input/complex_structure.abap": complex_structure_code,
+SELECT-OPTIONS s_id FOR ztable-id DEFAULT sy-uname.
+            """,
+            "targets": ["sy-uname", "sy-datum", "sy-langu"],
+            "expected_found": True,
+            "expected_domains": ["sy-uname", "sy-datum", "sy-langu"],
+        },
+        "comment_find": {
+            "content": """
+* 주석 안에 타겟 도메인이 있는 경우
+PARAMETERS p_field TYPE string. " sy-uname을 참조하는 필드
+SELECT-OPTIONS s_field FOR ztable-field. " 여기도 sy-datum 관련
+            """,
+            "targets": ["sy-uname", "sy-datum"],
+            "expected_found": True,
+            "expected_domains": ["sy-uname", "sy-datum"],
+        },
+        "substring_negative": {
+            "content": """
+* 타겟 도메인이 다른 단어의 일부인 경우 (검색되면 안됨)
+PARAMETERS p_user_table TYPE zsy-uname_table.
+SELECT-OPTIONS s_date_range FOR zsy-datum_range.
+            """,
+            "targets": ["sy-uname", "sy-datum"],
+            "expected_found": False,
+        },
+        "mixed_case": {
+            "content": """
+* 대소문자가 섞여있는 경우
+PARAMETERS p_user TYPE SY-UNAME.
+SELECT-OPTIONS s_date FOR Sy-Datum.
+            """,
+            "targets": ["sy-uname", "sy-datum"],
+            "expected_found": True,
+            "expected_domains": ["sy-uname", "sy-datum"],
+        },
+        "no_target": {
+            "content": """
+* 타겟 도메인이 없는 경우
+PARAMETERS p_field1 TYPE c.
+SELECT-OPTIONS s_field2 FOR ztable-field.
+            """,
+            "targets": ["sy-uname", "sy-datum"],
+            "expected_found": False,
+        },
+        "multiline_complex": {
+            "content": """
+* 여러 줄 복합 구문
+SELECT-OPTIONS: s_user FOR ztable-user, " 기본값 sy-uname 고려
+                s_date FOR ztable-date, " 기본값 sy-datum 고려
+                s_langu FOR ztable-lang DEFAULT sy-langu.
+            """,
+            "targets": ["sy-uname", "sy-datum", "sy-langu"],
+            "expected_found": True,
+            "expected_domains": ["sy-uname", "sy-datum", "sy-langu"],
+        },
     }
 
+    # --- 테스트 실행 ---
     os.makedirs("input", exist_ok=True)
+    all_tests_passed = True
 
-    for file_path, content in test_files.items():
+    for test_name, config in test_cases.items():
+        print(f"\n--- 🧪 테스트 실행: {test_name} ---")
+        file_path = f"input/{test_name}.abap"
         with open(file_path, "w", encoding="utf-8") as f:
-            f.write(content)
-        print(f"   📝 생성됨: {file_path}")
+            f.write(config["content"])
+        
+        analyzer = ABAPSourceAnalyzer(config["targets"])
+        results = analyzer.analyze_file(file_path)
 
-    print(f"\n✅ 총 {len(test_files)}개의 테스트 파일 생성 완료")
+        test_passed = True
+        if config["expected_found"]:
+            if not results:
+                test_passed = False
+                print(f"   ❌ 실패: 결과를 찾아야 하지만 찾지 못했습니다.")
+            else:
+                found_domains = set()
+                for res in results:
+                    found_domains.update(res["matched_domains"])
+                
+                expected_domains = set(config["expected_domains"])
+                if found_domains != expected_domains:
+                    test_passed = False
+                    print(f"   ❌ 실패: 찾은 도메인이 예상과 다릅니다.")
+                    print(f"     - 예상: {sorted(list(expected_domains))}")
+                    print(f"     - 실제: {sorted(list(found_domains))}")
+                else:
+                    print(f"   ✅ 성공: 예상된 도메인을 모두 찾았습니다: {sorted(list(found_domains))}")
+        else: # not expected_found
+            if results:
+                test_passed = False
+                print(f"   ❌ 실패: 결과를 찾지 않아야 하지만 찾았습니다: {results}")
+            else:
+                print(f"   ✅ 성공: 예상대로 결과를 찾지 않았습니다.")
 
-    # 테스트 1: 전체 도메인 검색
+        if not test_passed:
+            all_tests_passed = False
+
+    # --- 최종 결과 요약 ---
     print("\n" + "=" * 80)
-    print("🧪 테스트 1: 전체 도메인 검색 (sy-uname, sy-datum, sy-langu)")
-    print("=" * 80)
-
-    target_domains = ["sy-uname", "sy-datum", "sy-langu"]
-    success1 = analyze_and_export_to_csv(
-        target_domains, "input", "output/test1_full_domains.csv"
-    )
-
-    if success1:
-        print("\n✅ 테스트 1 완료!")
+    if all_tests_passed:
+        print("🎉 모든 테스트가 성공적으로 완료되었습니다!")
     else:
-        print("\n❌ 테스트 1 실패!")
-
-    # 테스트 2: SY-UNAME 전용 검색
-    print("\n" + "=" * 80)
-    print("🧪 테스트 2: SY-UNAME 전용 검색")
+        print("🔥 하나 이상의 테스트가 실패했습니다.")
     print("=" * 80)
-
-    sy_uname_only = ["sy-uname"]
-    success2 = analyze_and_export_to_csv(
-        sy_uname_only, "input", "output/test2_sy_uname_only.csv"
-    )
-
-    if success2:
-        print("\n✅ 테스트 2 완료!")
-    else:
-        print("\n❌ 테스트 2 실패!")
-
-    # 테스트 3: SY-DATUM 전용 검색
-    print("\n" + "=" * 80)
-    print("🧪 테스트 3: SY-DATUM 전용 검색")
-    print("=" * 80)
-
-    sy_datum_only = ["sy-datum"]
-    success3 = analyze_and_export_to_csv(
-        sy_datum_only, "input", "output/test3_sy_datum_only.csv"
-    )
-
-    if success3:
-        print("\n✅ 테스트 3 완료!")
-    else:
-        print("\n❌ 테스트 3 실패!")
-
-    # 테스트 4: 존재하지 않는 도메인 검색
-    print("\n" + "=" * 80)
-    print("🧪 테스트 4: 존재하지 않는 도메인 검색")
-    print("=" * 80)
-
-    non_existent = ["non-existent-domain"]
-    success4 = analyze_and_export_to_csv(
-        non_existent, "input", "output/test4_non_existent.csv"
-    )
-
-    # 존재하지 않는 도메인 검색 시 결과가 없는 것이 정상이므로 성공으로 처리
-    if success4 is not False:  # False가 아닌 경우 (None도 성공으로 처리)
-        print("\n✅ 테스트 4 완료! (예상대로 결과 없음)")
-        success4 = True  # 성공으로 표시
-    else:
-        print("\n❌ 테스트 4 실패!")
-
-    # 최종 결과 요약
-    print("\n" + "=" * 80)
-    print("🎯 종합 테스트 결과 요약")
-    print("=" * 80)
-
-    test_results = [
-        ("전체 도메인 검색", success1),
-        ("SY-UNAME 전용 검색", success2),
-        ("SY-DATUM 전용 검색", success3),
-        ("존재하지 않는 도메인 검색", success4),
-    ]
-
-    for test_name, result in test_results:
-        status = "✅ 성공" if result else "❌ 실패"
-        print(f"   {test_name}: {status}")
-
-    success_count = sum(1 for _, result in test_results if result)
-    print(f"\n📊 총 {len(test_results)}개 테스트 중 {success_count}개 성공")
-
-    if success_count == len(test_results):
-        print("\n🎉 모든 테스트가 성공적으로 완료되었습니다!")
-    else:
-        print(f"\n⚠️ {len(test_results) - success_count}개 테스트가 실패했습니다.")
-
-    print("\n=== 사용법 안내 ===")
-    print("🚀 이 도구를 사용하는 방법:")
-    print()
-    print("1️⃣ 기본 사용법:")
-    print("   python test.py")
-    print("   → 전체 테스트 실행 및 CSV 출력")
-    print()
-    print("2️⃣ 커스텀 도메인 검색:")
-    print("   from test import ABAPSourceAnalyzer")
-    print("   analyzer = ABAPSourceAnalyzer(['sy-uname'])")
-    print("   results = analyzer.analyze_directory('input')")
-    print("   analyzer.export_to_csv(results, 'output/custom.csv')")
-    print()
-    print("3️⃣ 단일 파일 분석:")
-    print("   analyzer = ABAPSourceAnalyzer(['sy-uname', 'sy-datum'])")
-    print("   results = analyzer.analyze_file('input/your_file.abap')")
-    print("   analyzer.export_to_csv(results)")
-    print()
-    print("4️⃣ 직접 함수 호출:")
-    print("   from test import analyze_and_export_to_csv")
-    print("   analyze_and_export_to_csv(['sy-uname'], 'input', 'output/result.csv')")
-    print()
-    print("📁 입력 폴더: input/ (ABAP 파일들)")
-    print("📁 출력 폴더: output/ (CSV 결과 파일들)")
-    print("🎯 지원 도메인: sy-uname, sy-datum, sy-langu 등")
-    print("💡 File_Name 컬럼에서 경로와 확장자가 자동으로 제거됩니다!")
