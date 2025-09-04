@@ -106,10 +106,10 @@ REPLACE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-# CLEAR 패턴 (변수 초기화)
+# CLEAR 패턴 (변수 초기화) - 'CLEAR var.' 와 'CLEAR: var1, var2.' 모두 지원
 CLEAR_PATTERN = re.compile(
-    r"^\s*CLEAR\s*:\s*(?P<variables>.*?)\s*\.",
-    re.IGNORECASE,
+    r"^\s*CLEAR:?\s+(?P<variables>.*?)\s*\.",
+    re.IGNORECASE | re.DOTALL,
 )
 
 # COMPUTE 패턴 (계산식 할당)

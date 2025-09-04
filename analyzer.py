@@ -153,6 +153,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
 
     # 3단계: sy-uname이 있는 경우에만 분석 시작
     tainted_vars = {"sy-uname"}
+    tainted_internal_tables = set()
     trace_path = [
         f"✅ SY-UNAME found at line {actual_sy_uname_line + 1} (specified line {start_line_in_snippet + 1})"
     ]
@@ -181,11 +182,31 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
             trace_path.append(
                 f"Line {line_num+1}: ⛔ PERFORM {subroutine_name} - 추적 종료 (스코프 경계)"
             )
+
+            # PERFORM 구문에서 사용된 오염 변수 확인
+            perform_params_str = perform_call_match.group("params")
+            used_tainted_vars = []
+            if perform_params_str:
+                for var in tainted_vars:
+                    # sy-uname 자체는 제외 (너무 많음)
+                    if var == "sy-uname":
+                        continue
+                    if re.search(
+                        rf"\b{re.escape(var)}\b", perform_params_str, re.IGNORECASE
+                    ):
+                        used_tainted_vars.append(var)
+
+            # 스코프 외부 사용 추측 메시지 생성
+            suggestion = ""
+            if used_tainted_vars:
+                suggestion = f"오염된 변수 {', '.join(f'\"{v}\"' for v in used_tainted_vars)}이(가) PERFORM '{subroutine_name}' 내부에서 사용될 것으로 추측됩니다."
+
             return {
                 "status": "Scope Boundary Reached",
                 "type": "PERFORM_CALL",
                 "subroutine": subroutine_name,
                 "reason": f"PERFORM 호출로 인한 스코프 경계 도달: {subroutine_name}",
+                "suggestion": suggestion,
                 "boundary_line": line_num + 1,
                 "verified_syuname_line": actual_sy_uname_line + 1,
                 "tainted_variables": list(tainted_vars),
@@ -390,6 +411,66 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                 "trace_path": trace_path,
             }
 
+        # ENDFORM 감지 (현재 서브루틴 종료)
+        if ENDFORM_PATTERN.match(statement_upper):
+            trace_path.append(
+                f"Line {line_num+1}: ⛔ ENDFORM - 추적 종료 (서브루틴 경계)"
+            )
+            return {
+                "status": "Scope Boundary Reached",
+                "type": "ENDFORM",
+                "reason": "ENDFORM 구문으로 인한 스코프 경계 도달",
+                "boundary_line": line_num + 1,
+                "verified_syuname_line": actual_sy_uname_line + 1,
+                "tainted_variables": list(tainted_vars),
+                "trace_path": trace_path,
+            }
+
+        # ENDMETHOD 감지 (현재 메소드 종료)
+        if ENDMETHOD_PATTERN.match(statement_upper):
+            trace_path.append(
+                f"Line {line_num+1}: ⛔ ENDMETHOD - 추적 종료 (메소드 경계)"
+            )
+            return {
+                "status": "Scope Boundary Reached",
+                "type": "ENDMETHOD",
+                "reason": "ENDMETHOD 구문으로 인한 스코프 경계 도달",
+                "boundary_line": line_num + 1,
+                "verified_syuname_line": actual_sy_uname_line + 1,
+                "tainted_variables": list(tainted_vars),
+                "trace_path": trace_path,
+            }
+
+        # ENDFUNCTION 감지 (현재 함수 종료)
+        if ENDFUNCTION_PATTERN.match(statement_upper):
+            trace_path.append(
+                f"Line {line_num+1}: ⛔ ENDFUNCTION - 추적 종료 (함수 경계)"
+            )
+            return {
+                "status": "Scope Boundary Reached",
+                "type": "ENDFUNCTION",
+                "reason": "ENDFUNCTION 구문으로 인한 스코프 경계 도달",
+                "boundary_line": line_num + 1,
+                "verified_syuname_line": actual_sy_uname_line + 1,
+                "tainted_variables": list(tainted_vars),
+                "trace_path": trace_path,
+            }
+
+        # ENDCLASS 감지 (현재 클래스 구현 종료)
+        if ENDCLASS_PATTERN.match(statement_upper):
+            trace_path.append(
+                f"Line {line_num+1}: ⛔ ENDCLASS - 추적 종료 (클래스 경계)"
+            )
+            return {
+                "status": "Scope Boundary Reached",
+                "type": "ENDCLASS",
+                "reason": "ENDCLASS 구문으로 인한 스코프 경계 도달",
+                "boundary_line": line_num + 1,
+                "verified_syuname_line": actual_sy_uname_line + 1,
+                "tainted_variables": list(tainted_vars),
+                "trace_path": trace_path,
+            }
+
         # --- 선언 분류 패턴들 먼저 처리 (전파에 추가하지 않음) ---
 
         # DATA TYPE sy-uname 패턴
@@ -585,6 +666,68 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                             f"Line {line_num+1}: SPLIT '{source_var}' -> '{target_var}'"
                         )
 
+        # CLEAR statement handling
+        clear_match = CLEAR_PATTERN.match(statement_upper)
+        if clear_match:
+            vars_to_clear_str = clear_match.group("variables").strip()
+            vars_to_clear = [
+                v.strip().lower()
+                for v in re.split(r"[\s,]+", vars_to_clear_str)
+                if v.strip()
+            ]
+
+            vars_to_remove = []
+            tables_to_remove = []
+
+            for var_to_clear in vars_to_clear:
+                # Remove from tainted_vars
+                for tainted_var in list(tainted_vars):
+                    if tainted_var == var_to_clear or tainted_var.startswith(
+                        var_to_clear + "-"
+                    ):
+                        vars_to_remove.append(tainted_var)
+
+                # Remove from tainted_internal_tables
+                for tainted_table in list(tainted_internal_tables):
+                    if tainted_table == var_to_clear.replace("[]", ""):
+                        tables_to_remove.append(tainted_table)
+
+            if vars_to_remove or tables_to_remove:
+                trace_path.append(
+                    f"Line {line_num+1}: CLEAR statement processed for: {', '.join(vars_to_clear)}"
+                )
+                for var in set(vars_to_remove):
+                    if var in tainted_vars:
+                        tainted_vars.remove(var)
+                        trace_path.append(f"   -> Untainted variable: '{var}'")
+                for table in set(tables_to_remove):
+                    if table in tainted_internal_tables:
+                        tainted_internal_tables.remove(table)
+                        trace_path.append(f"   -> Untainted internal table: '{table}'")
+
+        # APPEND pattern - for internal tables
+        append_match = APPEND_PATTERN.match(statement_upper)
+        if append_match:
+            source_wa = append_match.group("source").strip().lower()
+            target_itab = append_match.group("target").strip().lower().replace("[]", "")
+
+            # Check if the source work area or any of its fields are tainted
+            source_is_tainted = False
+            if source_wa in tainted_vars:
+                source_is_tainted = True
+            else:
+                # Check for tainted fields within the work area, e.g., ls_data-field
+                for var in tainted_vars:
+                    if var.startswith(source_wa + "-"):
+                        source_is_tainted = True
+                        break
+
+            if source_is_tainted and target_itab not in tainted_internal_tables:
+                tainted_internal_tables.add(target_itab)
+                trace_path.append(
+                    f"Line {line_num+1}: APPEND tainted work area '{source_wa}' -> internal table '{target_itab}'"
+                )
+
         # --- Sink 분석 (DB, RFC, 조건문 등) ---
 
         # 1. DB 작업 분석
@@ -643,6 +786,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "fields": affected_fields,
                         "operation": "UPDATE_SET",
                         "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
         # UPDATE FROM
@@ -651,6 +795,20 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
             table = update_from_match.group("table").strip().upper()
             if table.startswith(("Z", "Y")):
                 source_var = update_from_match.group("source").strip().lower()
+
+                # Case 1: Source is a tainted internal table
+                source_table_name = source_var.replace("[]", "")
+                if source_table_name in tainted_internal_tables:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_UPDATE",
+                        "table": table,
+                        "operation": f"UPDATE FROM tainted table '{source_table_name}'",
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                    }
+
+                # Case 2: Source is a work area with tainted fields (existing logic)
                 base_structure_name = source_var.replace("[]", "")
                 affected_fields = []
                 for tainted_var in tainted_vars:
@@ -671,6 +829,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "type": "DATABASE_UPDATE_FIELD",
                         "table": table,
                         "fields": list(set(affected_fields)),
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
         # INSERT VALUES 패턴들 처리 (우선 처리)
@@ -692,6 +852,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "table": table,
                         "description": "SY-UNAME used in INSERT VALUES statement",
                         "operation": "INSERT_VALUES",
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
                 # 오염된 변수들 체크
@@ -708,6 +870,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                             "table": table,
                             "tainted_variable": tainted_var,
                             "operation": "INSERT_VALUES",
+                            "trace_path": trace_path,
+                            "tainted_variables": list(tainted_vars),
                         }
 
         # 2. INSERT table VALUES structure 패턴
@@ -735,6 +899,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "table": table,
                         "fields": list(set(affected_fields)),
                         "operation": "INSERT_VALUES_STRUCTURE",
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
         # 3. INSERT table FROM TABLE 패턴 (기존)
@@ -743,6 +909,20 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
             table = insert_table_match.group("table").strip().upper()
             if table.startswith(("Z", "Y")):
                 source_table = insert_table_match.group("source_table").strip().lower()
+
+                # Case 1: Source is a tainted internal table
+                source_table_name = source_table.replace("[]", "")
+                if source_table_name in tainted_internal_tables:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_INSERT",
+                        "table": table,
+                        "operation": f"INSERT FROM tainted table '{source_table_name}'",
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                    }
+
+                # Case 2: Source is a structure with tainted fields (existing logic)
                 base_table_name = source_table.replace("[]", "")
 
                 # 소스 테이블의 오염된 필드들 찾기
@@ -772,6 +952,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "fields": list(set(affected_fields)),  # 중복 제거
                         "operation": "INSERT_TABLE",
                         "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
         # DELETE dbtab FROM wa 패턴 (ECC 6.0 추가)
@@ -795,6 +976,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                     "fields": list(set(affected_fields)),
                     "operation": "DELETE_FROM_WA",
                     "trace_path": trace_path,
+                    "tainted_variables": list(tainted_vars),
                 }
 
         # INSERT (FROM or VALUES) - 기존 패턴
@@ -825,6 +1007,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                             "type": "DATABASE_INSERT_FIELD",
                             "table": table,
                             "fields": list(set(affected_fields)),
+                            "trace_path": trace_path,
+                            "tainted_variables": list(tainted_vars),
                         }
 
         # MODIFY 패턴들 처리 (확장된 패턴들)
@@ -836,6 +1020,20 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                 source_table = (
                     modify_from_table_match.group("source_table").strip().lower()
                 )
+
+                # Case 1: Source is a tainted internal table
+                source_table_name = source_table.replace("[]", "")
+                if source_table_name in tainted_internal_tables:
+                    return {
+                        "status": "Found",
+                        "type": "DATABASE_MODIFY",
+                        "table": table,
+                        "operation": f"MODIFY FROM tainted table '{source_table_name}'",
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
+                    }
+
+                # Case 2: Source is a structure with tainted fields (existing logic)
                 base_table_name = source_table.replace("[]", "")
                 affected_fields = []
 
@@ -860,6 +1058,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "table": table,
                         "fields": list(set(affected_fields)),
                         "operation": "MODIFY_FROM_TABLE",
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
         # 2. 단독 MODIFY 패턴 (workarea 사용)
@@ -889,6 +1089,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "table": table,
                         "fields": list(set(affected_fields)),
                         "operation": "MODIFY_WORKAREA",
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
         # 3. MODIFY (FROM or table.) - 기존 패턴들
@@ -917,6 +1119,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "type": "DATABASE_MODIFY_FIELD",
                         "table": table,
                         "fields": list(set(affected_fields)),
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
         modify_table_match = MODIFY_TABLE_PATTERN.match(statement_upper)
@@ -943,6 +1147,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "type": "DATABASE_MODIFY_FIELD",
                         "table": table,
                         "fields": list(set(affected_fields)),
+                        "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
 
         # DELETE 문 분석
@@ -961,6 +1167,8 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                             "type": "DATABASE_DELETE",
                             "table": table,
                             "condition_variable": tainted_var,
+                            "trace_path": trace_path,
+                            "tainted_variables": list(tainted_vars),
                         }
 
         # 2. RFC 호출 분석 (핵심 기능)
@@ -979,6 +1187,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "name": rfc_name,
                         "parameter": p_match.group("param_name").strip(),
                         "trace_path": trace_path,
+                        "tainted_variables": list(tainted_vars),
                     }
                 for tainted_var in tainted_vars:
                     if tainted_var.startswith(base_structure_name + "-"):
@@ -989,6 +1198,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                             "parameter": p_match.group("param_name").strip(),
                             "tainted_field": tainted_var,
                             "trace_path": trace_path,
+                            "tainted_variables": list(tainted_vars),
                         }
 
         # 다른 읽기 전용 패턴들 수집 (힌트용)
@@ -1057,7 +1267,7 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
 
     return {
         "status": "Not Found",
-        "reason": "SY-UNAME variable flow traced but no Z/Y table or RFC sink found",
+        "reason": "스코프 내에서 Z/Y 테이블 또는 RFC Sink를 찾지 못했습니다.",
         "verified_syuname_line": actual_sy_uname_line + 1,
         "tainted_variables": list(tainted_vars),
         "trace_path": trace_path,

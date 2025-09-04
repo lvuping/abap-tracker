@@ -101,10 +101,10 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
                     print(
                         f"   추적 변수: {', '.join(result.get('tainted_variables', []))}"
                     )
-                    print(f"   추적 단계: {len(result.get('path', []))}단계")
-                    if result.get("path"):
+                    print(f"   추적 단계: {len(result.get('trace_path', []))}단계")
+                    if result.get("trace_path"):
                         print("   추적 경로:")
-                        for step in result["path"]:
+                        for step in result["trace_path"]:
                             print(f"     {step}")
 
                 if result["status"] == "Found":
@@ -142,6 +142,9 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
                         print(
                             f"   ⛔ 스코프 경계: PERFORM {subroutine} (라인 {boundary_line})"
                         )
+                        suggestion = result.get("suggestion")
+                        if suggestion:
+                            print(f"      💡 추측: {suggestion}")
                     elif boundary_type == "INCLUDE":
                         include_name = result.get("include_name", "Unknown")
                         print(
@@ -381,6 +384,7 @@ def export_to_csv(results, output_file):
             "RFC_Name": "",
             "RFC_Parameter": "",
             "Description": analysis_result.get("description", ""),
+            "Suggestion": analysis_result.get("suggestion", ""),
             "Final_Variable": analysis_result.get("final_variable", ""),
             "Boundary_Line": analysis_result.get("boundary_line", ""),
             "Boundary_Details": "",
@@ -498,6 +502,7 @@ def export_to_csv(results, output_file):
         "RFC_Name",
         "RFC_Parameter",
         "Description",
+        "Suggestion",
         "Final_Variable",
         "Boundary_Line",
         "Boundary_Details",

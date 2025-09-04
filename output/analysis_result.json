@@ -1,0 +1,98 @@
+[
+  {
+    "id": "1",
+    "source_file": "input/test_comprehensive_scenario.abap",
+    "source_line": 18,
+    "result": {
+      "status": "Found",
+      "type": "DATABASE_MODIFY",
+      "table": "ZUSER_DATA",
+      "operation": "MODIFY FROM tainted table 'lt_data'",
+      "trace_path": [
+        "✅ SY-UNAME found at line 18 (specified line 18)",
+        "Starting analysis from verified SY-UNAME location (line 18)",
+        "Line 18: Chained Assignment 'sy-uname' -> 'gv_user'",
+        "Line 21: Chained Assignment 'gv_user' -> 'gv_log_user'",
+        "Line 24: Chained Assignment 'gv_user' -> 'gv_temp_user'",
+        "Line 27: Chained Assignment 'gv_temp_user' -> 'ls_data-created_by'",
+        "Line 27: Structure assignment 'gv_temp_user' -> 'ls_data-created_by'",
+        "Line 30: CLEAR statement processed for: gv_temp_user",
+        "   -> Untainted variable: 'gv_temp_user'",
+        "Line 34: APPEND tainted work area 'ls_data' -> internal table 'lt_data'"
+      ],
+      "tainted_variables": [
+        "gv_log_user",
+        "ls_data-created_by",
+        "sy-uname",
+        "gv_user"
+      ]
+    }
+  },
+  {
+    "id": "2",
+    "source_file": "input/test_extended_scenarios.abap",
+    "source_line": 10,
+    "result": {
+      "status": "Found",
+      "type": "RFC",
+      "name": "Z_RFC_UPDATE_USER",
+      "parameter": "I_USERNAME",
+      "trace_path": [
+        "✅ SY-UNAME found at line 10 (specified line 10)",
+        "Starting analysis from verified SY-UNAME location (line 10)",
+        "Line 10: Chained Assignment 'sy-uname' -> 'gv_user_rfc'"
+      ],
+      "tainted_variables": [
+        "gv_user_rfc",
+        "sy-uname"
+      ]
+    }
+  },
+  {
+    "id": "3",
+    "source_file": "input/test_extended_scenarios.abap",
+    "source_line": 17,
+    "result": {
+      "status": "Scope Boundary Reached",
+      "type": "PERFORM_CALL",
+      "subroutine": "PROCESS_USER_DATA",
+      "reason": "PERFORM 호출로 인한 스코프 경계 도달: PROCESS_USER_DATA",
+      "suggestion": "오염된 변수 \"gv_user_perform\"이(가) PERFORM 'PROCESS_USER_DATA' 내부에서 사용될 것으로 추측됩니다.",
+      "boundary_line": 18,
+      "verified_syuname_line": 17,
+      "tainted_variables": [
+        "gv_user_perform",
+        "sy-uname"
+      ],
+      "trace_path": [
+        "✅ SY-UNAME found at line 17 (specified line 17)",
+        "Starting analysis from verified SY-UNAME location (line 17)",
+        "Line 17: Chained Assignment 'sy-uname' -> 'gv_user_perform'",
+        "Line 18: ⛔ PERFORM PROCESS_USER_DATA - 추적 종료 (스코프 경계)"
+      ]
+    }
+  },
+  {
+    "id": "4",
+    "source_file": "input/test_extended_scenarios.abap",
+    "source_line": 22,
+    "result": {
+      "status": "Scope Boundary Reached",
+      "type": "FORM_DEFINITION",
+      "form_name": "PROCESS_USER_DATA",
+      "reason": "새로운 FORM 정의로 인한 스코프 경계 도달: PROCESS_USER_DATA",
+      "boundary_line": 26,
+      "verified_syuname_line": 22,
+      "tainted_variables": [
+        "gv_user_unused",
+        "sy-uname"
+      ],
+      "trace_path": [
+        "✅ SY-UNAME found at line 22 (specified line 22)",
+        "Starting analysis from verified SY-UNAME location (line 22)",
+        "Line 22: Chained Assignment 'sy-uname' -> 'gv_user_unused'",
+        "Line 26: ⛔ FORM PROCESS_USER_DATA - 추적 종료 (새 서브루틴 정의)"
+      ]
+    }
+  }
+]
