@@ -43,14 +43,19 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
     print(f"📁 입력 파일: {sy_uname_locations_file}")
     print("=" * 80)
 
-    # 총 라인 수 계산
-    with open(sy_uname_locations_file, "r", encoding="utf-8") as f:
-        total_locations = sum(1 for _ in csv.reader(f)) - 1
+    try:
+        with open(sy_uname_locations_file, "r", encoding="utf-8") as f:
+            csv_lines = f.readlines()
+    except UnicodeDecodeError:
+        with open(sy_uname_locations_file, "r", encoding="cp949") as f:
+            csv_lines = f.readlines()
 
-    # 다시 파일 읽기
-    with open(sy_uname_locations_file, "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        next(reader)  # 헤더 스킵
+    # 총 라인 수 계산 (빈 라인 제외)
+    total_locations = sum(1 for row in csv.reader(csv_lines) if row) - 1
+
+    # CSV 내용을 다시 읽기 위해 csv.reader를 새로 생성
+    reader = csv.reader(csv_lines)
+    next(reader)  # 헤더 스킵
 
         for idx, row in enumerate(reader, 1):
             if len(row) == 3:  # id, file_path, line_number
@@ -82,8 +87,12 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
                 )
 
             try:
-                with open(file_path, "r", encoding="utf-8") as source_file:
-                    all_lines = source_file.readlines()
+                try:
+                    with open(file_path, "r", encoding="utf-8") as source_file:
+                        all_lines = source_file.readlines()
+                except UnicodeDecodeError:
+                    with open(file_path, "r", encoding="cp949") as source_file:
+                        all_lines = source_file.readlines()
 
                 # 분석할 코드 범위(앞 200줄, 뒤 1000줄) 추출
                 start = max(0, line_number - 201)
