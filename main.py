@@ -53,42 +53,46 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
     reader = csv.reader(csv_lines)
     next(reader)  # 헤더 스킵
 
-        for idx, row in enumerate(reader, 1):
-            if len(row) == 3:  # id, file_path, line_number
-                id_value, file_path, line_number = row
-            elif len(row) == 2:  # 기존 형식 호환성 유지
-                file_path, line_number = row
-                id_value = None
-            else:
-                print(f"⚠️ 잘못된 CSV 형식: {row}")
-                continue
+    for idx, row in enumerate(reader, 1):
+        if len(row) == 3:  # id, file_path, line_number
+            id_value, file_path, line_number = row
+        elif len(row) == 2:  # 기존 형식 호환성 유지
+            file_path, line_number = row
+            id_value = None
+        else:
+            print(f"⚠️ 잘못된 CSV 형식: {row}")
+            continue
 
-            line_number = int(line_number)
+        if not line_number:
+            print(f"⚠️ line number가 없는 행을 건너뜁니다: {row}")
+            continue
+        
+        line_number = int(line_number)
 
-            # .abap 확장자 자동 추가
-            if not file_path.endswith(".abap"):
-                file_path = file_path + ".abap"
+        # .abap 확장자 자동 추가
+        if not file_path.endswith(".abap"):
+            file_path = file_path + ".abap"
 
-            # input/ 디렉토리 경로 자동 추가
-            if not file_path.startswith("input/"):
-                file_path = "input/" + file_path
+        # input/ 디렉토리 경로 자동 추가
+        if not file_path.startswith("input/"):
+            file_path = "input/" + file_path
 
-            if verbose:
-                print(
-                    f"📍 {idx}/{total_locations}. 분석 중: ID={id_value}, {file_path} 라인 {line_number}"
-                )
-            else:
-                print(
-                    f"📍 {idx}/{total_locations}. {os.path.basename(file_path)} (라인 {line_number})"
-                )
+        if verbose:
+            print(
+                f"📍 {idx}/{total_locations}. 분석 중: ID={id_value}, {file_path} 라인 {line_number}"
+            )
+        else:
+            print(
+                f"📍 {idx}/{total_locations}. {os.path.basename(file_path)} (라인 {line_number})"
+            )
 
-            try:
-                with open(file_path, "r", encoding="utf-8", errors="replace") as source_file:
-                    all_lines = source_file.readlines()
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="replace") as source_file:
+                all_lines = source_file.readlines()
 
-                # 분석할 코드 범위(앞 200줄, 뒤 1000줄) 추출
-                start = max(0, line_number - 201)
-                end = min(len(all_lines), line_number + 1000)
+            # 분석할 코드 범위(앞 15줄, 뒤 150줄) 추출
+            start = max(0, line_number - 16)
+            end = min(len(all_lines), line_number + 150)
                 snippet = all_lines[start:end]
 
                 # snippet 내에서 sy-uname이 있는 상대적 라인 번호
