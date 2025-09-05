@@ -277,29 +277,29 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
                 }
             )
 
-            except FileNotFoundError:
-                print(f"   ❌ 파일 없음: {file_path}")
-                all_results.append(
-                    {
-                        "id": id_value,
-                        "source_file": file_path,
-                        "source_line": line_number,
-                        "result": {
-                            "status": "File Not Found",
-                            "error": "File not found",
-                        },
-                    }
-                )
-            except Exception as e:
-                print(f"   ❌ 분석 오류: {e}")
-                all_results.append(
-                    {
-                        "id": id_value,
-                        "source_file": file_path,
-                        "source_line": line_number,
-                        "result": {"status": "Error", "error": str(e)},
-                    }
-                )
+        except FileNotFoundError:
+            print(f"   ❌ 파일 없음: {file_path}")
+            all_results.append(
+                {
+                    "id": id_value,
+                    "source_file": file_path,
+                    "source_line": line_number,
+                    "result": {
+                        "status": "File Not Found",
+                        "error": "File not found",
+                    },
+                }
+            )
+        except Exception as e:
+            print(f"   ❌ 분석 오류: {e}")
+            all_results.append(
+                {
+                    "id": id_value,
+                    "source_file": file_path,
+                    "source_line": line_number,
+                    "result": {"status": "Error", "error": str(e)},
+                }
+            )
 
     # 결과 저장
     output_dir = "output"
