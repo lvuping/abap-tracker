@@ -63,11 +63,11 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
             print(f"⚠️ 잘못된 CSV 형식: {row}")
             continue
 
-        if not line_number:
-            print(f"⚠️ line number가 없는 행을 건너뜁니다: {row}")
+        try:
+            line_number = int(line_number)
+        except (ValueError, TypeError):
+            print(f"⚠️ 잘못된 line number 형식입니다. 숫자가 아니거나 비어있습니다: {row}")
             continue
-        
-        line_number = int(line_number)
 
         # .abap 확장자 자동 추가
         if not file_path.endswith(".abap"):
