@@ -93,189 +93,189 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
             # 분석할 코드 범위(앞 15줄, 뒤 150줄) 추출
             start = max(0, line_number - 16)
             end = min(len(all_lines), line_number + 150)
-                snippet = all_lines[start:end]
+            snippet = all_lines[start:end]
 
-                # snippet 내에서 sy-uname이 있는 상대적 라인 번호
-                relative_start_line = line_number - start - 1
+            # snippet 내에서 sy-uname이 있는 상대적 라인 번호
+            relative_start_line = line_number - start - 1
 
-                result = trace_sy_uname_in_snippet(snippet, relative_start_line)
+            result = trace_sy_uname_in_snippet(snippet, relative_start_line)
 
-                if verbose:
-                    # 상세 분석 결과 출력
-                    print(f"   결과: {result['status']}")
-                    print(
-                        f"   추적 변수: {', '.join(result.get('tainted_variables', []))}"
-                    )
-                    print(f"   추적 단계: {len(result.get('trace_path', []))}단계")
-                    if result.get("trace_path"):
-                        print("   추적 경로:")
-                        for step in result["trace_path"]:
-                            print(f"     {step}")
-
-                if result["status"] == "Found":
-                    # 발견된 Sink 유형에 따라 다른 정보 출력
-                    if result["type"] == "RFC":
-                        print(f"   ✅ RFC 호출: {result['name']}")
-                    elif result["type"] == "AUDIT_FIELD":
-                        print(
-                            f"   ✅ 감사 필드: {result['structure']}-{result['field']}"
-                        )
-                    elif result["type"] in [
-                        "DATABASE_UPDATE_FIELD",
-                        "DATABASE_INSERT_FIELD",
-                        "DATABASE_MODIFY_FIELD",
-                        "DATABASE_SELECT_WHERE",
-                    ]:
-                        print(
-                            f"   🎯 데이터베이스: {result['table']}.{', '.join(result['fields'])} ({result.get('operation', 'UNKNOWN')})"
-                        )
-                    elif result["type"].startswith("DATABASE_"):
-                        print(
-                            f"   ✅ 데이터베이스: {result.get('operation', 'UNKNOWN')} {result['table']}"
-                        )
-                    elif result["type"] == "CALL_TRANSACTION":
-                        print(f"   ✅ 트랜잭션: {result['transaction']}")
-                    else:
-                        print(f"   ✅ Sink: {result['type']}")
-                elif result["status"] == "Scope Boundary Reached":
-                    # 스코프 경계 도달 처리
-                    boundary_type = result["type"]
-                    boundary_line = result.get("boundary_line", "Unknown")
-
-                    if boundary_type == "PERFORM_CALL":
-                        subroutine = result.get("subroutine", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: PERFORM {subroutine} (라인 {boundary_line})"
-                        )
-                        suggestion = result.get("suggestion")
-                        if suggestion:
-                            print(f"      💡 추측: {suggestion}")
-                    elif boundary_type == "INCLUDE":
-                        include_name = result.get("include_name", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: INCLUDE {include_name} (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "SUBMIT":
-                        program_name = result.get("program_name", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: SUBMIT {program_name} (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "FORM_DEFINITION":
-                        form_name = result.get("form_name", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: FORM {form_name} 정의 (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "FUNCTION_DEFINITION":
-                        function_name = result.get("function_name", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: FUNCTION {function_name} 정의 (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "METHOD_DEFINITION":
-                        method_name = result.get("method_name", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: METHOD {method_name} 정의 (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "CLASS_DEFINITION":
-                        class_name = result.get("class_name", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: CLASS {class_name} 정의 (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "DYNAMIC_PERFORM":
-                        subroutine_var = result.get("subroutine_variable", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: 동적 PERFORM ({subroutine_var}) (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "DYNAMIC_CALL_FUNCTION":
-                        function_var = result.get("function_variable", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: 동적 CALL FUNCTION {function_var} (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "DYNAMIC_CALL_METHOD":
-                        object_ref = result.get("object_reference", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: 동적 CALL METHOD {object_ref} (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "OBJECT_METHOD_CALL":
-                        object_name = result.get("object_name", "Unknown")
-                        method_name = result.get("method_name", "Unknown")
-                        print(
-                            f"   ⛔ 스코프 경계: {object_name}->{method_name}() (라인 {boundary_line})"
-                        )
-                    elif boundary_type == "TRY_BLOCK":
-                        print(
-                            f"   ⛔ 스코프 경계: TRY 블록 시작 (라인 {boundary_line})"
-                        )
-                    else:
-                        print(
-                            f"   ⛔ 스코프 경계: {boundary_type} (라인 {boundary_line})"
-                        )
-
-                    tainted_count = len(result.get("tainted_variables", []))
-                    if tainted_count > 1:  # sy-uname 제외
-                        print(f"      전파된 변수: {tainted_count-1}개")
-                else:
-                    # 엄격한 검증에 따른 구체적인 실패 이유 출력
-                    error_type = result.get("error_type")
-
-                    if error_type == "SYUNAME_NOT_AT_SPECIFIED_LINE":
-                        print(f"   ❌ 지정된 라인에 SY-UNAME 없음")
-                        print(
-                            f"      라인 {result.get('specified_line')}: '{result.get('actual_content', 'N/A')}'"
-                        )
-                    elif error_type == "NO_ZY_TABLE_RFC_SINK_FOUND":
-                        print(f"   ⚠️ SY-UNAME 추적됨 but Z/Y 테이블/RFC Sink 미발견")
-                        analysis = result.get("analysis_summary", {})
-                        print(
-                            f"      • 분석된 문장: {analysis.get('total_statements_analyzed', 0)}개"
-                        )
-                        print(
-                            f"      • 전파된 변수: {analysis.get('variables_propagated', 0)}개"
-                        )
-                        print(
-                            f"      • 추적 단계: {analysis.get('trace_steps', 0)}단계"
-                        )
-
-                        # 힌트 정보 표시
-                        hints = result.get("hints", [])
-                        if hints:
-                            print(f"      💡 힌트:")
-                            for hint in hints:
-                                print(f"         - {hint}")
-
-                        if verbose and result.get("tainted_variables"):
-                            print(
-                                f"      • 오염된 변수들: {', '.join(result['tainted_variables'])}"
-                            )
-                    elif error_type == "NO_SINK_FOUND_AFTER_TRACING":
-                        print(f"   ⚠️ SY-UNAME 추적됨 but 유효한 Sink 미발견")
-                        analysis = result.get("analysis_summary", {})
-                        print(
-                            f"      • 분석된 문장: {analysis.get('total_statements_analyzed', 0)}개"
-                        )
-                        print(
-                            f"      • 전파된 변수: {analysis.get('variables_propagated', 0)}개"
-                        )
-                        print(
-                            f"      • 추적 단계: {analysis.get('trace_steps', 0)}단계"
-                        )
-                        if verbose and result.get("tainted_variables"):
-                            print(
-                                f"      • 오염된 변수들: {', '.join(result['tainted_variables'])}"
-                            )
-                    else:
-                        print(
-                            f"   ⚠️ 분석 실패: {result.get('reason', 'Unknown reason')}"
-                        )
-
-                # 모든 결과를 저장 (성공/실패 무관)
-                all_results.append(
-                    {
-                        "id": id_value,
-                        "source_file": file_path,
-                        "source_line": line_number,
-                        "result": result,
-                    }
+            if verbose:
+                # 상세 분석 결과 출력
+                print(f"   결과: {result['status']}")
+                print(
+                    f"   추적 변수: {', '.join(result.get('tainted_variables', []))}"
                 )
+                print(f"   추적 단계: {len(result.get('trace_path', []))}단계")
+                if result.get("trace_path"):
+                    print("   추적 경로:")
+                    for step in result["trace_path"]:
+                        print(f"     {step}")
+
+            if result["status"] == "Found":
+                # 발견된 Sink 유형에 따라 다른 정보 출력
+                if result["type"] == "RFC":
+                    print(f"   ✅ RFC 호출: {result['name']}")
+                elif result["type"] == "AUDIT_FIELD":
+                    print(
+                        f"   ✅ 감사 필드: {result['structure']}-{result['field']}"
+                    )
+                elif result["type"] in [
+                    "DATABASE_UPDATE_FIELD",
+                    "DATABASE_INSERT_FIELD",
+                    "DATABASE_MODIFY_FIELD",
+                    "DATABASE_SELECT_WHERE",
+                ]:
+                    print(
+                        f"   🎯 데이터베이스: {result['table']}.{', '.join(result['fields'])} ({result.get('operation', 'UNKNOWN')})"
+                    )
+                elif result["type"].startswith("DATABASE_"):
+                    print(
+                        f"   ✅ 데이터베이스: {result.get('operation', 'UNKNOWN')} {result['table']}"
+                    )
+                elif result["type"] == "CALL_TRANSACTION":
+                    print(f"   ✅ 트랜잭션: {result['transaction']}")
+                else:
+                    print(f"   ✅ Sink: {result['type']}")
+            elif result["status"] == "Scope Boundary Reached":
+                # 스코프 경계 도달 처리
+                boundary_type = result["type"]
+                boundary_line = result.get("boundary_line", "Unknown")
+
+                if boundary_type == "PERFORM_CALL":
+                    subroutine = result.get("subroutine", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: PERFORM {subroutine} (라인 {boundary_line})"
+                    )
+                    suggestion = result.get("suggestion")
+                    if suggestion:
+                        print(f"      💡 추측: {suggestion}")
+                elif boundary_type == "INCLUDE":
+                    include_name = result.get("include_name", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: INCLUDE {include_name} (라인 {boundary_line})"
+                    )
+                elif boundary_type == "SUBMIT":
+                    program_name = result.get("program_name", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: SUBMIT {program_name} (라인 {boundary_line})"
+                    )
+                elif boundary_type == "FORM_DEFINITION":
+                    form_name = result.get("form_name", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: FORM {form_name} 정의 (라인 {boundary_line})"
+                    )
+                elif boundary_type == "FUNCTION_DEFINITION":
+                    function_name = result.get("function_name", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: FUNCTION {function_name} 정의 (라인 {boundary_line})"
+                    )
+                elif boundary_type == "METHOD_DEFINITION":
+                    method_name = result.get("method_name", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: METHOD {method_name} 정의 (라인 {boundary_line})"
+                    )
+                elif boundary_type == "CLASS_DEFINITION":
+                    class_name = result.get("class_name", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: CLASS {class_name} 정의 (라인 {boundary_line})"
+                    )
+                elif boundary_type == "DYNAMIC_PERFORM":
+                    subroutine_var = result.get("subroutine_variable", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: 동적 PERFORM ({subroutine_var}) (라인 {boundary_line})"
+                    )
+                elif boundary_type == "DYNAMIC_CALL_FUNCTION":
+                    function_var = result.get("function_variable", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: 동적 CALL FUNCTION {function_var} (라인 {boundary_line})"
+                    )
+                elif boundary_type == "DYNAMIC_CALL_METHOD":
+                    object_ref = result.get("object_reference", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: 동적 CALL METHOD {object_ref} (라인 {boundary_line})"
+                    )
+                elif boundary_type == "OBJECT_METHOD_CALL":
+                    object_name = result.get("object_name", "Unknown")
+                    method_name = result.get("method_name", "Unknown")
+                    print(
+                        f"   ⛔ 스코프 경계: {object_name}->{method_name}() (라인 {boundary_line})"
+                    )
+                elif boundary_type == "TRY_BLOCK":
+                    print(
+                        f"   ⛔ 스코프 경계: TRY 블록 시작 (라인 {boundary_line})"
+                    )
+                else:
+                    print(
+                        f"   ⛔ 스코프 경계: {boundary_type} (라인 {boundary_line})"
+                    )
+
+                tainted_count = len(result.get("tainted_variables", []))
+                if tainted_count > 1:  # sy-uname 제외
+                    print(f"      전파된 변수: {tainted_count-1}개")
+            else:
+                # 엄격한 검증에 따른 구체적인 실패 이유 출력
+                error_type = result.get("error_type")
+
+                if error_type == "SYUNAME_NOT_AT_SPECIFIED_LINE":
+                    print(f"   ❌ 지정된 라인에 SY-UNAME 없음")
+                    print(
+                        f"      라인 {result.get('specified_line')}: '{result.get('actual_content', 'N/A')}'"
+                    )
+                elif error_type == "NO_ZY_TABLE_RFC_SINK_FOUND":
+                    print(f"   ⚠️ SY-UNAME 추적됨 but Z/Y 테이블/RFC Sink 미발견")
+                    analysis = result.get("analysis_summary", {})
+                    print(
+                        f"      • 분석된 문장: {analysis.get('total_statements_analyzed', 0)}개"
+                    )
+                    print(
+                        f"      • 전파된 변수: {analysis.get('variables_propagated', 0)}개"
+                    )
+                    print(
+                        f"      • 추적 단계: {analysis.get('trace_steps', 0)}단계"
+                    )
+
+                    # 힌트 정보 표시
+                    hints = result.get("hints", [])
+                    if hints:
+                        print(f"      💡 힌트:")
+                        for hint in hints:
+                            print(f"         - {hint}")
+
+                    if verbose and result.get("tainted_variables"):
+                        print(
+                            f"      • 오염된 변수들: {', '.join(result['tainted_variables'])}"
+                        )
+                elif error_type == "NO_SINK_FOUND_AFTER_TRACING":
+                    print(f"   ⚠️ SY-UNAME 추적됨 but 유효한 Sink 미발견")
+                    analysis = result.get("analysis_summary", {})
+                    print(
+                        f"      • 분석된 문장: {analysis.get('total_statements_analyzed', 0)}개"
+                    )
+                    print(
+                        f"      • 전파된 변수: {analysis.get('variables_propagated', 0)}개"
+                    )
+                    print(
+                        f"      • 추적 단계: {analysis.get('trace_steps', 0)}단계"
+                    )
+                    if verbose and result.get("tainted_variables"):
+                        print(
+                            f"      • 오염된 변수들: {', '.join(result['tainted_variables'])}"
+                        )
+                else:
+                    print(
+                        f"   ⚠️ 분석 실패: {result.get('reason', 'Unknown reason')}"
+                    )
+
+            # 모든 결과를 저장 (성공/실패 무관)
+            all_results.append(
+                {
+                    "id": id_value,
+                    "source_file": file_path,
+                    "source_line": line_number,
+                    "result": result,
+                }
+            )
 
             except FileNotFoundError:
                 print(f"   ❌ 파일 없음: {file_path}")
