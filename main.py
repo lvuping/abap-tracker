@@ -21,6 +21,7 @@ import sys
 import os
 from datetime import datetime
 from analyzer import trace_sy_uname_in_snippet
+from encoding_utils import safe_file_read
 
 
 def analyze_sy_uname_locations(output_format="json", verbose=False):
@@ -43,16 +44,20 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
     print(f"📁 입력 파일: {sy_uname_locations_file}")
     print("=" * 80)
 
-    # 총 라인 수 계산
-    with open(sy_uname_locations_file, "r", encoding="utf-8") as f:
-        total_locations = sum(1 for _ in csv.reader(f)) - 1
+    # 총 라인 수 계산 (자동 인코딩 감지)
+    lines, encoding_used = safe_file_read(sy_uname_locations_file)
+    total_locations = len(lines) - 1  # 헤더 제외
+    
+    if verbose:
+        print(f"📝 파일 인코딩: {encoding_used}")
 
-    # 다시 파일 읽기
-    with open(sy_uname_locations_file, "r", encoding="utf-8") as f:
-        reader = csv.reader(f)
-        next(reader)  # 헤더 스킵
+    # CSV 데이터 읽기
+    import io
+    csv_content = io.StringIO(''.join(lines))
+    reader = csv.reader(csv_content)
+    next(reader)  # 헤더 스킵
 
-        for idx, row in enumerate(reader, 1):
+    for idx, row in enumerate(reader, 1):
             if len(row) == 3:  # id, file_path, line_number
                 id_value, file_path, line_number = row
             elif len(row) == 2:  # 기존 형식 호환성 유지
@@ -82,8 +87,10 @@ def analyze_sy_uname_locations(output_format="json", verbose=False):
                 )
 
             try:
-                with open(file_path, "r", encoding="utf-8") as source_file:
-                    all_lines = source_file.readlines()
+                # 자동 인코딩 감지로 ABAP 파일 읽기
+                all_lines, abap_encoding = safe_file_read(file_path)
+                if verbose:
+                    print(f"  📄 ABAP 파일 인코딩: {abap_encoding}")
 
                 # 분석할 코드 범위(앞 200줄, 뒤 1000줄) 추출
                 start = max(0, line_number - 201)

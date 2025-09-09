@@ -9,8 +9,9 @@ import json
 import csv
 import argparse
 from datetime import datetime
-from test_runner import TestRunner
+# from test_runner import TestRunner  # TODO: Create this module if needed
 from unified_analyzer import UnifiedAnalyzer
+from encoding_utils import safe_file_read
 
 
 def run_test():
@@ -19,26 +20,32 @@ def run_test():
     print("🚀 ABAP Tracker 테스트 실행")
     print("="*80)
     
-    runner = TestRunner(verbose=False)
-    test_cases = runner.load_test_cases('input/sy_uname_locations.csv')
+    # TODO: Implement TestRunner module
+    print("❌ TestRunner 모듈이 구현되지 않았습니다.")
+    print("대신 --batch 옵션을 사용하세요:")
+    print("  python abap_tracker.py --batch input/sy_uname_locations.csv")
+    return
     
-    if not test_cases:
-        print("❌ 테스트 케이스를 로드할 수 없습니다.")
-        return
-    
-    runner.run_all_tests(test_cases)
-    
-    # 결과 저장
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    csv_file = f"output/test_results_{timestamp}.csv"
-    json_file = f"output/test_report_{timestamp}.json"
-    
-    runner.export_csv(csv_file)
-    runner.export_json(json_file)
-    
-    print(f"\n📊 결과 파일:")
-    print(f"  • CSV: {csv_file}")
-    print(f"  • JSON: {json_file}")
+    # runner = TestRunner(verbose=False)
+    # test_cases = runner.load_test_cases('input/sy_uname_locations.csv')
+    # 
+    # if not test_cases:
+    #     print("❌ 테스트 케이스를 로드할 수 없습니다.")
+    #     return
+    # 
+    # runner.run_all_tests(test_cases)
+    # 
+    # # 결과 저장
+    # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # csv_file = f"output/test_results_{timestamp}.csv"
+    # json_file = f"output/test_report_{timestamp}.json"
+    # 
+    # runner.export_csv(csv_file)
+    # runner.export_json(json_file)
+    # 
+    # print(f"\n📊 결과 파일:")
+    # print(f"  • CSV: {csv_file}")
+    # print(f"  • JSON: {json_file}")
 
 
 def run_analysis(file_path, line_number, verbose=False):
@@ -49,8 +56,10 @@ def run_analysis(file_path, line_number, verbose=False):
     
     print(f"\n📍 분석 중: {file_path}:{line_number}")
     
-    with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
-        lines = f.readlines()
+    # 자동 인코딩 감지로 파일 읽기
+    lines, encoding_used = safe_file_read(file_path)
+    if verbose:
+        print(f"  📄 파일 인코딩: {encoding_used}")
     
     if line_number > len(lines):
         print(f"❌ 라인 {line_number}이 파일 범위를 벗어났습니다.")
@@ -83,32 +92,36 @@ def batch_analysis(csv_file, output_format='json', verbose=False):
     print(f"\n📂 일괄 분석 시작: {csv_file}")
     
     results = []
-    with open(csv_file, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        total = sum(1 for _ in f) - 1  # 헤더 제외
-        f.seek(0)
-        next(reader)  # 헤더 스킵
+    # CSV 파일 자동 인코딩 감지
+    lines, csv_encoding = safe_file_read(csv_file)
+    if verbose:
+        print(f"  📄 CSV 파일 인코딩: {csv_encoding}")
+    
+    import io
+    csv_content = io.StringIO(''.join(lines))
+    reader = csv.DictReader(csv_content)
+    total = len(lines) - 1  # 헤더 제외
+    
+    for i, row in enumerate(reader, 1):
+        file_path = row.get('file_path', '').strip()
+        if not file_path.endswith('.abap'):
+            file_path += '.abap'
+        if not file_path.startswith('input/'):
+            file_path = 'input/' + file_path
         
-        for i, row in enumerate(reader, 1):
-            file_path = row.get('file_path', '').strip()
-            if not file_path.endswith('.abap'):
-                file_path += '.abap'
-            if not file_path.startswith('input/'):
-                file_path = 'input/' + file_path
-            
-            line_number = int(row.get('line_number', 0))
-            
-            if not verbose:
-                print(f"  [{i}/{total}] {os.path.basename(file_path)}:{line_number}", end='\r')
-            
-            result = run_analysis(file_path, line_number, verbose=False)
-            if result:
-                results.append({
-                    'id': row.get('id', i),
-                    'file': file_path,
-                    'line': line_number,
-                    'result': result
-                })
+        line_number = int(row.get('line_number', 0))
+        
+        if not verbose:
+            print(f"  [{i}/{total}] {os.path.basename(file_path)}:{line_number}", end='\r')
+        
+        result = run_analysis(file_path, line_number, verbose=False)
+        if result:
+            results.append({
+                'id': row.get('id', i),
+                'file': file_path,
+                'line': line_number,
+                'result': result
+            })
     
     print(f"\n✅ 분석 완료: {len(results)}개 항목")
     

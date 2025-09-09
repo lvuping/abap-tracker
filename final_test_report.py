@@ -7,6 +7,7 @@ import os
 import sys
 import glob
 from analyzer import trace_sy_uname_in_snippet
+from encoding_utils import safe_file_read
 
 def test_file(filepath):
     """Test a single ABAP file and return detailed results"""
@@ -21,8 +22,8 @@ def test_file(filepath):
     }
     
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
+        # 자동 인코딩 감지로 파일 읽기
+        lines, encoding_used = safe_file_read(filepath)
         
         # Look for sy-uname in the file
         sy_uname_lines = []

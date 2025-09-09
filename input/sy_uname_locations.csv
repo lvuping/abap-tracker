@@ -129,3 +129,4 @@ id,file_path,line_number
 128,user_example.abap,3
 129,ztest.abap,4
 130,ztest.abap,9
+131,test_cp949,3

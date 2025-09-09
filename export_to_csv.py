@@ -20,6 +20,7 @@ import csv
 import os
 from datetime import datetime
 from analyzer import trace_sy_uname_in_snippet
+from encoding_utils import safe_file_read
 
 
 def analyze_and_export_to_csv():
@@ -46,11 +47,15 @@ def analyze_and_export_to_csv():
 
     results = []
 
-    # sy_uname_locations.csv 읽기
+    # sy_uname_locations.csv 읽기 (자동 인코딩 감지)
     try:
-        with open(locations_file, "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            locations = list(reader)
+        lines, encoding_used = safe_file_read(locations_file)
+        print(f"📄 CSV 파일 인코딩: {encoding_used}")
+        
+        import io
+        csv_content = io.StringIO(''.join(lines))
+        reader = csv.DictReader(csv_content)
+        locations = list(reader)
     except Exception as e:
         print(f"❌ 오류: {locations_file} 읽기 실패 - {e}")
         return False
@@ -86,9 +91,8 @@ def analyze_and_export_to_csv():
             continue
 
         try:
-            # 파일 읽기
-            with open(file_path, "r", encoding="utf-8") as f:
-                all_lines = f.readlines()
+            # 파일 읽기 (자동 인코딩 감지)
+            all_lines, file_encoding = safe_file_read(file_path)
 
             # 분석 범위 추출 (main.py와 동일한 로직)
             start = max(0, line_number - 201)
