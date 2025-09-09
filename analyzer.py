@@ -4,36 +4,224 @@ from patterns import *
 temp_audit_result = None
 
 
+def expand_colon_statements(statement, line_num):
+    """
+    Expand ABAP statements with colon syntax into individual statements.
+    
+    For example:
+    CLEAR: var1, var2, var3.
+    becomes:
+    CLEAR var1.
+    CLEAR var2.
+    CLEAR var3.
+    
+    Args:
+        statement: The statement string (already concatenated)
+        line_num: The starting line number of the statement
+        
+    Returns:
+        List of (expanded_statement, line_num) tuples
+    """
+    # Remove leading/trailing whitespace
+    statement = statement.strip()
+    
+    # Check if statement contains colon (but not in string literals)
+    # Simple check: look for colon after a keyword but before the first quote
+    if ':' not in statement:
+        return [(statement, line_num)]
+    
+    # Find the position of the colon
+    # Look for pattern: KEYWORD: 
+    colon_patterns = [
+        (r'^(CLEAR)\s*:\s*(.+)\.$', 'CLEAR'),
+        (r'^(MOVE)\s*:\s*(.+)\.$', 'MOVE'),
+        (r'^(WRITE)\s*:\s*(.+)\.$', 'WRITE'),
+        (r'^(DATA)\s*:\s*(.+)\.$', 'DATA'),
+        (r'^(TYPES)\s*:\s*(.+)\.$', 'TYPES'),
+        (r'^(CONSTANTS)\s*:\s*(.+)\.$', 'CONSTANTS'),
+        (r'^(FIELD-SYMBOLS)\s*:\s*(.+)\.$', 'FIELD-SYMBOLS'),
+        (r'^(PARAMETERS)\s*:\s*(.+)\.$', 'PARAMETERS'),
+        (r'^(SELECT-OPTIONS)\s*:\s*(.+)\.$', 'SELECT-OPTIONS'),
+        (r'^(TABLES)\s*:\s*(.+)\.$', 'TABLES'),
+        (r'^(APPEND)\s*:\s*(.+)\.$', 'APPEND'),
+        (r'^(INSERT)\s*:\s*(.+)\.$', 'INSERT'),
+        (r'^(UPDATE)\s*:\s*(.+)\.$', 'UPDATE'),
+        (r'^(DELETE)\s*:\s*(.+)\.$', 'DELETE'),
+        (r'^(MODIFY)\s*:\s*(.+)\.$', 'MODIFY'),
+        (r'^(CONCATENATE)\s*:\s*(.+)\.$', 'CONCATENATE'),
+        (r'^(SPLIT)\s*:\s*(.+)\.$', 'SPLIT'),
+        (r'^(ADD)\s*:\s*(.+)\.$', 'ADD'),
+        (r'^(SUBTRACT)\s*:\s*(.+)\.$', 'SUBTRACT'),
+        (r'^(HIDE)\s*:\s*(.+)\.$', 'HIDE'),
+        (r'^(FREE)\s*:\s*(.+)\.$', 'FREE'),
+        (r'^(REFRESH)\s*:\s*(.+)\.$', 'REFRESH'),
+        (r'^(MOVE-CORRESPONDING)\s*:\s*(.+)\.$', 'MOVE-CORRESPONDING'),
+        (r'^(PERFORM)\s*:\s*(.+)\.$', 'PERFORM'),
+        (r'^(RANGES)\s*:\s*(.+)\.$', 'RANGES'),
+    ]
+    
+    for pattern, keyword in colon_patterns:
+        match = re.match(pattern, statement, re.IGNORECASE | re.DOTALL)
+        if match:
+            items_part = match.group(2)
+            expanded = []
+            
+            # Special handling for different keywords
+            if keyword in ['CLEAR', 'FREE', 'REFRESH', 'HIDE']:
+                # Simple variable list
+                items = [item.strip() for item in items_part.split(',')]
+                for item in items:
+                    if item:
+                        expanded.append((f"{keyword} {item}.", line_num))
+                        
+            elif keyword == 'MOVE':
+                # MOVE: source TO target, source2 TO target2
+                # Split by comma, each part should have TO
+                items = items_part.split(',')
+                for item in items:
+                    item = item.strip()
+                    if 'TO' in item.upper():
+                        expanded.append((f"MOVE {item}.", line_num))
+                        
+            elif keyword == 'WRITE':
+                # WRITE: item1, item2, item3
+                items = []
+                current_item = ""
+                in_string = False
+                
+                for char in items_part:
+                    if char == "'" and (not current_item or current_item[-1] != '\\'):
+                        in_string = not in_string
+                    if char == ',' and not in_string:
+                        items.append(current_item.strip())
+                        current_item = ""
+                    else:
+                        current_item += char
+                if current_item.strip():
+                    items.append(current_item.strip())
+                    
+                for item in items:
+                    if item:
+                        expanded.append((f"WRITE {item}.", line_num))
+                        
+            elif keyword in ['DATA', 'TYPES', 'CONSTANTS', 'FIELD-SYMBOLS', 'PARAMETERS', 'SELECT-OPTIONS', 'TABLES', 'RANGES']:
+                # Complex declarations - keep mostly as-is but could be split
+                # For now, preserve the original for complex declarations
+                return [(statement, line_num)]
+                
+            elif keyword == 'APPEND':
+                # APPEND: item TO table, item2 TO table2
+                items = items_part.split(',')
+                for item in items:
+                    item = item.strip()
+                    if 'TO' in item.upper():
+                        expanded.append((f"APPEND {item}.", line_num))
+                        
+            elif keyword in ['INSERT', 'UPDATE', 'DELETE', 'MODIFY']:
+                # Database operations - complex, keep as-is for now
+                # These need more sophisticated parsing
+                return [(statement, line_num)]
+                
+            elif keyword == 'CONCATENATE':
+                # CONCATENATE: sources INTO target, sources2 INTO target2
+                items = items_part.split(',')
+                for item in items:
+                    item = item.strip()
+                    if 'INTO' in item.upper():
+                        expanded.append((f"CONCATENATE {item}.", line_num))
+                        
+            elif keyword == 'SPLIT':
+                # SPLIT: source AT delim INTO targets
+                items = items_part.split(',')
+                for item in items:
+                    item = item.strip()
+                    if item:
+                        expanded.append((f"SPLIT {item}.", line_num))
+                        
+            elif keyword in ['ADD', 'SUBTRACT']:
+                # ADD: value TO variable, value2 TO variable2
+                items = items_part.split(',')
+                for item in items:
+                    item = item.strip()
+                    if ('TO' in item.upper() and keyword == 'ADD') or ('FROM' in item.upper() and keyword == 'SUBTRACT'):
+                        expanded.append((f"{keyword} {item}.", line_num))
+                        
+            elif keyword == 'MOVE-CORRESPONDING':
+                # MOVE-CORRESPONDING: source TO target, source2 TO target2
+                items = items_part.split(',')
+                for item in items:
+                    item = item.strip()
+                    if 'TO' in item.upper():
+                        expanded.append((f"MOVE-CORRESPONDING {item}.", line_num))
+                        
+            elif keyword == 'PERFORM':
+                # PERFORM: form1, form2 USING param, form3 CHANGING param
+                # Complex - for now, keep as separate PERFORM calls
+                items = []
+                current_item = ""
+                paren_depth = 0
+                
+                for char in items_part:
+                    if char == '(':
+                        paren_depth += 1
+                    elif char == ')':
+                        paren_depth -= 1
+                    elif char == ',' and paren_depth == 0:
+                        items.append(current_item.strip())
+                        current_item = ""
+                        continue
+                    current_item += char
+                    
+                if current_item.strip():
+                    items.append(current_item.strip())
+                    
+                for item in items:
+                    if item:
+                        expanded.append((f"PERFORM {item}.", line_num))
+                        
+            if expanded:
+                return expanded
+    
+    # If no pattern matched or couldn't expand, return original
+    return [(statement, line_num)]
+
+
 def group_statements(snippet):
     """
     ABAP 코드 라인들을 완전한 문장 단위로 그룹화합니다.
     각 문장은 마침표(.)로 끝납니다. 주석은 제거됩니다.
+    콜론(:) 구문은 개별 문장으로 확장됩니다.
+    
     반환값: (문장, 시작 라인 번호) 튜플의 리스트
     """
     statements = []
     current_statement = ""
     statement_start_line = -1
-
+    
     for i, line in enumerate(snippet):
         # 주석 처리 (라인 시작이 * 이거나, "가 중간에 있는 경우)
         if line.strip().startswith("*"):
             continue
         line = line.split('"')[0]
-
+        
         clean_line = line.strip()
         if not clean_line:
             continue
-
+        
         if statement_start_line == -1:
             statement_start_line = i
-
+        
         current_statement += " " + clean_line
-
+        
         if clean_line.endswith("."):
-            statements.append((current_statement.strip(), statement_start_line))
+            # Statement is complete - now expand if it has colon syntax
+            complete_statement = current_statement.strip()
+            expanded_statements = expand_colon_statements(complete_statement, statement_start_line)
+            statements.extend(expanded_statements)
+            
             current_statement = ""
             statement_start_line = -1
-
+    
     return statements
 
 
@@ -107,6 +295,19 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
             "specified_line": start_line_in_snippet + 1,
             "actual_content": original_line,
             "error_type": "SYUNAME_NOT_AT_SPECIFIED_LINE",
+        }
+    
+    # Check if sy-uname is only in a comment (after ")
+    # Split by " and check if sy-uname is only in the comment part
+    code_part = original_line.split('"')[0]
+    if "SY-UNAME" not in code_part.upper():
+        # sy-uname is only in the comment, not in actual code
+        return {
+            "status": "Not Found",
+            "reason": f"SY-UNAME only found in comment at line {start_line_in_snippet + 1}",
+            "specified_line": start_line_in_snippet + 1,
+            "actual_content": original_line,
+            "error_type": "SYUNAME_IN_COMMENT_ONLY",
         }
 
     # 2단계: statements에서 해당 라인의 statement 찾기
@@ -454,6 +655,36 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         f"Line {line_num+1}: Chained MOVE '{source_var}' -> '{target_var}'"
                     )
 
+        # String template 처리 (|...{ sy-uname }...|)
+        # 이 패턴은 일반 할당보다 먼저 체크해야 함
+        string_template_pattern = re.compile(
+            r"^\s*(?:DATA\()?(?P<target>[\w\d_]+)\)?\s*=\s*\|.*\{\s*sy-uname\s*\}.*\|\s*\.?",
+            re.IGNORECASE
+        )
+        string_template_match = string_template_pattern.match(statement_upper)
+        if string_template_match:
+            target_var = string_template_match.group("target").strip().lower()
+            if target_var not in tainted_vars:
+                tainted_vars.add(target_var)
+                trace_path.append(
+                    f"Line {line_num+1}: String template with sy-uname -> '{target_var}'"
+                )
+        
+        # String template에서 오염된 변수 사용
+        for tainted_var in list(tainted_vars):  # Copy to avoid modification during iteration
+            tainted_pattern = re.compile(
+                rf"^\s*(?:DATA\()?(?P<target>[\w\d_]+)\)?\s*=\s*\|.*\{{\s*{re.escape(tainted_var)}\s*\}}.*\|\s*\.?",
+                re.IGNORECASE
+            )
+            tainted_match = tainted_pattern.match(statement_upper)
+            if tainted_match:
+                target_var = tainted_match.group("target").strip().lower()
+                if target_var not in tainted_vars:
+                    tainted_vars.add(target_var)
+                    trace_path.append(
+                        f"Line {line_num+1}: String template with '{tainted_var}' -> '{target_var}'"
+                    )
+
         # 기본 변수 전파
         match = MOVE_PATTERN.match(statement_upper) or ASSIGN_PATTERN.match(
             statement_upper
@@ -515,6 +746,29 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
         # --- Sink 분석 (DB, RFC, 조건문 등) ---
 
         # 1. DB 작업 분석
+        # UPDATE with string template
+        # e.g., UPDATE ztable SET description = lv_new_text WHERE ...
+        # where lv_new_text contains sy-uname from string template
+        update_simple_pattern = re.compile(
+            r"^\s*UPDATE\s+(?P<table>[\w\d_]+)\s+SET\s+(?P<field>[\w\d_]+)\s*=\s*(?P<value>[\w\d_]+).*",
+            re.IGNORECASE
+        )
+        update_simple_match = update_simple_pattern.match(statement_upper)
+        if update_simple_match:
+            table = update_simple_match.group("table").strip().upper()
+            field = update_simple_match.group("field").strip().upper()
+            value_var = update_simple_match.group("value").strip().lower()
+            
+            if table.startswith(("Z", "Y")) and value_var in tainted_vars:
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_UPDATE_FIELD",
+                    "table": table,
+                    "fields": [field],
+                    "description": f"UPDATE with tainted variable from string template",
+                    "operation": "UPDATE_SET"
+                }
+
         # UPDATE SET - 강화된 분석
         update_set_match = UPDATE_SET_SYUNAME_PATTERN.match(statement_upper)
         if update_set_match:
@@ -847,6 +1101,24 @@ def trace_sy_uname_in_snippet(snippet, start_line_in_snippet):
                         "table": table,
                         "fields": list(set(affected_fields)),
                     }
+
+        # Dynamic WHERE clause 처리 (DELETE FROM table WHERE (variable))
+        dynamic_where_pattern = re.compile(
+            r"^\s*DELETE\s+FROM\s+(?P<table>[\w\d_]+)\s+WHERE\s+\((?P<where_var>[\w\d_]+)\)\s*\.?",
+            re.IGNORECASE
+        )
+        dynamic_where_match = dynamic_where_pattern.match(statement_upper)
+        if dynamic_where_match:
+            table = dynamic_where_match.group("table").strip().upper()
+            where_var = dynamic_where_match.group("where_var").strip().lower()
+            if table.startswith(("Z", "Y")) and where_var in tainted_vars:
+                return {
+                    "status": "Found",
+                    "type": "DATABASE_DELETE",
+                    "table": table,
+                    "condition_variable": where_var,
+                    "description": "Dynamic WHERE clause with tainted variable"
+                }
 
         # DELETE 문 분석
         delete_match = DELETE_PATTERN.match(statement_upper)
