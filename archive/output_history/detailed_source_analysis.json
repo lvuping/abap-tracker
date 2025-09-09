@@ -1,0 +1,2708 @@
+{
+  "timestamp": "2025-09-09T12:27:34.060Z",
+  "testType": "detailed-source-analysis",
+  "totalCases": 15,
+  "results": [
+    {
+      "id": "simple-assignment",
+      "name": "Simple Variable Assignment",
+      "sourceCode": "REPORT ztest_simple.\nDATA: lv_user TYPE sy-uname.\nlv_user = sy-uname.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER"
+        ],
+        "sinks": []
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 3,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 3,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 3,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 3,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 100
+      }
+    },
+    {
+      "id": "chain-assignment",
+      "name": "Chain Assignment Propagation",
+      "sourceCode": "REPORT ztest_chain.\nDATA: lv_user1 TYPE sy-uname,\n      lv_user2 TYPE sy-uname,\n      lv_user3 TYPE string.\n\nlv_user1 = sy-uname.\nlv_user2 = lv_user1.\nlv_user3 = lv_user2.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER1",
+          "LV_USER2",
+          "LV_USER3"
+        ],
+        "sinks": []
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER1",
+            "LV_USER2",
+            "LV_USER3"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER1",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 6,
+                "column": 1,
+                "statement": "lv_user1 = sy-uname."
+              },
+              "operation": "MOVE"
+            },
+            {
+              "from": "LV_USER1",
+              "to": "LV_USER2",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 7,
+                "column": 1,
+                "statement": "lv_user2 = lv_user1."
+              },
+              "operation": "MOVE"
+            },
+            {
+              "from": "LV_USER2",
+              "to": "LV_USER3",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 8,
+                "column": 1,
+                "statement": "lv_user3 = lv_user2."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER1",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 6,
+                  "column": 1,
+                  "statement": "lv_user1 = sy-uname."
+                },
+                "operation": "MOVE"
+              },
+              {
+                "from": "LV_USER1",
+                "to": "LV_USER2",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 7,
+                  "column": 1,
+                  "statement": "lv_user2 = lv_user1."
+                },
+                "operation": "MOVE"
+              },
+              {
+                "from": "LV_USER2",
+                "to": "LV_USER3",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 8,
+                  "column": 1,
+                  "statement": "lv_user3 = lv_user2."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER1",
+            "LV_USER2",
+            "LV_USER3"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER1",
+              "location": {
+                "file": "test.abap",
+                "line": 6,
+                "statement": "lv_user1 = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "LV_USER1",
+              "to": "LV_USER2",
+              "location": {
+                "file": "test.abap",
+                "line": 7,
+                "statement": "lv_user2 = lv_user1."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "LV_USER2",
+              "to": "LV_USER3",
+              "location": {
+                "file": "test.abap",
+                "line": 8,
+                "statement": "lv_user3 = lv_user2."
+              },
+              "operation": "ASSIGNMENT"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER1",
+                "location": {
+                  "file": "test.abap",
+                  "line": 6,
+                  "statement": "lv_user1 = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "LV_USER1",
+                "to": "LV_USER2",
+                "location": {
+                  "file": "test.abap",
+                  "line": 7,
+                  "statement": "lv_user2 = lv_user1."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "LV_USER2",
+                "to": "LV_USER3",
+                "location": {
+                  "file": "test.abap",
+                  "line": 8,
+                  "statement": "lv_user3 = lv_user2."
+                },
+                "operation": "ASSIGNMENT"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 100
+      }
+    },
+    {
+      "id": "db-insert",
+      "name": "Database INSERT Operation",
+      "sourceCode": "REPORT ztest_insert.\nDATA: lv_user TYPE sy-uname,\n      ls_data TYPE ztable.\n\nlv_user = sy-uname.\nls_data-username = lv_user.\nINSERT ztable FROM ls_data.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER",
+          "LS_DATA-USERNAME",
+          "LS_DATA"
+        ],
+        "sinks": [
+          {
+            "type": "DB_INSERT",
+            "variable": "LS_DATA"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "LS_DATA-USERNAME",
+            "LS_DATA"
+          ],
+          "sinks": [
+            {
+              "type": "DB_INSERT",
+              "variable": "LS_DATA",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 7,
+                "column": 1,
+                "statement": "INSERT ztable FROM ls_data."
+              },
+              "context": "INSERT INTO ztable",
+              "targetTable": "ztable"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            },
+            {
+              "from": "LV_USER",
+              "to": "LS_DATA-USERNAME",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 6,
+                "column": 1,
+                "statement": "ls_data-username = lv_user."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              },
+              {
+                "from": "LV_USER",
+                "to": "LS_DATA-USERNAME",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 6,
+                  "column": 1,
+                  "statement": "ls_data-username = lv_user."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_INSERT",
+                "variable": "LS_DATA",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 7,
+                  "column": 1,
+                  "statement": "INSERT ztable FROM ls_data."
+                },
+                "context": "INSERT INTO ztable",
+                "targetTable": "ztable"
+              }
+            ],
+            "propagationPaths": []
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "LS_DATA-USERNAME"
+          ],
+          "sinks": [
+            {
+              "type": "DB_INSERT",
+              "variable": "LS_DATA",
+              "location": {
+                "file": "test.abap",
+                "line": 7,
+                "statement": "INSERT ztable FROM ls_data."
+              },
+              "context": "INSERT ztable FROM ls_data.",
+              "targetTable": "ztable",
+              "affectedFields": [
+                "USERNAME"
+              ]
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "LV_USER",
+              "to": "LS_DATA-USERNAME",
+              "location": {
+                "file": "test.abap",
+                "line": 6,
+                "statement": "ls_data-username = lv_user."
+              },
+              "operation": "ASSIGNMENT",
+              "targetTable": "LS_DATA",
+              "targetField": "USERNAME"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "LV_USER",
+                "to": "LS_DATA-USERNAME",
+                "location": {
+                  "file": "test.abap",
+                  "line": 6,
+                  "statement": "ls_data-username = lv_user."
+                },
+                "operation": "ASSIGNMENT",
+                "targetTable": "LS_DATA",
+                "targetField": "USERNAME"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_INSERT",
+                "variable": "LS_DATA",
+                "location": {
+                  "file": "test.abap",
+                  "line": 7,
+                  "statement": "INSERT ztable FROM ls_data."
+                },
+                "context": "INSERT ztable FROM ls_data.",
+                "targetTable": "ztable",
+                "affectedFields": [
+                  "USERNAME"
+                ]
+              }
+            ],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [
+          "regex tainted variables mismatch: expected SY-UNAME, LV_USER, LS_DATA-USERNAME, LS_DATA, got SY-UNAME, LV_USER, LS_DATA-USERNAME"
+        ],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 50
+      }
+    },
+    {
+      "id": "db-update",
+      "name": "Database UPDATE Operation",
+      "sourceCode": "REPORT ztest_update.\nDATA: lv_user TYPE sy-uname,\n      lv_date TYPE sy-datum.\n\nlv_user = sy-uname.\nlv_date = sy-datum.\n\nUPDATE ztable SET \n  username = lv_user,\n  changedate = lv_date\nWHERE client = sy-mandt.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER"
+        ],
+        "sinks": [
+          {
+            "type": "DB_UPDATE",
+            "variable": "LV_USER"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "DB_UPDATE",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 8,
+                "column": 1,
+                "statement": "UPDATE ztable SET username = lv_user, changedate = lv_date WHERE client = sy-mandt."
+              },
+              "context": "UPDATE ztable SET username, changedate",
+              "targetTable": "ztable",
+              "affectedFields": [
+                "username",
+                "changedate"
+              ]
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_UPDATE",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 8,
+                  "column": 1,
+                  "statement": "UPDATE ztable SET username = lv_user, changedate = lv_date WHERE client = sy-mandt."
+                },
+                "context": "UPDATE ztable SET username, changedate",
+                "targetTable": "ztable",
+                "affectedFields": [
+                  "username",
+                  "changedate"
+                ]
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "DB_UPDATE",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.prog.abap",
+                    "line": 8,
+                    "column": 1,
+                    "statement": "UPDATE ztable SET username = lv_user, changedate = lv_date WHERE client = sy-mandt."
+                  },
+                  "context": "UPDATE ztable SET username, changedate",
+                  "targetTable": "ztable",
+                  "affectedFields": [
+                    "username",
+                    "changedate"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "DB_UPDATE",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 8,
+                "statement": "UPDATE ztable SET username = lv_user,"
+              },
+              "context": "UPDATE ztable SET username = lv_user,",
+              "targetTable": "ztable",
+              "affectedFields": [
+                "username"
+              ]
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_UPDATE",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 8,
+                  "statement": "UPDATE ztable SET username = lv_user,"
+                },
+                "context": "UPDATE ztable SET username = lv_user,",
+                "targetTable": "ztable",
+                "affectedFields": [
+                  "username"
+                ]
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "DB_UPDATE",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.abap",
+                    "line": 8,
+                    "statement": "UPDATE ztable SET username = lv_user,"
+                  },
+                  "context": "UPDATE ztable SET username = lv_user,",
+                  "targetTable": "ztable",
+                  "affectedFields": [
+                    "username"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 100
+      }
+    },
+    {
+      "id": "structure-field",
+      "name": "Structure Field Assignment",
+      "sourceCode": "REPORT ztest_struct.\nDATA: ls_data TYPE zstruct.\n\nls_data-username = sy-uname.\nls_data-client = sy-mandt.\n\nINSERT ztable FROM ls_data.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LS_DATA-USERNAME",
+          "LS_DATA"
+        ],
+        "sinks": [
+          {
+            "type": "DB_INSERT",
+            "variable": "LS_DATA"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LS_DATA-USERNAME",
+            "LS_DATA"
+          ],
+          "sinks": [
+            {
+              "type": "DB_INSERT",
+              "variable": "LS_DATA",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 7,
+                "column": 1,
+                "statement": "INSERT ztable FROM ls_data."
+              },
+              "context": "INSERT INTO ztable",
+              "targetTable": "ztable"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LS_DATA-USERNAME",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 4,
+                "column": 1,
+                "statement": "ls_data-username = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LS_DATA-USERNAME",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 4,
+                  "column": 1,
+                  "statement": "ls_data-username = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_INSERT",
+                "variable": "LS_DATA",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 7,
+                  "column": 1,
+                  "statement": "INSERT ztable FROM ls_data."
+                },
+                "context": "INSERT INTO ztable",
+                "targetTable": "ztable"
+              }
+            ],
+            "propagationPaths": []
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LS_DATA-USERNAME"
+          ],
+          "sinks": [
+            {
+              "type": "DB_INSERT",
+              "variable": "LS_DATA",
+              "location": {
+                "file": "test.abap",
+                "line": 7,
+                "statement": "INSERT ztable FROM ls_data."
+              },
+              "context": "INSERT ztable FROM ls_data.",
+              "targetTable": "ztable",
+              "affectedFields": [
+                "USERNAME"
+              ]
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LS_DATA-USERNAME",
+              "location": {
+                "file": "test.abap",
+                "line": 4,
+                "statement": "ls_data-username = sy-uname."
+              },
+              "operation": "ASSIGNMENT",
+              "targetTable": "LS_DATA",
+              "targetField": "USERNAME"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LS_DATA-USERNAME",
+                "location": {
+                  "file": "test.abap",
+                  "line": 4,
+                  "statement": "ls_data-username = sy-uname."
+                },
+                "operation": "ASSIGNMENT",
+                "targetTable": "LS_DATA",
+                "targetField": "USERNAME"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_INSERT",
+                "variable": "LS_DATA",
+                "location": {
+                  "file": "test.abap",
+                  "line": 7,
+                  "statement": "INSERT ztable FROM ls_data."
+                },
+                "context": "INSERT ztable FROM ls_data.",
+                "targetTable": "ztable",
+                "affectedFields": [
+                  "USERNAME"
+                ]
+              }
+            ],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [
+          "regex tainted variables mismatch: expected SY-UNAME, LS_DATA-USERNAME, LS_DATA, got SY-UNAME, LS_DATA-USERNAME"
+        ],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 50
+      }
+    },
+    {
+      "id": "concatenate",
+      "name": "String Concatenation",
+      "sourceCode": "REPORT ztest_concat.\nDATA: lv_user TYPE sy-uname,\n      lv_text TYPE string,\n      lv_final TYPE string.\n\nlv_user = sy-uname.\nCONCATENATE 'User:' lv_user INTO lv_text.\nlv_final = |Current user is { lv_text }|.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER",
+          "LV_TEXT",
+          "LV_FINAL"
+        ],
+        "sinks": []
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 6,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 6,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "LV_TEXT"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 6,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "SY-UNAME",
+              "to": "LV_TEXT",
+              "location": {
+                "file": "test.abap",
+                "line": 7,
+                "statement": "CONCATENATE 'User:' lv_user INTO lv_text."
+              },
+              "operation": "CONCATENATE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 6,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "SY-UNAME",
+                "to": "LV_TEXT",
+                "location": {
+                  "file": "test.abap",
+                  "line": 7,
+                  "statement": "CONCATENATE 'User:' lv_user INTO lv_text."
+                },
+                "operation": "CONCATENATE"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": false,
+        "differences": [
+          "abaplint tainted variables mismatch: expected SY-UNAME, LV_USER, LV_TEXT, LV_FINAL, got SY-UNAME, LV_USER",
+          "regex tainted variables mismatch: expected SY-UNAME, LV_USER, LV_TEXT, LV_FINAL, got SY-UNAME, LV_USER, LV_TEXT"
+        ],
+        "accuracy": 50,
+        "abaplintAccuracy": 50,
+        "regexAccuracy": 50
+      }
+    },
+    {
+      "id": "internal-table",
+      "name": "Internal Table Operations",
+      "sourceCode": "REPORT ztest_itab.\nDATA: lt_users TYPE TABLE OF sy-uname,\n      lv_user TYPE sy-uname.\n\nlv_user = sy-uname.\nAPPEND lv_user TO lt_users.\nINSERT ztable FROM TABLE lt_users.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER",
+          "LT_USERS"
+        ],
+        "sinks": [
+          {
+            "type": "DB_INSERT",
+            "variable": "LT_USERS"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "LT_USERS"
+          ],
+          "sinks": [
+            {
+              "type": "DB_INSERT",
+              "variable": "LT_USERS",
+              "location": {
+                "file": "test.abap",
+                "line": 7,
+                "statement": "INSERT ztable FROM TABLE lt_users."
+              },
+              "context": "INSERT ztable FROM TABLE lt_users.",
+              "targetTable": "ztable"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "SY-UNAME",
+              "to": "LT_USERS",
+              "location": {
+                "file": "test.abap",
+                "line": 6,
+                "statement": "APPEND lv_user TO lt_users."
+              },
+              "operation": "APPEND"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "SY-UNAME",
+                "to": "LT_USERS",
+                "location": {
+                  "file": "test.abap",
+                  "line": 6,
+                  "statement": "APPEND lv_user TO lt_users."
+                },
+                "operation": "APPEND"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_INSERT",
+                "variable": "LT_USERS",
+                "location": {
+                  "file": "test.abap",
+                  "line": 7,
+                  "statement": "INSERT ztable FROM TABLE lt_users."
+                },
+                "context": "INSERT ztable FROM TABLE lt_users.",
+                "targetTable": "ztable"
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LT_USERS"
+                ],
+                "sink": {
+                  "type": "DB_INSERT",
+                  "variable": "LT_USERS",
+                  "location": {
+                    "file": "test.abap",
+                    "line": 7,
+                    "statement": "INSERT ztable FROM TABLE lt_users."
+                  },
+                  "context": "INSERT ztable FROM TABLE lt_users.",
+                  "targetTable": "ztable"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [
+          "abaplint tainted variables mismatch: expected SY-UNAME, LV_USER, LT_USERS, got SY-UNAME, LV_USER",
+          "abaplint sinks mismatch"
+        ],
+        "accuracy": 100,
+        "abaplintAccuracy": 0,
+        "regexAccuracy": 100
+      }
+    },
+    {
+      "id": "function-call",
+      "name": "Function Module Call",
+      "sourceCode": "REPORT ztest_func.\nDATA: lv_user TYPE sy-uname,\n      lv_result TYPE string.\n\nlv_user = sy-uname.\n\nCALL FUNCTION 'Z_PROCESS_USER'\n  EXPORTING\n    iv_username = lv_user\n  IMPORTING\n    ev_result = lv_result.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER"
+        ],
+        "sinks": [
+          {
+            "type": "FUNCTION_CALL",
+            "variable": "LV_USER"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "FUNCTION_CALL",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 7,
+                "column": 1,
+                "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result."
+              },
+              "context": "CALL FUNCTION ''Z_PROCESS_USER''"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "FUNCTION_CALL",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 7,
+                  "column": 1,
+                  "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result."
+                },
+                "context": "CALL FUNCTION ''Z_PROCESS_USER''"
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "FUNCTION_CALL",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.prog.abap",
+                    "line": 7,
+                    "column": 1,
+                    "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result."
+                  },
+                  "context": "CALL FUNCTION ''Z_PROCESS_USER''"
+                }
+              }
+            ]
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "IV_USERNAME"
+          ],
+          "sinks": [
+            {
+              "type": "METHOD_CALL",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 7,
+                "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result."
+              },
+              "context": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result.",
+              "targetTable": "Z_PROCESS_USER",
+              "affectedFields": [
+                "iv_username"
+              ]
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "LV_USER",
+              "to": "Z_PROCESS_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 7,
+                "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result."
+              },
+              "operation": "FUNCTION_CALL"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "LV_USER",
+                "to": "Z_PROCESS_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 7,
+                  "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result."
+                },
+                "operation": "FUNCTION_CALL"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "METHOD_CALL",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 7,
+                  "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result."
+                },
+                "context": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result.",
+                "targetTable": "Z_PROCESS_USER",
+                "affectedFields": [
+                  "iv_username"
+                ]
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "METHOD_CALL",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.abap",
+                    "line": 7,
+                    "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result."
+                  },
+                  "context": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = lv_user IMPORTING ev_result = lv_result.",
+                  "targetTable": "Z_PROCESS_USER",
+                  "affectedFields": [
+                    "iv_username"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [
+          "regex tainted variables mismatch: expected SY-UNAME, LV_USER, got SY-UNAME, LV_USER, IV_USERNAME",
+          "regex sinks mismatch"
+        ],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 0
+      }
+    },
+    {
+      "id": "perform-form",
+      "name": "PERFORM/FORM Subroutine",
+      "sourceCode": "REPORT ztest_perform.\nDATA: lv_user TYPE sy-uname,\n      lv_output TYPE string.\n\nlv_user = sy-uname.\nPERFORM process_user USING lv_user CHANGING lv_output.\n\nFORM process_user USING p_user TYPE sy-uname\n                  CHANGING p_output TYPE string.\n  p_output = |Processed: { p_user }|.\nENDFORM.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER"
+        ],
+        "sinks": [
+          {
+            "type": "FORM_CALL",
+            "variable": "LV_USER"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "FORM_CALL",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 6,
+                "column": 1,
+                "statement": "PERFORM process_user USING lv_user CHANGING lv_output."
+              },
+              "context": "PERFORM process_user"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "FORM_CALL",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 6,
+                  "column": 1,
+                  "statement": "PERFORM process_user USING lv_user CHANGING lv_output."
+                },
+                "context": "PERFORM process_user"
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "FORM_CALL",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.prog.abap",
+                    "line": 6,
+                    "column": 1,
+                    "statement": "PERFORM process_user USING lv_user CHANGING lv_output."
+                  },
+                  "context": "PERFORM process_user"
+                }
+              }
+            ]
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "FORM_CALL",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 6,
+                "statement": "PERFORM process_user USING lv_user CHANGING lv_output."
+              },
+              "context": "PERFORM process_user USING lv_user CHANGING lv_output."
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "FORM_CALL",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 6,
+                  "statement": "PERFORM process_user USING lv_user CHANGING lv_output."
+                },
+                "context": "PERFORM process_user USING lv_user CHANGING lv_output."
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "FORM_CALL",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.abap",
+                    "line": 6,
+                    "statement": "PERFORM process_user USING lv_user CHANGING lv_output."
+                  },
+                  "context": "PERFORM process_user USING lv_user CHANGING lv_output."
+                }
+              }
+            ]
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 100
+      }
+    },
+    {
+      "id": "field-symbol",
+      "name": "Field Symbol Assignment",
+      "sourceCode": "REPORT ztest_fieldsymbol.\nFIELD-SYMBOLS: <fs_user> TYPE sy-uname,\n               <fs_data> TYPE any.\nDATA: lv_user TYPE sy-uname.\n\nlv_user = sy-uname.\nASSIGN lv_user TO <fs_user>.\nASSIGN <fs_user> TO <fs_data>.\n\nINSERT ztable FROM <fs_data>.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER",
+          "<FS_USER>",
+          "<FS_DATA>"
+        ],
+        "sinks": [
+          {
+            "type": "DB_INSERT",
+            "variable": "<FS_DATA>"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "FS_USER",
+            "FS_DATA"
+          ],
+          "sinks": [
+            {
+              "type": "DB_INSERT",
+              "variable": "FS_DATA",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 10,
+                "column": 1,
+                "statement": "INSERT ztable FROM <fs_data>."
+              },
+              "context": "INSERT INTO ztable",
+              "targetTable": "ztable"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 6,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            },
+            {
+              "from": "LV_USER",
+              "to": "FS_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 7,
+                "column": 1,
+                "statement": "ASSIGN lv_user TO <fs_user>."
+              },
+              "operation": "ASSIGN"
+            },
+            {
+              "from": "FS_USER",
+              "to": "FS_DATA",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 8,
+                "column": 1,
+                "statement": "ASSIGN <fs_user> TO <fs_data>."
+              },
+              "operation": "ASSIGN"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 6,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              },
+              {
+                "from": "LV_USER",
+                "to": "FS_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 7,
+                  "column": 1,
+                  "statement": "ASSIGN lv_user TO <fs_user>."
+                },
+                "operation": "ASSIGN"
+              },
+              {
+                "from": "FS_USER",
+                "to": "FS_DATA",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 8,
+                  "column": 1,
+                  "statement": "ASSIGN <fs_user> TO <fs_data>."
+                },
+                "operation": "ASSIGN"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_INSERT",
+                "variable": "FS_DATA",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 10,
+                  "column": 1,
+                  "statement": "INSERT ztable FROM <fs_data>."
+                },
+                "context": "INSERT INTO ztable",
+                "targetTable": "ztable"
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER",
+                  "FS_USER",
+                  "FS_DATA"
+                ],
+                "sink": {
+                  "type": "DB_INSERT",
+                  "variable": "FS_DATA",
+                  "location": {
+                    "file": "test.prog.abap",
+                    "line": 10,
+                    "column": 1,
+                    "statement": "INSERT ztable FROM <fs_data>."
+                  },
+                  "context": "INSERT INTO ztable",
+                  "targetTable": "ztable"
+                }
+              }
+            ]
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 6,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 6,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": false,
+        "differences": [
+          "abaplint tainted variables mismatch: expected SY-UNAME, LV_USER, <FS_USER>, <FS_DATA>, got SY-UNAME, LV_USER, FS_USER, FS_DATA",
+          "abaplint sinks mismatch",
+          "regex tainted variables mismatch: expected SY-UNAME, LV_USER, <FS_USER>, <FS_DATA>, got SY-UNAME, LV_USER",
+          "regex sinks mismatch"
+        ],
+        "accuracy": 0,
+        "abaplintAccuracy": 0,
+        "regexAccuracy": 0
+      }
+    },
+    {
+      "id": "write-output",
+      "name": "WRITE Statement Output",
+      "sourceCode": "REPORT ztest_write.\nDATA: lv_user TYPE sy-uname,\n      lv_msg TYPE string.\n\nlv_user = sy-uname.\nlv_msg = |Welcome { lv_user }|.\n\nWRITE: / 'User Information:'.\nWRITE: / lv_msg.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER",
+          "LV_MSG"
+        ],
+        "sinks": [
+          {
+            "type": "WRITE",
+            "variable": "LV_MSG"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "LV_MSG"
+          ],
+          "sinks": [
+            {
+              "type": "WRITE",
+              "variable": "LV_MSG",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 9,
+                "column": 1,
+                "statement": "WRITE / lv_msg."
+              },
+              "context": "WRITE LV_MSG"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            },
+            {
+              "from": "LV_USER",
+              "to": "LV_MSG",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 6,
+                "column": 1,
+                "statement": "lv_msg = |Welcome { lv_user }|."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              },
+              {
+                "from": "LV_USER",
+                "to": "LV_MSG",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 6,
+                  "column": 1,
+                  "statement": "lv_msg = |Welcome { lv_user }|."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "WRITE",
+                "variable": "LV_MSG",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 9,
+                  "column": 1,
+                  "statement": "WRITE / lv_msg."
+                },
+                "context": "WRITE LV_MSG"
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER",
+                  "LV_MSG"
+                ],
+                "sink": {
+                  "type": "WRITE",
+                  "variable": "LV_MSG",
+                  "location": {
+                    "file": "test.prog.abap",
+                    "line": 9,
+                    "column": 1,
+                    "statement": "WRITE / lv_msg."
+                  },
+                  "context": "WRITE LV_MSG"
+                }
+              }
+            ]
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [
+          "regex tainted variables mismatch: expected SY-UNAME, LV_USER, LV_MSG, got SY-UNAME, LV_USER",
+          "regex sinks mismatch"
+        ],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 0
+      }
+    },
+    {
+      "id": "message-output",
+      "name": "MESSAGE Statement",
+      "sourceCode": "REPORT ztest_message.\nDATA: lv_user TYPE sy-uname.\n\nlv_user = sy-uname.\nMESSAGE i001(z1) WITH lv_user.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER"
+        ],
+        "sinks": [
+          {
+            "type": "MESSAGE",
+            "variable": "LV_USER"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "MESSAGE",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "MESSAGE i001(z1) WITH lv_user."
+              },
+              "context": "MESSAGE with LV_USER"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 4,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 4,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "MESSAGE",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "MESSAGE i001(z1) WITH lv_user."
+                },
+                "context": "MESSAGE with LV_USER"
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "MESSAGE",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.prog.abap",
+                    "line": 5,
+                    "column": 1,
+                    "statement": "MESSAGE i001(z1) WITH lv_user."
+                  },
+                  "context": "MESSAGE with LV_USER"
+                }
+              }
+            ]
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "MESSAGE",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "MESSAGE i001(z1) WITH lv_user."
+              },
+              "context": "MESSAGE i001(z1) WITH lv_user."
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 4,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 4,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "MESSAGE",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "MESSAGE i001(z1) WITH lv_user."
+                },
+                "context": "MESSAGE i001(z1) WITH lv_user."
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "MESSAGE",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.abap",
+                    "line": 5,
+                    "statement": "MESSAGE i001(z1) WITH lv_user."
+                  },
+                  "context": "MESSAGE i001(z1) WITH lv_user."
+                }
+              }
+            ]
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 100
+      }
+    },
+    {
+      "id": "rfc-call",
+      "name": "RFC Destination Call",
+      "sourceCode": "REPORT ztest_rfc.\nDATA: lv_user TYPE sy-uname,\n      lv_system TYPE string.\n\nlv_user = sy-uname.\nlv_system = 'PROD'.\n\nCALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system\n  EXPORTING\n    iv_user = lv_user.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER"
+        ],
+        "sinks": [
+          {
+            "type": "RFC_CALL",
+            "variable": "LV_USER"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "RFC_CALL",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 8,
+                "column": 1,
+                "statement": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user."
+              },
+              "context": "CALL FUNCTION ''Z_RFC_FUNCTION'' DESTINATION ..."
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "RFC_CALL",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 8,
+                  "column": 1,
+                  "statement": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user."
+                },
+                "context": "CALL FUNCTION ''Z_RFC_FUNCTION'' DESTINATION ..."
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "RFC_CALL",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.prog.abap",
+                    "line": 8,
+                    "column": 1,
+                    "statement": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user."
+                  },
+                  "context": "CALL FUNCTION ''Z_RFC_FUNCTION'' DESTINATION ..."
+                }
+              }
+            ]
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "IV_USER"
+          ],
+          "sinks": [
+            {
+              "type": "RFC_CALL",
+              "variable": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 8,
+                "statement": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user."
+              },
+              "context": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user.",
+              "targetTable": "Z_RFC_FUNCTION@lv_system",
+              "affectedFields": [
+                "iv_user"
+              ]
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "LV_USER",
+              "to": "Z_RFC_FUNCTION",
+              "location": {
+                "file": "test.abap",
+                "line": 8,
+                "statement": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user."
+              },
+              "operation": "RFC_CALL"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "LV_USER",
+                "to": "Z_RFC_FUNCTION",
+                "location": {
+                  "file": "test.abap",
+                  "line": 8,
+                  "statement": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user."
+                },
+                "operation": "RFC_CALL"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "RFC_CALL",
+                "variable": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 8,
+                  "statement": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user."
+                },
+                "context": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user.",
+                "targetTable": "Z_RFC_FUNCTION@lv_system",
+                "affectedFields": [
+                  "iv_user"
+                ]
+              }
+            ],
+            "propagationPaths": [
+              {
+                "source": "SY-UNAME",
+                "path": [
+                  "SY-UNAME",
+                  "LV_USER"
+                ],
+                "sink": {
+                  "type": "RFC_CALL",
+                  "variable": "LV_USER",
+                  "location": {
+                    "file": "test.abap",
+                    "line": 8,
+                    "statement": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user."
+                  },
+                  "context": "CALL FUNCTION 'Z_RFC_FUNCTION' DESTINATION lv_system EXPORTING iv_user = lv_user.",
+                  "targetTable": "Z_RFC_FUNCTION@lv_system",
+                  "affectedFields": [
+                    "iv_user"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [
+          "regex tainted variables mismatch: expected SY-UNAME, LV_USER, got SY-UNAME, LV_USER, IV_USER"
+        ],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 50
+      }
+    },
+    {
+      "id": "modify-db",
+      "name": "MODIFY Database Operation",
+      "sourceCode": "REPORT ztest_modify.\nDATA: ls_data TYPE ztable,\n      lv_user TYPE sy-uname.\n\nlv_user = sy-uname.\nls_data-username = lv_user.\nls_data-mandt = sy-mandt.\n\nMODIFY ztable FROM ls_data.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER",
+          "LS_DATA-USERNAME",
+          "LS_DATA"
+        ],
+        "sinks": [
+          {
+            "type": "DB_MODIFY",
+            "variable": "LS_DATA"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "LS_DATA-USERNAME",
+            "LS_DATA"
+          ],
+          "sinks": [
+            {
+              "type": "DB_MODIFY",
+              "variable": "LS_DATA",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 9,
+                "column": 1,
+                "statement": "MODIFY ztable FROM ls_data."
+              },
+              "context": "MODIFY ztable",
+              "targetTable": "ztable"
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 5,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            },
+            {
+              "from": "LV_USER",
+              "to": "LS_DATA-USERNAME",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 6,
+                "column": 1,
+                "statement": "ls_data-username = lv_user."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 5,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              },
+              {
+                "from": "LV_USER",
+                "to": "LS_DATA-USERNAME",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 6,
+                  "column": 1,
+                  "statement": "ls_data-username = lv_user."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_MODIFY",
+                "variable": "LS_DATA",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 9,
+                  "column": 1,
+                  "statement": "MODIFY ztable FROM ls_data."
+                },
+                "context": "MODIFY ztable",
+                "targetTable": "ztable"
+              }
+            ],
+            "propagationPaths": []
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "LS_DATA-USERNAME"
+          ],
+          "sinks": [
+            {
+              "type": "DB_MODIFY",
+              "variable": "LS_DATA",
+              "location": {
+                "file": "test.abap",
+                "line": 9,
+                "statement": "MODIFY ztable FROM ls_data."
+              },
+              "context": "MODIFY ztable FROM ls_data.",
+              "targetTable": "ztable",
+              "affectedFields": [
+                "USERNAME"
+              ]
+            }
+          ],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 5,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "LV_USER",
+              "to": "LS_DATA-USERNAME",
+              "location": {
+                "file": "test.abap",
+                "line": 6,
+                "statement": "ls_data-username = lv_user."
+              },
+              "operation": "ASSIGNMENT",
+              "targetTable": "LS_DATA",
+              "targetField": "USERNAME"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 5,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "LV_USER",
+                "to": "LS_DATA-USERNAME",
+                "location": {
+                  "file": "test.abap",
+                  "line": 6,
+                  "statement": "ls_data-username = lv_user."
+                },
+                "operation": "ASSIGNMENT",
+                "targetTable": "LS_DATA",
+                "targetField": "USERNAME"
+              }
+            ],
+            "sinks": [
+              {
+                "type": "DB_MODIFY",
+                "variable": "LS_DATA",
+                "location": {
+                  "file": "test.abap",
+                  "line": 9,
+                  "statement": "MODIFY ztable FROM ls_data."
+                },
+                "context": "MODIFY ztable FROM ls_data.",
+                "targetTable": "ztable",
+                "affectedFields": [
+                  "USERNAME"
+                ]
+              }
+            ],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": true,
+        "differences": [
+          "regex tainted variables mismatch: expected SY-UNAME, LV_USER, LS_DATA-USERNAME, LS_DATA, got SY-UNAME, LV_USER, LS_DATA-USERNAME"
+        ],
+        "accuracy": 100,
+        "abaplintAccuracy": 100,
+        "regexAccuracy": 50
+      }
+    },
+    {
+      "id": "loop-processing",
+      "name": "LOOP Processing with Taint",
+      "sourceCode": "REPORT ztest_loop.\nDATA: lt_users TYPE TABLE OF sy-uname,\n      lv_user TYPE sy-uname,\n      lv_current TYPE sy-uname.\n\nlv_user = sy-uname.\nAPPEND lv_user TO lt_users.\n\nLOOP AT lt_users INTO lv_current.\n  INSERT ztable FROM lv_current.\nENDLOOP.",
+      "expectedResults": {
+        "taintedVariables": [
+          "SY-UNAME",
+          "LV_USER",
+          "LT_USERS",
+          "LV_CURRENT"
+        ],
+        "sinks": [
+          {
+            "type": "DB_INSERT",
+            "variable": "LV_CURRENT"
+          }
+        ]
+      },
+      "actualResults": {
+        "abaplint": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.prog.abap",
+                "line": 6,
+                "column": 1,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "MOVE"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.prog.abap",
+                  "line": 6,
+                  "column": 1,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "MOVE"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        },
+        "regex": {
+          "taintedVariables": [
+            "SY-UNAME",
+            "LV_USER",
+            "LT_USERS"
+          ],
+          "sinks": [],
+          "flows": [
+            {
+              "from": "SY-UNAME",
+              "to": "LV_USER",
+              "location": {
+                "file": "test.abap",
+                "line": 6,
+                "statement": "lv_user = sy-uname."
+              },
+              "operation": "ASSIGNMENT"
+            },
+            {
+              "from": "SY-UNAME",
+              "to": "LT_USERS",
+              "location": {
+                "file": "test.abap",
+                "line": 7,
+                "statement": "APPEND lv_user TO lt_users."
+              },
+              "operation": "APPEND"
+            }
+          ],
+          "rawOutput": {
+            "source": "SY-UNAME",
+            "taintedVariables": {},
+            "flows": [
+              {
+                "from": "SY-UNAME",
+                "to": "LV_USER",
+                "location": {
+                  "file": "test.abap",
+                  "line": 6,
+                  "statement": "lv_user = sy-uname."
+                },
+                "operation": "ASSIGNMENT"
+              },
+              {
+                "from": "SY-UNAME",
+                "to": "LT_USERS",
+                "location": {
+                  "file": "test.abap",
+                  "line": 7,
+                  "statement": "APPEND lv_user TO lt_users."
+                },
+                "operation": "APPEND"
+              }
+            ],
+            "sinks": [],
+            "propagationPaths": []
+          }
+        }
+      },
+      "analysis": {
+        "matches": false,
+        "differences": [
+          "abaplint tainted variables mismatch: expected SY-UNAME, LV_USER, LT_USERS, LV_CURRENT, got SY-UNAME, LV_USER",
+          "abaplint sinks mismatch",
+          "regex tainted variables mismatch: expected SY-UNAME, LV_USER, LT_USERS, LV_CURRENT, got SY-UNAME, LV_USER, LT_USERS",
+          "regex sinks mismatch"
+        ],
+        "accuracy": 0,
+        "abaplintAccuracy": 0,
+        "regexAccuracy": 0
+      }
+    }
+  ],
+  "summary": {
+    "totalTests": 15,
+    "passed": 12,
+    "failed": 3,
+    "abaplintAccuracy": 73.33333333333333,
+    "regexAccuracy": 40
+  }
+}

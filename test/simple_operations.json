@@ -1,0 +1,141 @@
+{
+  "timestamp": "2025-09-09T14:37:26.609Z",
+  "totalOperations": 15,
+  "operations": [
+    {
+      "line": 37,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "statement": "INSERT ztable FROM wa_ztable."
+    },
+    {
+      "line": 50,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "statement": "INSERT INTO ztable VALUES wa_ztable."
+    },
+    {
+      "line": 65,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ],
+      "statement": "INSERT ztable FROM TABLE lt_ztable."
+    },
+    {
+      "line": 78,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ],
+      "statement": "INSERT ztable FROM TABLE lt_ztable ACCEPTING DUPLICATE KEYS."
+    },
+    {
+      "line": 89,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "statement": "INSERT ztable FROM wa_ztable."
+    },
+    {
+      "line": 91,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "statement": "UPDATE ztable FROM wa_ztable."
+    },
+    {
+      "line": 105,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "statement": "INSERT ztable CLIENT SPECIFIED FROM wa_ztable."
+    },
+    {
+      "line": 110,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "statement": "INSERT ztable FROM ( SELECT * FROM ztable_source WHERE status = 'NEW' )."
+    },
+    {
+      "line": 115,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "statement": "INSERT ztable FROM @( VALUE #( field1 = 'INLINE'"
+    },
+    {
+      "line": 127,
+      "operation": "DB-INSERT",
+      "table": "ZMARA",
+      "fields": [
+        "WA_MARA"
+      ],
+      "statement": "INSERT zmara FROM wa_mara."
+    },
+    {
+      "line": 134,
+      "operation": "DB-INSERT",
+      "table": "MAKT",
+      "fields": [
+        "WA_MAKT"
+      ],
+      "statement": "INSERT makt FROM wa_makt."
+    },
+    {
+      "line": 144,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "statement": "INSERT ztable FROM wa_ztable."
+    },
+    {
+      "line": 151,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "statement": "INSERT ztable FROM wa_ztable."
+    },
+    {
+      "line": 162,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "statement": "INSERT ztable FROM wa_ztable."
+    },
+    {
+      "line": 178,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ],
+      "statement": "INSERT ztable FROM TABLE lt_large_data FROM lv_from TO lv_to."
+    }
+  ]
+}

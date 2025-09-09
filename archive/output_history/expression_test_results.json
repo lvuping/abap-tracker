@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-09-09T11:56:40.369Z",
+  "testType": "expressions",
+  "results": {
+    "stdout": "Testing all expressions used in abaplintTaintAnalyzer...\n\nExpression availability check:\n✅ Source: available\n✅ Target: available\n✅ DefinitionName: available\n✅ FormName: available\n✅ MethodName: available\n✅ FieldChain: available\n✅ FieldSymbol: available\n✅ DatabaseTable: available\n❌ SQLSetClause: missing or not a class\n✅ SQLFieldAndValue: available\n✅ SQLFieldName: available\n✅ SQLSource: available\n✅ SQLCond: available\n✅ FunctionName: available\n✅ FunctionExporting: available\n❌ FunctionImporting: missing or not a class\n❌ FunctionTables: missing or not a class\n❌ FunctionChanging: missing or not a class\n✅ PerformUsing: available\n✅ PerformChanging: available\n\nSummary:\nAvailable: 16/20\nMissing: 4/20\n\nMissing expressions: SQLSetClause, FunctionImporting, FunctionTables, FunctionChanging\n\n\nAll available expressions in abaplint.Expressions:\nTotal expressions available: 226\n\nSQL/Database/Field-related expressions (60):\n  ConstantFieldLength\n  DatabaseConnection\n  DatabaseTable\n  Field\n  FieldAll\n  FieldAssignment\n  FieldChain\n  FieldLength\n  FieldOffset\n  FieldSub\n  FieldSymbol\n  InlineField\n  InlineFieldDefinition\n  ProvideFieldName\n  SQLAggregation\n  SQLAliasField\n  SQLArithmeticOperator\n  SQLArithmetics\n  SQLAsName\n  SQLCDSParameters\n  SQLCase\n  SQLClient\n  SQLCompare\n  SQLCompareOperator\n  SQLCond\n  SQLField\n  SQLFieldAndValue\n  SQLFieldList\n  SQLFieldListLoop\n  SQLFieldName\n  SQLFields\n  SQLFieldsLoop\n  SQLForAllEntries\n  SQLFrom\n  SQLFromSource\n  SQLFunction\n  SQLFunctionInput\n  SQLGroupBy\n  SQLHaving\n  SQLHints\n  SQLIn\n  SQLIntoList\n  SQLIntoStructure\n  SQLIntoTable\n  SQLJoin\n  SQLOrderBy\n  SQLPath\n  SQLSource\n  SQLSourceNoSpace\n  SQLSourceSimple\n  SQLTarget\n  SQLUpTo\n  SimpleFieldChain\n  SimpleFieldChain2\n  SourceField\n  SourceFieldSymbol\n  SourceFieldSymbolChain\n  TargetField\n  TargetFieldSymbol\n  TransportingFields\n\nFunction/Form-related expressions (20):\n  CallTransformationOptions\n  CallTransformationParameters\n  FormChanging\n  FormName\n  FormParam\n  FormParamName\n  FormParamType\n  FormRaising\n  FormTables\n  FormUsing\n  FunctionExporting\n  FunctionExportingParameter\n  FunctionName\n  FunctionParameters\n  PerformChanging\n  PerformTables\n  PerformUsing\n  SQLFunction\n  SQLFunctionInput\n  StringTemplateFormatting\n",
+    "stderr": ""
+  },
+  "summary": {
+    "passed": 16,
+    "totalTests": 20,
+    "failed": 4
+  }
+}

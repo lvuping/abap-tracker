@@ -1,0 +1,1199 @@
+{
+  "timestamp": "2025-09-09T14:43:14.074Z",
+  "summary": {
+    "total": 130,
+    "found": 43,
+    "passed": 130
+  },
+  "results": [
+    {
+      "id": 1,
+      "fileName": "01_database_insert.abap",
+      "lineNumber": 34,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 2,
+      "fileName": "01_database_insert.abap",
+      "lineNumber": 60,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 3,
+      "fileName": "01_database_insert.abap",
+      "lineNumber": 118,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 4,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 33,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 5,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 51,
+      "found": true,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "FIELD2",
+        "FIELD3",
+        "CHANGED_BY",
+        "CHANGED_ON"
+      ],
+      "passed": true
+    },
+    {
+      "id": 6,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 67,
+      "found": true,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "passed": true
+    },
+    {
+      "id": 7,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 134,
+      "found": true,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "VERSION",
+        "LAST_CHANGED",
+        "CHANGED_BY"
+      ],
+      "passed": true
+    },
+    {
+      "id": 8,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 154,
+      "found": true,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "ARCHIVED",
+        "ARCHIVE_DATE",
+        "ARCHIVE_USER"
+      ],
+      "passed": true
+    },
+    {
+      "id": 9,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 206,
+      "found": true,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "DESCRIPTION"
+      ],
+      "passed": true
+    },
+    {
+      "id": 10,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 23,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 11,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 35,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 12,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 61,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 13,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 122,
+      "found": true,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "passed": true
+    },
+    {
+      "id": 14,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 247,
+      "found": true,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ],
+      "passed": true
+    },
+    {
+      "id": 15,
+      "fileName": "04_database_delete.abap",
+      "lineNumber": 64,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 16,
+      "fileName": "04_database_delete.abap",
+      "lineNumber": 217,
+      "found": true,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 17,
+      "fileName": "06_move_operations.abap",
+      "lineNumber": 81,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 18,
+      "fileName": "09_data_declarations.abap",
+      "lineNumber": 210,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 19,
+      "fileName": "10_if_else.abap",
+      "lineNumber": 162,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 20,
+      "fileName": "11_case_when.abap",
+      "lineNumber": 105,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 21,
+      "fileName": "11_case_when.abap",
+      "lineNumber": 109,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 22,
+      "fileName": "13_try_catch.abap",
+      "lineNumber": 118,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 23,
+      "fileName": "34_multiline_colon.abap",
+      "lineNumber": 162,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 24,
+      "fileName": "34_multiline_colon.abap",
+      "lineNumber": 233,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 25,
+      "fileName": "business_scenario.abap",
+      "lineNumber": 7,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 26,
+      "fileName": "business_scenario.abap",
+      "lineNumber": 14,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 27,
+      "fileName": "comment_find.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 28,
+      "fileName": "complex_structure.abap",
+      "lineNumber": 4,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 29,
+      "fileName": "complex_structure.abap",
+      "lineNumber": 10,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 30,
+      "fileName": "long_code_find.abap",
+      "lineNumber": 44,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 31,
+      "fileName": "multiline_complex.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 32,
+      "fileName": "simple_find.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 33,
+      "fileName": "simple_find.abap",
+      "lineNumber": 6,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 34,
+      "fileName": "substring_negative.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 35,
+      "fileName": "test_basic.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 36,
+      "fileName": "test_colon_comma.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 37,
+      "fileName": "test_colon_comma.abap",
+      "lineNumber": 7,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 38,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 4,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 39,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 5,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 40,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 11,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 41,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 18,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 42,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 24,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 43,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 25,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 44,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 26,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 45,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 29,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 46,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 66,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 47,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 72,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 48,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 79,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 49,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 80,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 50,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 96,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 51,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 97,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 52,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 132,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 53,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 146,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 54,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 55,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 4,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 56,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 5,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 57,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 8,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 58,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 18,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 59,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 44,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 60,
+      "fileName": "test_default.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 61,
+      "fileName": "test_default.abap",
+      "lineNumber": 8,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 62,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 3,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "TYPE",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 63,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 4,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "TYPE",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 64,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 5,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "TYPE",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 65,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 10,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "Z_RFC_UPDATE_USER",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 66,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 17,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "process_user_data",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 67,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 22,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 68,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 26,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 69,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 70,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 4,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 71,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 11,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 72,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 14,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 73,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 21,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "ZUSER_AUDIT",
+      "fields": [
+        "VALUE"
+      ],
+      "passed": true
+    },
+    {
+      "id": 74,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 27,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 75,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 30,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 76,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 32,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 77,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 35,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 78,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 42,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 79,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 51,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 80,
+      "fileName": "test_mixed.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 81,
+      "fileName": "test_mixed.abap",
+      "lineNumber": 7,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 82,
+      "fileName": "test_multiline.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 83,
+      "fileName": "test_multiline.abap",
+      "lineNumber": 8,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 84,
+      "fileName": "test_multiline_scenario.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 85,
+      "fileName": "test_multiline_scenario.abap",
+      "lineNumber": 6,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 86,
+      "fileName": "test_multiline_update.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 87,
+      "fileName": "test_multiline_update.abap",
+      "lineNumber": 10,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 88,
+      "fileName": "test_multiline_update.abap",
+      "lineNumber": 33,
+      "found": true,
+      "operation": "DB-UPDATE",
+      "table": "ZEMPLOYEES",
+      "fields": [
+        "APPROVER"
+      ],
+      "passed": true
+    },
+    {
+      "id": 89,
+      "fileName": "test_multiline_update.abap",
+      "lineNumber": 40,
+      "found": true,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE1",
+      "fields": [
+        "USER"
+      ],
+      "passed": true
+    },
+    {
+      "id": 90,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 91,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 4,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 92,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 5,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 93,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 13,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "Z_UPDATE_REMOTE_USER",
+      "fields": [
+        "DEST:RFC_SYSTEM_A"
+      ],
+      "passed": true
+    },
+    {
+      "id": 94,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 21,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "Z_SYNC_USER_DATA",
+      "fields": [
+        "DEST:RFC_SYSTEM_B"
+      ],
+      "passed": true
+    },
+    {
+      "id": 95,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 36,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 96,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 48,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "Z_ASYNC_PROCESS",
+      "fields": [
+        "DEST:IN"
+      ],
+      "passed": true
+    },
+    {
+      "id": 97,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 62,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 98,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 68,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 99,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 69,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 100,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 84,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 101,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 85,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 102,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 86,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "Z_PROCESS_COMPLEX_DATA",
+      "fields": [
+        "DEST:RFC_SYSTEM_E"
+      ],
+      "passed": true
+    },
+    {
+      "id": 103,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 95,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "Z_ADMIN_FUNCTION",
+      "fields": [
+        "DEST:ADMIN_SYSTEM"
+      ],
+      "passed": true
+    },
+    {
+      "id": 104,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 97,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "Z_ADMIN_FUNCTION",
+      "fields": [
+        "DEST:ADMIN_SYSTEM"
+      ],
+      "passed": true
+    },
+    {
+      "id": 105,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 100,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "Z_USER_FUNCTION",
+      "fields": [
+        "DEST:USER_SYSTEM"
+      ],
+      "passed": true
+    },
+    {
+      "id": 106,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 112,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 107,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 3,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 108,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 4,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 109,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 5,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 110,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 11,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "process_user",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 111,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 15,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 112,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 16,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "validate_access",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 113,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 23,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "update_structure",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 114,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 24,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "update_structure",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 115,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 28,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "main_process",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 116,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 31,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "log_activity",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 117,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 32,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "log_activity",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 118,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 38,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 119,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 42,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 120,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 48,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 121,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 49,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 122,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 61,
+      "found": false,
+      "operation": "NONE",
+      "passed": true
+    },
+    {
+      "id": 123,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 70,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "sub_process",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 124,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 77,
+      "found": true,
+      "operation": "PERFORM",
+      "table": "log_user",
+      "fields": [],
+      "passed": true
+    },
+    {
+      "id": 125,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 83,
+      "found": true,
+      "operation": "DB-UPDATE",
+      "table": "ZPROCESS_LOG",
+      "fields": [
+        "PROCESSOR"
+      ],
+      "passed": true
+    },
+    {
+      "id": 126,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 89,
+      "found": true,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 127,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 95,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 128,
+      "fileName": "user_example.abap",
+      "lineNumber": 3,
+      "found": true,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ],
+      "passed": true
+    },
+    {
+      "id": 129,
+      "fileName": "ztest.abap",
+      "lineNumber": 4,
+      "found": false,
+      "operation": "ASSIGNMENT",
+      "passed": true
+    },
+    {
+      "id": 130,
+      "fileName": "ztest.abap",
+      "lineNumber": 9,
+      "found": true,
+      "operation": "RFC-CALL",
+      "table": "TR_TASK_OVERVIEW",
+      "fields": [],
+      "passed": true
+    }
+  ]
+}

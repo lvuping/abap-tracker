@@ -1,0 +1,968 @@
+{
+  "metadata": {
+    "timestamp": "2025-09-09T14:29:21.898Z",
+    "fileName": "combined_sy_uname_test.abap",
+    "analyzerVersion": "3.0.0",
+    "seedVariables": [
+      "SY-UNAME"
+    ]
+  },
+  "summary": {
+    "totalOperations": 35,
+    "dbOperations": 23,
+    "rfcCalls": 12,
+    "taintedOperations": 13
+  },
+  "operations": [
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "USERNAME",
+        "DATA"
+      ],
+      "lineNumber": 10,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "USERNAME, DATA",
+      "rfcName": "Z_UPDATE_MASTER_DATA",
+      "rfcDestination": "ERP_PRODUCTION",
+      "tainted": false,
+      "statement": "CALL FUNCTION 'Z_UPDATE_MASTER_DATA' DESTINATION 'ERP_PRODUCTION' EXPORTING username = lv_username data = ls_data IMPORTING result = lv_result.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-MODIFY",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE"
+      ],
+      "lineNumber": 10,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WA_ZTABLE",
+      "tainted": true,
+      "statement": "MODIFY ztable FROM wa_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-UPDATE",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "CHANGED_BY",
+        "CHANGE_DATE",
+        "STATUS"
+      ],
+      "lineNumber": 11,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "SY-UNAME, SY-DATUM, 'MODIFIED'",
+      "tainted": true,
+      "statement": "UPDATE ztable SET changed_by = @sy-uname, change_date = @sy-datum, status = 'MODIFIED' WHERE id = @lv_id.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-MODIFY",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE",
+        "LT_ZTABLE"
+      ],
+      "lineNumber": 13,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "TABLE",
+      "tainted": false,
+      "statement": "MODIFY ztable FROM TABLE lt_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE"
+      ],
+      "lineNumber": 15,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WA_ZTABLE",
+      "tainted": true,
+      "statement": "INSERT ztable FROM wa_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-DELETE",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "*ALL*"
+      ],
+      "lineNumber": 16,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WHERE_CLAUSE",
+      "tainted": false,
+      "statement": "DELETE FROM ztable WHERE created_by = sy-uname.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-UPDATE",
+      "tableName": "ZMARA",
+      "affectedFields": [
+        "DESCRIPTION"
+      ],
+      "lineNumber": 18,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "'UPDATED'",
+      "tainted": false,
+      "statement": "UPDATE zmara SET description = 'Updated' WHERE matnr = '1000'.",
+      "confidence": "high"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "USERNAME"
+      ],
+      "lineNumber": 19,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "USERNAME",
+      "rfcName": "BAPI_USER_GET_DETAIL",
+      "tainted": false,
+      "statement": "CALL FUNCTION 'BAPI_USER_GET_DETAIL' EXPORTING username = sy-uname IMPORTING address = ls_address.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-DELETE",
+      "tableName": "ZTABLE_TEMP",
+      "affectedFields": [
+        "*ALL*"
+      ],
+      "lineNumber": 19,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WHERE_CLAUSE",
+      "tainted": false,
+      "statement": "DELETE FROM ztable_temp.",
+      "confidence": "high"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "INPUT"
+      ],
+      "lineNumber": 26,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "INPUT",
+      "rfcName": "Z_LOCAL_PROCESSING",
+      "tainted": false,
+      "statement": "CALL FUNCTION 'Z_LOCAL_PROCESSING' EXPORTING input = sy-uname.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE"
+      ],
+      "lineNumber": 58,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WA_ZTABLE",
+      "tainted": true,
+      "statement": "INSERT ztable FROM wa_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE"
+      ],
+      "lineNumber": 82,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WA_ZTABLE",
+      "tainted": true,
+      "statement": "INSERT ztable FROM wa_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-UPDATE",
+      "tableName": "ZTABLE",
+      "affectedFields": [],
+      "lineNumber": 94,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "",
+      "tainted": false,
+      "statement": "UPDATE ztable FROM wa_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-UPDATE",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "CHANGED_BY",
+        "CHANGED_ON",
+        "STATUS"
+      ],
+      "lineNumber": 108,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "SY-UNAME, SY-DATUM, 'UPDATED'",
+      "tainted": true,
+      "statement": "UPDATE ztable SET changed_by = sy-uname changed_on = sy-datum status = 'UPDATED' WHERE field1 = 'TEST_INSERT'.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-MODIFY",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE"
+      ],
+      "lineNumber": 126,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WA_ZTABLE",
+      "tainted": true,
+      "statement": "MODIFY ztable FROM wa_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-MODIFY",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE",
+        "LT_ZTABLE"
+      ],
+      "lineNumber": 148,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "TABLE",
+      "tainted": false,
+      "statement": "MODIFY ztable FROM TABLE lt_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USERNAME"
+      ],
+      "lineNumber": 182,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USERNAME",
+      "rfcName": "with",
+      "tainted": true,
+      "statement": "CALL FUNCTION with",
+      "confidence": "medium"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USERNAME",
+        "IV_ACTION"
+      ],
+      "lineNumber": 184,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USERNAME",
+      "rfcName": "with",
+      "tainted": true,
+      "statement": "CALL FUNCTION with",
+      "confidence": "medium"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USERNAME",
+        "IV_ACTION"
+      ],
+      "lineNumber": 186,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USERNAME, IV_ACTION",
+      "rfcName": "Z_PROCESS_USER",
+      "tainted": false,
+      "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = sy-uname iv_action = 'CREATE' IMPORTING ev_result = gv_result EXCEPTIONS error = 1 OTHERS = 2.",
+      "confidence": "high"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USER",
+        "IV_TYPE"
+      ],
+      "lineNumber": 204,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USER, IV_TYPE",
+      "rfcName": "Z_REMOTE_USER_CHECK",
+      "rfcDestination": "RFC_DEST",
+      "tainted": false,
+      "statement": "CALL FUNCTION 'Z_REMOTE_USER_CHECK' DESTINATION 'RFC_DEST' EXPORTING iv_user = lv_remote_user iv_type = 'CHECK' IMPORTING ev_status = gv_status EXCEPTIONS communication_failure = 1 system_failure = 2.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZLOG",
+      "affectedFields": [
+        "*ALL_FIELDS*"
+      ],
+      "lineNumber": 215,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "UNKNOWN",
+      "tainted": false,
+      "statement": "INSERT INTO zlog VALUES @( VALUE #( log_user = sy-uname log_date = sy-datum log_time = sy-uzeit action = 'RFC_CALL' status = gv_status ) ).",
+      "confidence": "high"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USER"
+      ],
+      "lineNumber": 225,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USER",
+      "rfcName": "IN",
+      "tainted": true,
+      "statement": "CALL FUNCTION IN",
+      "confidence": "medium"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USER",
+        "IV_TASK"
+      ],
+      "lineNumber": 229,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USER, IV_TASK",
+      "rfcName": "Z_BACKGROUND_PROCESS",
+      "tainted": false,
+      "statement": "CALL FUNCTION 'Z_BACKGROUND_PROCESS' IN BACKGROUND TASK EXPORTING iv_user = sy-uname iv_task = 'BATCH_JOB'.",
+      "confidence": "high"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USER"
+      ],
+      "lineNumber": 236,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USER",
+      "rfcName": "STARTING",
+      "tainted": true,
+      "statement": "CALL FUNCTION STARTING",
+      "confidence": "medium"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USER",
+        "IV_DATA"
+      ],
+      "lineNumber": 243,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USER, IV_DATA",
+      "rfcName": "Z_ASYNC_PROCESS",
+      "rfcDestination": "IN",
+      "tainted": false,
+      "statement": "CALL FUNCTION 'Z_ASYNC_PROCESS' STARTING NEW TASK lv_taskname DESTINATION IN GROUP 'parallel_group' EXPORTING iv_user = sy-uname iv_data = 'ASYNC_DATA'.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE"
+      ],
+      "lineNumber": 261,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WA_ZTABLE",
+      "tainted": true,
+      "statement": "INSERT ztable FROM wa_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-MODIFY",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE"
+      ],
+      "lineNumber": 269,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WA_ZTABLE",
+      "tainted": true,
+      "statement": "MODIFY ztable FROM wa_ztable.",
+      "confidence": "high"
+    },
+    {
+      "operation": "RFC-CALL",
+      "affectedFields": [
+        "IV_USER",
+        "IV_TRANS"
+      ],
+      "lineNumber": 272,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "IV_USER, IV_TRANS",
+      "rfcName": "Z_LOG_TRANSACTION",
+      "rfcDestination": "LOGGER",
+      "tainted": false,
+      "statement": "CALL FUNCTION 'Z_LOG_TRANSACTION' DESTINATION 'LOGGER' EXPORTING iv_user = lv_processor iv_trans = 'COMPLEX_FLOW' EXCEPTIONS OTHERS = 1.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "*ALL_FIELDS*"
+      ],
+      "lineNumber": 288,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "VALUES",
+      "tainted": false,
+      "statement": "INSERT INTO ztable VALUES ( 'DYN_SQL', '{ sy-uname }', '{ sy-datum }' )",
+      "confidence": "medium"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZLOG",
+      "affectedFields": [
+        "WA_LOG"
+      ],
+      "lineNumber": 322,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "WA_LOG",
+      "tainted": false,
+      "statement": "INSERT zlog FROM wa_log.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-UPDATE",
+      "tableName": "ZLOG",
+      "affectedFields": [
+        "SECONDARY_USER"
+      ],
+      "lineNumber": 336,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "LV_SECONDARY_USER",
+      "tainted": false,
+      "statement": "UPDATE zlog SET secondary_user = lv_secondary_user WHERE log_user = p_user.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZAUDIT",
+      "affectedFields": [
+        "*ALL_FIELDS*"
+      ],
+      "lineNumber": 349,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "UNKNOWN",
+      "tainted": false,
+      "statement": "INSERT INTO zaudit VALUES @( VALUE #( audit_user = p_user audit_time = sy-uzeit audit_action = 'PROCESS' ) ).",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-MODIFY",
+      "tableName": "ZTABLE",
+      "affectedFields": [
+        "WA_ZTABLE",
+        "LT_ZTABLE"
+      ],
+      "lineNumber": 368,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "TABLE",
+      "tainted": false,
+      "statement": "MODIFY ztable FROM TABLE t_data.",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-INSERT",
+      "tableName": "ZCHAIN",
+      "affectedFields": [
+        "*ALL_FIELDS*"
+      ],
+      "lineNumber": 396,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "UNKNOWN",
+      "tainted": false,
+      "statement": "INSERT INTO zchain VALUES @( VALUE #( chain_user = p_user chain_level = 2 chain_time = sy-uzeit ) ).",
+      "confidence": "high"
+    },
+    {
+      "operation": "DB-UPDATE",
+      "tableName": "ZTABLE",
+      "affectedFields": [],
+      "lineNumber": 411,
+      "fileName": "combined_sy_uname_test.abap",
+      "sourceVariable": "",
+      "tainted": false,
+      "statement": "UPDATE ztable FROM c_data.",
+      "confidence": "high"
+    }
+  ],
+  "operationsByType": {
+    "RFC-CALL": [
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "USERNAME",
+          "DATA"
+        ],
+        "lineNumber": 10,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "USERNAME, DATA",
+        "rfcName": "Z_UPDATE_MASTER_DATA",
+        "rfcDestination": "ERP_PRODUCTION",
+        "tainted": false,
+        "statement": "CALL FUNCTION 'Z_UPDATE_MASTER_DATA' DESTINATION 'ERP_PRODUCTION' EXPORTING username = lv_username data = ls_data IMPORTING result = lv_result.",
+        "confidence": "high"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "USERNAME"
+        ],
+        "lineNumber": 19,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "USERNAME",
+        "rfcName": "BAPI_USER_GET_DETAIL",
+        "tainted": false,
+        "statement": "CALL FUNCTION 'BAPI_USER_GET_DETAIL' EXPORTING username = sy-uname IMPORTING address = ls_address.",
+        "confidence": "high"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "INPUT"
+        ],
+        "lineNumber": 26,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "INPUT",
+        "rfcName": "Z_LOCAL_PROCESSING",
+        "tainted": false,
+        "statement": "CALL FUNCTION 'Z_LOCAL_PROCESSING' EXPORTING input = sy-uname.",
+        "confidence": "high"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USERNAME"
+        ],
+        "lineNumber": 182,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USERNAME",
+        "rfcName": "with",
+        "tainted": true,
+        "statement": "CALL FUNCTION with",
+        "confidence": "medium"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USERNAME",
+          "IV_ACTION"
+        ],
+        "lineNumber": 184,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USERNAME",
+        "rfcName": "with",
+        "tainted": true,
+        "statement": "CALL FUNCTION with",
+        "confidence": "medium"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USERNAME",
+          "IV_ACTION"
+        ],
+        "lineNumber": 186,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USERNAME, IV_ACTION",
+        "rfcName": "Z_PROCESS_USER",
+        "tainted": false,
+        "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = sy-uname iv_action = 'CREATE' IMPORTING ev_result = gv_result EXCEPTIONS error = 1 OTHERS = 2.",
+        "confidence": "high"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USER",
+          "IV_TYPE"
+        ],
+        "lineNumber": 204,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USER, IV_TYPE",
+        "rfcName": "Z_REMOTE_USER_CHECK",
+        "rfcDestination": "RFC_DEST",
+        "tainted": false,
+        "statement": "CALL FUNCTION 'Z_REMOTE_USER_CHECK' DESTINATION 'RFC_DEST' EXPORTING iv_user = lv_remote_user iv_type = 'CHECK' IMPORTING ev_status = gv_status EXCEPTIONS communication_failure = 1 system_failure = 2.",
+        "confidence": "high"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USER"
+        ],
+        "lineNumber": 225,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USER",
+        "rfcName": "IN",
+        "tainted": true,
+        "statement": "CALL FUNCTION IN",
+        "confidence": "medium"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USER",
+          "IV_TASK"
+        ],
+        "lineNumber": 229,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USER, IV_TASK",
+        "rfcName": "Z_BACKGROUND_PROCESS",
+        "tainted": false,
+        "statement": "CALL FUNCTION 'Z_BACKGROUND_PROCESS' IN BACKGROUND TASK EXPORTING iv_user = sy-uname iv_task = 'BATCH_JOB'.",
+        "confidence": "high"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USER"
+        ],
+        "lineNumber": 236,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USER",
+        "rfcName": "STARTING",
+        "tainted": true,
+        "statement": "CALL FUNCTION STARTING",
+        "confidence": "medium"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USER",
+          "IV_DATA"
+        ],
+        "lineNumber": 243,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USER, IV_DATA",
+        "rfcName": "Z_ASYNC_PROCESS",
+        "rfcDestination": "IN",
+        "tainted": false,
+        "statement": "CALL FUNCTION 'Z_ASYNC_PROCESS' STARTING NEW TASK lv_taskname DESTINATION IN GROUP 'parallel_group' EXPORTING iv_user = sy-uname iv_data = 'ASYNC_DATA'.",
+        "confidence": "high"
+      },
+      {
+        "operation": "RFC-CALL",
+        "affectedFields": [
+          "IV_USER",
+          "IV_TRANS"
+        ],
+        "lineNumber": 272,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "IV_USER, IV_TRANS",
+        "rfcName": "Z_LOG_TRANSACTION",
+        "rfcDestination": "LOGGER",
+        "tainted": false,
+        "statement": "CALL FUNCTION 'Z_LOG_TRANSACTION' DESTINATION 'LOGGER' EXPORTING iv_user = lv_processor iv_trans = 'COMPLEX_FLOW' EXCEPTIONS OTHERS = 1.",
+        "confidence": "high"
+      }
+    ],
+    "DB-MODIFY": [
+      {
+        "operation": "DB-MODIFY",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE"
+        ],
+        "lineNumber": 10,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WA_ZTABLE",
+        "tainted": true,
+        "statement": "MODIFY ztable FROM wa_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-MODIFY",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE",
+          "LT_ZTABLE"
+        ],
+        "lineNumber": 13,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "TABLE",
+        "tainted": false,
+        "statement": "MODIFY ztable FROM TABLE lt_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-MODIFY",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE"
+        ],
+        "lineNumber": 126,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WA_ZTABLE",
+        "tainted": true,
+        "statement": "MODIFY ztable FROM wa_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-MODIFY",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE",
+          "LT_ZTABLE"
+        ],
+        "lineNumber": 148,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "TABLE",
+        "tainted": false,
+        "statement": "MODIFY ztable FROM TABLE lt_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-MODIFY",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE"
+        ],
+        "lineNumber": 269,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WA_ZTABLE",
+        "tainted": true,
+        "statement": "MODIFY ztable FROM wa_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-MODIFY",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE",
+          "LT_ZTABLE"
+        ],
+        "lineNumber": 368,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "TABLE",
+        "tainted": false,
+        "statement": "MODIFY ztable FROM TABLE t_data.",
+        "confidence": "high"
+      }
+    ],
+    "DB-UPDATE": [
+      {
+        "operation": "DB-UPDATE",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "CHANGED_BY",
+          "CHANGE_DATE",
+          "STATUS"
+        ],
+        "lineNumber": 11,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "SY-UNAME, SY-DATUM, 'MODIFIED'",
+        "tainted": true,
+        "statement": "UPDATE ztable SET changed_by = @sy-uname, change_date = @sy-datum, status = 'MODIFIED' WHERE id = @lv_id.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-UPDATE",
+        "tableName": "ZMARA",
+        "affectedFields": [
+          "DESCRIPTION"
+        ],
+        "lineNumber": 18,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "'UPDATED'",
+        "tainted": false,
+        "statement": "UPDATE zmara SET description = 'Updated' WHERE matnr = '1000'.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-UPDATE",
+        "tableName": "ZTABLE",
+        "affectedFields": [],
+        "lineNumber": 94,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "",
+        "tainted": false,
+        "statement": "UPDATE ztable FROM wa_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-UPDATE",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "CHANGED_BY",
+          "CHANGED_ON",
+          "STATUS"
+        ],
+        "lineNumber": 108,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "SY-UNAME, SY-DATUM, 'UPDATED'",
+        "tainted": true,
+        "statement": "UPDATE ztable SET changed_by = sy-uname changed_on = sy-datum status = 'UPDATED' WHERE field1 = 'TEST_INSERT'.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-UPDATE",
+        "tableName": "ZLOG",
+        "affectedFields": [
+          "SECONDARY_USER"
+        ],
+        "lineNumber": 336,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "LV_SECONDARY_USER",
+        "tainted": false,
+        "statement": "UPDATE zlog SET secondary_user = lv_secondary_user WHERE log_user = p_user.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-UPDATE",
+        "tableName": "ZTABLE",
+        "affectedFields": [],
+        "lineNumber": 411,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "",
+        "tainted": false,
+        "statement": "UPDATE ztable FROM c_data.",
+        "confidence": "high"
+      }
+    ],
+    "DB-INSERT": [
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE"
+        ],
+        "lineNumber": 15,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WA_ZTABLE",
+        "tainted": true,
+        "statement": "INSERT ztable FROM wa_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE"
+        ],
+        "lineNumber": 58,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WA_ZTABLE",
+        "tainted": true,
+        "statement": "INSERT ztable FROM wa_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE"
+        ],
+        "lineNumber": 82,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WA_ZTABLE",
+        "tainted": true,
+        "statement": "INSERT ztable FROM wa_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZLOG",
+        "affectedFields": [
+          "*ALL_FIELDS*"
+        ],
+        "lineNumber": 215,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "UNKNOWN",
+        "tainted": false,
+        "statement": "INSERT INTO zlog VALUES @( VALUE #( log_user = sy-uname log_date = sy-datum log_time = sy-uzeit action = 'RFC_CALL' status = gv_status ) ).",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "WA_ZTABLE"
+        ],
+        "lineNumber": 261,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WA_ZTABLE",
+        "tainted": true,
+        "statement": "INSERT ztable FROM wa_ztable.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "*ALL_FIELDS*"
+        ],
+        "lineNumber": 288,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "VALUES",
+        "tainted": false,
+        "statement": "INSERT INTO ztable VALUES ( 'DYN_SQL', '{ sy-uname }', '{ sy-datum }' )",
+        "confidence": "medium"
+      },
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZLOG",
+        "affectedFields": [
+          "WA_LOG"
+        ],
+        "lineNumber": 322,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WA_LOG",
+        "tainted": false,
+        "statement": "INSERT zlog FROM wa_log.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZAUDIT",
+        "affectedFields": [
+          "*ALL_FIELDS*"
+        ],
+        "lineNumber": 349,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "UNKNOWN",
+        "tainted": false,
+        "statement": "INSERT INTO zaudit VALUES @( VALUE #( audit_user = p_user audit_time = sy-uzeit audit_action = 'PROCESS' ) ).",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-INSERT",
+        "tableName": "ZCHAIN",
+        "affectedFields": [
+          "*ALL_FIELDS*"
+        ],
+        "lineNumber": 396,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "UNKNOWN",
+        "tainted": false,
+        "statement": "INSERT INTO zchain VALUES @( VALUE #( chain_user = p_user chain_level = 2 chain_time = sy-uzeit ) ).",
+        "confidence": "high"
+      }
+    ],
+    "DB-DELETE": [
+      {
+        "operation": "DB-DELETE",
+        "tableName": "ZTABLE",
+        "affectedFields": [
+          "*ALL*"
+        ],
+        "lineNumber": 16,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WHERE_CLAUSE",
+        "tainted": false,
+        "statement": "DELETE FROM ztable WHERE created_by = sy-uname.",
+        "confidence": "high"
+      },
+      {
+        "operation": "DB-DELETE",
+        "tableName": "ZTABLE_TEMP",
+        "affectedFields": [
+          "*ALL*"
+        ],
+        "lineNumber": 19,
+        "fileName": "combined_sy_uname_test.abap",
+        "sourceVariable": "WHERE_CLAUSE",
+        "tainted": false,
+        "statement": "DELETE FROM ztable_temp.",
+        "confidence": "high"
+      }
+    ]
+  }
+}

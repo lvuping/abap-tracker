@@ -1,0 +1,1217 @@
+{
+  "timestamp": "2025-09-09T14:43:14.078Z",
+  "totalOperations": 138,
+  "operations": [
+    {
+      "file": "01_database_insert.abap",
+      "line": 37,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 50,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 65,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 78,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 89,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 91,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 105,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 110,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 115,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 127,
+      "operation": "DB-INSERT",
+      "table": "ZMARA",
+      "fields": [
+        "WA_MARA"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 134,
+      "operation": "DB-INSERT",
+      "table": "MAKT",
+      "fields": [
+        "WA_MAKT"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 144,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 151,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 162,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "01_database_insert.abap",
+      "line": 178,
+      "operation": "DB-INSERT",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 36,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 49,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "FIELD2",
+        "FIELD3",
+        "CHANGED_BY",
+        "CHANGED_ON"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 68,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 71,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 81,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "QUANTITY",
+        "TOTAL_VALUE",
+        "DISCOUNT"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 89,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "STATUS"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 99,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 107,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "DESCRIPTION"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 125,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 132,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "VERSION",
+        "LAST_CHANGED",
+        "CHANGED_BY"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 145,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 152,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "ARCHIVED",
+        "ARCHIVE_DATE",
+        "ARCHIVE_USER"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 164,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "FIELD2"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 188,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 207,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "DESCRIPTION"
+      ]
+    },
+    {
+      "file": "02_database_update.abap",
+      "line": 213,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "CATEGORY",
+        "STATUS",
+        "STATUS",
+        "STATUS",
+        "PRIORITY",
+        "DUE_DATE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 38,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 66,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 78,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 87,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 95,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 104,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 112,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 116,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 124,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 134,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 152,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 167,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 183,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 201,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 220,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 249,
+      "operation": "DB-MODIFY",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "WA_ZTABLE"
+      ]
+    },
+    {
+      "file": "03_database_modify.abap",
+      "line": 253,
+      "operation": "DB-MODIFY",
+      "table": "ZTABLE",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 26,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 32,
+      "operation": "DB-DELETE",
+      "table": "FAILED",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 38,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 51,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 61,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 76,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 84,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 91,
+      "operation": "DB-DELETE",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 92,
+      "operation": "DB-DELETE",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 98,
+      "operation": "DB-DELETE",
+      "table": "ADJACENT",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 103,
+      "operation": "DB-DELETE",
+      "table": "LT_ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 108,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 119,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE_CHILD",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 123,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE_PARENT",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 148,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 160,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 181,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 200,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 219,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 228,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 233,
+      "operation": "DB-DELETE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "04_database_delete.abap",
+      "line": 237,
+      "operation": "DB-DELETE",
+      "table": "EXAMPLES",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "09_data_declarations.abap",
+      "line": 127,
+      "operation": "PERFORM",
+      "performName": "count_calls",
+      "fields": []
+    },
+    {
+      "file": "09_data_declarations.abap",
+      "line": 128,
+      "operation": "PERFORM",
+      "performName": "count_calls",
+      "fields": []
+    },
+    {
+      "file": "09_data_declarations.abap",
+      "line": 129,
+      "operation": "PERFORM",
+      "performName": "count_calls",
+      "fields": []
+    },
+    {
+      "file": "11_case_when.abap",
+      "line": 262,
+      "operation": "DB-DELETE",
+      "table": "TYPE",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "11_case_when.abap",
+      "line": 277,
+      "operation": "DB-DELETE",
+      "table": "OPERATION",
+      "fields": [
+        "*ALL_ROWS*"
+      ]
+    },
+    {
+      "file": "11_case_when.abap",
+      "line": 287,
+      "operation": "RFC-CALL",
+      "rfcName": "DATE_COMPUTE_DAY",
+      "fields": []
+    },
+    {
+      "file": "long_code_find.abap",
+      "line": 9,
+      "operation": "PERFORM",
+      "performName": "get_data",
+      "fields": []
+    },
+    {
+      "file": "long_code_find.abap",
+      "line": 10,
+      "operation": "PERFORM",
+      "performName": "process_data",
+      "fields": []
+    },
+    {
+      "file": "long_code_find.abap",
+      "line": 11,
+      "operation": "PERFORM",
+      "performName": "display_data",
+      "fields": []
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 43,
+      "operation": "DB-INSERT",
+      "table": "ZMASTER_DATA",
+      "fields": [
+        "GS_MASTER"
+      ]
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 53,
+      "operation": "DB-MODIFY",
+      "table": "GT_DETAILS",
+      "fields": [
+        "LS_DETAIL"
+      ]
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 56,
+      "operation": "DB-INSERT",
+      "table": "ZDETAIL_DATA",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 75,
+      "operation": "DB-UPDATE",
+      "table": "ZDYNAMIC_TABLE",
+      "fields": [
+        "UPDATED_BY"
+      ]
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 91,
+      "operation": "PERFORM",
+      "performName": "update_audit_log",
+      "fields": []
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 101,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_TRANSFORM_USER",
+      "fields": []
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 108,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 124,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 140,
+      "operation": "PERFORM",
+      "performName": "write_to_archive",
+      "fields": []
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 142,
+      "operation": "DB-INSERT",
+      "table": "ZAUDIT_LOG",
+      "fields": [
+        "LS_AUDIT"
+      ]
+    },
+    {
+      "file": "test_complex_flow.abap",
+      "line": 152,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_comprehensive_scenario.abap",
+      "line": 38,
+      "operation": "DB-MODIFY",
+      "table": "ZUSER_DATA",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "test_comprehensive_scenario.abap",
+      "line": 41,
+      "operation": "PERFORM",
+      "performName": "log_user_activity",
+      "fields": []
+    },
+    {
+      "file": "test_extended_scenarios.abap",
+      "line": 3,
+      "operation": "PERFORM",
+      "performName": "TYPE",
+      "fields": []
+    },
+    {
+      "file": "test_extended_scenarios.abap",
+      "line": 11,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_RFC_UPDATE_USER",
+      "fields": []
+    },
+    {
+      "file": "test_extended_scenarios.abap",
+      "line": 18,
+      "operation": "PERFORM",
+      "performName": "process_user_data",
+      "fields": []
+    },
+    {
+      "file": "test_extended_scenarios.abap",
+      "line": 29,
+      "operation": "DB-INSERT",
+      "table": "ZUSER_LOG",
+      "fields": [
+        "LS_USER_LOG"
+      ]
+    },
+    {
+      "file": "test_insert_values.abap",
+      "line": 13,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_insert_values.abap",
+      "line": 19,
+      "operation": "DB-INSERT",
+      "table": "ZUSER_AUDIT",
+      "fields": [
+        "VALUE"
+      ]
+    },
+    {
+      "file": "test_insert_values.abap",
+      "line": 29,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_insert_values.abap",
+      "line": 39,
+      "operation": "DB-INSERT",
+      "table": "ZUSER_RECORDS",
+      "fields": [
+        "LS_RECORD"
+      ]
+    },
+    {
+      "file": "test_insert_values.abap",
+      "line": 47,
+      "operation": "DB-INSERT",
+      "table": "ZUSER_RECORDS",
+      "fields": [
+        "TABLE"
+      ]
+    },
+    {
+      "file": "test_insert_values.abap",
+      "line": 50,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_multiline_scenario.abap",
+      "line": 10,
+      "operation": "DB-UPDATE",
+      "table": "ZUSER_DATA",
+      "fields": [
+        "LAST_CHANGED_BY",
+        "LAST_CHANGED_AT"
+      ]
+    },
+    {
+      "file": "test_multiline_update.abap",
+      "line": 14,
+      "operation": "DB-UPDATE",
+      "table": "ZUSERTAB",
+      "fields": [
+        "LAST_CHANGED_BY",
+        "LAST_CHANGED_AT",
+        "CLIENT"
+      ]
+    },
+    {
+      "file": "test_multiline_update.abap",
+      "line": 22,
+      "operation": "DB-UPDATE",
+      "table": "ZUSERS",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_multiline_update.abap",
+      "line": 32,
+      "operation": "DB-UPDATE",
+      "table": "ZEMPLOYEES",
+      "fields": [
+        "APPROVER"
+      ]
+    },
+    {
+      "file": "test_multiline_update.abap",
+      "line": 42,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE1",
+      "fields": [
+        "USER"
+      ]
+    },
+    {
+      "file": "test_multiline_update.abap",
+      "line": 43,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE2",
+      "fields": [
+        "USER"
+      ]
+    },
+    {
+      "file": "test_multiline_update.abap",
+      "line": 44,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE3",
+      "fields": [
+        "USER"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 15,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_UPDATE_REMOTE_USER",
+      "fields": [
+        "DEST:RFC_SYSTEM_A"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 23,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_SYNC_USER_DATA",
+      "fields": [
+        "DEST:RFC_SYSTEM_B"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 41,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_BATCH_UPDATE_USERS",
+      "fields": [
+        "DEST:RFC_SYSTEM_C"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 50,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_ASYNC_PROCESS",
+      "fields": [
+        "DEST:IN"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 59,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_BACKGROUND_SYNC",
+      "fields": [
+        "DEST:RFC_SYSTEM_D"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 72,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_CREATE_USER",
+      "fields": [
+        "DEST:SYSTEM_1"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 75,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_REPLICATE_USER",
+      "fields": [
+        "DEST:SYSTEM_2"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 78,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_AUDIT_USER",
+      "fields": [
+        "DEST:SYSTEM_3"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 88,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_PROCESS_COMPLEX_DATA",
+      "fields": [
+        "DEST:RFC_SYSTEM_E"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 96,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_ADMIN_FUNCTION",
+      "fields": [
+        "DEST:ADMIN_SYSTEM"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 99,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_USER_FUNCTION",
+      "fields": [
+        "DEST:USER_SYSTEM"
+      ]
+    },
+    {
+      "file": "test_multiple_rfc.abap",
+      "line": 112,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 12,
+      "operation": "PERFORM",
+      "performName": "process_user",
+      "fields": []
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 18,
+      "operation": "PERFORM",
+      "performName": "validate_access",
+      "fields": []
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 24,
+      "operation": "PERFORM",
+      "performName": "update_structure",
+      "fields": []
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 28,
+      "operation": "PERFORM",
+      "performName": "main_process",
+      "fields": []
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 31,
+      "operation": "PERFORM",
+      "performName": "log_activity",
+      "fields": []
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 43,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 57,
+      "operation": "DB-INSERT",
+      "table": "ZACCESS_LOG",
+      "fields": [
+        "LS_ACCESS"
+      ]
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 66,
+      "operation": "DB-MODIFY",
+      "table": "ZUSER_DATA",
+      "fields": [
+        "PS_DATA"
+      ]
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 72,
+      "operation": "PERFORM",
+      "performName": "sub_process",
+      "fields": []
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 73,
+      "operation": "PERFORM",
+      "performName": "another_process",
+      "fields": []
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 79,
+      "operation": "PERFORM",
+      "performName": "log_user",
+      "fields": []
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 84,
+      "operation": "DB-UPDATE",
+      "table": "ZPROCESS_LOG",
+      "fields": [
+        "PROCESSOR"
+      ]
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 90,
+      "operation": "DB-INSERT",
+      "table": "INTO",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "test_perform_using.abap",
+      "line": 106,
+      "operation": "DB-INSERT",
+      "table": "ZACTIVITY_LOG",
+      "fields": [
+        "LS_LOG"
+      ]
+    },
+    {
+      "file": "user_example.abap",
+      "line": 2,
+      "operation": "DB-UPDATE",
+      "table": "ZTABLE",
+      "fields": [
+        "*ALL_FIELDS*"
+      ]
+    },
+    {
+      "file": "ztest.abap",
+      "line": 7,
+      "operation": "RFC-CALL",
+      "rfcName": "TR_TASK_OVERVIEW",
+      "fields": []
+    },
+    {
+      "file": "ztest.abap",
+      "line": 12,
+      "operation": "RFC-CALL",
+      "rfcName": "Z_USER_CHECK",
+      "fields": []
+    }
+  ]
+}

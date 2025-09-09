@@ -1,9 +1,0 @@
-﻿ID,Source_File,SY_UNAME_Line,Status,Type,Final_Table,Final_Fields,RFC_Name,RFC_Parameter,Hardcode_Type,Hardcode_Operator,Hardcode_Value,Description,Final_Variable,Tainted_Variables_Count,Trace_Steps
-1,input/source_code.abap,90,Not Found,,,,,,,,,,,0,0
-2,input/extended_test_code.abap,37,Found,RFC,,,Z_USER_AUTHORIZATION_CHECK,I_USERNAME,,,,,,0,0
-3,input/business_scenario_code.abap,45,Found,DATABASE_INSERT_FIELD,ZDOCUMENTS,CREATED_BY,,,,,,,,0,0
-4,input/test.abap,23,Found,RFC,,,BAPI_USER_GET_DETAIL,USERNAME,,,,,,0,0
-5,input/hardcode_test.abap,14,Found,SYUNAME_HARDCODE,,,,,IF_STATEMENT,=,'ADMIN',SY-UNAME hardcoded comparison in IF: sy-uname = 'ADMIN',sy-uname,0,0
-6,input/hardcode_test.abap,27,Found,SYUNAME_HARDCODE,,,,,IF_STATEMENT,=,'ADMIN',SY-UNAME hardcoded comparison in IF: sy-uname = 'ADMIN',sy-uname,0,0
-7,input/hardcode_test.abap,35,Found,SYUNAME_HARDCODE,,,,,WHERE_CLAUSE,<>,'GUEST',SY-UNAME hardcoded comparison in WHERE: sy-uname <> 'GUEST',sy-uname,0,0
-8,input/hardcode_test.abap,40,Found,SYUNAME_HARDCODE,,,,,ASSERT_STATEMENT,=,'DEVELOPER',SY-UNAME hardcoded comparison in ASSERT: sy-uname = 'DEVELOPER',sy-uname,0,0

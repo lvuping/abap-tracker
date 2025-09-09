@@ -1,0 +1,2242 @@
+{
+  "timestamp": "2025-09-09T14:31:25.030Z",
+  "summary": {
+    "total": 130,
+    "passed": 31,
+    "failed": 99,
+    "passRate": "23.8%"
+  },
+  "results": [
+    {
+      "id": 1,
+      "fileName": "01_database_insert.abap",
+      "lineNumber": 34,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 2,
+      "fileName": "01_database_insert.abap",
+      "lineNumber": 60,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 3,
+      "fileName": "01_database_insert.abap",
+      "lineNumber": 118,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 4,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 33,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 5,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 51,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "UNKNOWN"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 6,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 67,
+      "operations": [
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "LT_ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 7,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 134,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "MAKT",
+          "fields": [
+            "WA_MAKT"
+          ],
+          "tainted": false,
+          "source": "WA_MAKT"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 8,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 154,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 9,
+      "fileName": "02_database_update.abap",
+      "lineNumber": 206,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "DESCRIPTION"
+          ],
+          "tainted": false,
+          "source": "LV_NEW_TEXT"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 10,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 23,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 11,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 35,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [],
+          "tainted": false,
+          "source": ""
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 12,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 61,
+      "operations": [
+        {
+          "operation": "SELECT-INTO",
+          "tableName": "ZTABLE",
+          "fields": [
+            "TABLE"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 13,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 122,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 14,
+      "fileName": "03_database_modify.abap",
+      "lineNumber": 247,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 15,
+      "fileName": "04_database_delete.abap",
+      "lineNumber": 64,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE",
+            "LT_ZTABLE",
+            "LT_MARA",
+            "LT_LARGE_DATA"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 16,
+      "fileName": "04_database_delete.abap",
+      "lineNumber": 217,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 17,
+      "fileName": "06_move_operations.abap",
+      "lineNumber": 81,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "QUANTITY",
+            "TOTAL_VALUE",
+            "DISCOUNT"
+          ],
+          "tainted": false,
+          "source": "100, UNIT_PRICE, '0.1'"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 18,
+      "fileName": "09_data_declarations.abap",
+      "lineNumber": 210,
+      "operations": [
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZMARA",
+          "fields": [
+            "WA_MARA"
+          ],
+          "tainted": false,
+          "source": "WA_MARA"
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZSCARR",
+          "fields": [
+            "WA_SCARR"
+          ],
+          "tainted": false,
+          "source": "WA_SCARR"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 19,
+      "fileName": "10_if_else.abap",
+      "lineNumber": 162,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 20,
+      "fileName": "11_case_when.abap",
+      "lineNumber": 105,
+      "operations": [
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 21,
+      "fileName": "11_case_when.abap",
+      "lineNumber": 109,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "ZTABLE_SOURCE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 22,
+      "fileName": "13_try_catch.abap",
+      "lineNumber": 118,
+      "operations": [
+        {
+          "operation": "DB-DELETE",
+          "tableName": "ZTABLE_CHILD",
+          "fields": [
+            "*ALL*"
+          ],
+          "tainted": false,
+          "source": "WHERE_CLAUSE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 23,
+      "fileName": "34_multiline_colon.abap",
+      "lineNumber": 162,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 24,
+      "fileName": "34_multiline_colon.abap",
+      "lineNumber": 233,
+      "operations": [
+        {
+          "operation": "DB-DELETE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL*"
+          ],
+          "tainted": false,
+          "source": "WHERE_CLAUSE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 25,
+      "fileName": "business_scenario.abap",
+      "lineNumber": 7,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 26,
+      "fileName": "business_scenario.abap",
+      "lineNumber": 14,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 27,
+      "fileName": "comment_find.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 28,
+      "fileName": "complex_structure.abap",
+      "lineNumber": 4,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 29,
+      "fileName": "complex_structure.abap",
+      "lineNumber": 10,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 30,
+      "fileName": "long_code_find.abap",
+      "lineNumber": 44,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 31,
+      "fileName": "multiline_complex.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 32,
+      "fileName": "simple_find.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 33,
+      "fileName": "simple_find.abap",
+      "lineNumber": 6,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 34,
+      "fileName": "substring_negative.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 35,
+      "fileName": "test_basic.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 36,
+      "fileName": "test_colon_comma.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 37,
+      "fileName": "test_colon_comma.abap",
+      "lineNumber": 7,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 38,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 4,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 39,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 5,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 40,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 11,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 41,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 18,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 42,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 24,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 43,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 25,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 44,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 26,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 45,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 29,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 46,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 66,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE",
+            "LT_ZTABLE",
+            "LT_MARA",
+            "LT_LARGE_DATA"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE",
+            "LT_ZTABLE",
+            "LT_MARA",
+            "LT_LARGE_DATA"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 47,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 72,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [],
+          "tainted": false,
+          "source": ""
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZMARA",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "WA_ZMARA"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 48,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 79,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE",
+            "LT_ZTABLE",
+            "LT_MARA",
+            "LT_LARGE_DATA"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 49,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 80,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "QUANTITY",
+            "TOTAL_VALUE",
+            "DISCOUNT"
+          ],
+          "tainted": false,
+          "source": "100, UNIT_PRICE, '0.1'"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 50,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 96,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "with",
+          "fields": [
+            "IV_INPUT_USER"
+          ],
+          "tainted": true,
+          "source": "IV_INPUT_USER"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 51,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 97,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 52,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 132,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "VERSION",
+            "LAST_CHANGED",
+            "CHANGED_BY"
+          ],
+          "tainted": true,
+          "source": "1, LV_TIMESTAMP, SY-UNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 53,
+      "fileName": "test_complex_flow.abap",
+      "lineNumber": 146,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [],
+          "tainted": false,
+          "source": ""
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 54,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 55,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 4,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 56,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 5,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 57,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 8,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 58,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 18,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 59,
+      "fileName": "test_comprehensive_scenario.abap",
+      "lineNumber": 44,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZMASTER_DATA",
+          "fields": [
+            "GS_MASTER"
+          ],
+          "tainted": true,
+          "source": "GS_MASTER"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 60,
+      "fileName": "test_default.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 61,
+      "fileName": "test_default.abap",
+      "lineNumber": 8,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 62,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 63,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 4,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 64,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 5,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 65,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 10,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_RFC_UPDATE_USER",
+          "fields": [
+            "I_USERNAME"
+          ],
+          "tainted": false,
+          "source": "I_USERNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 66,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 17,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 67,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 22,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 68,
+      "fileName": "test_extended_scenarios.abap",
+      "lineNumber": 26,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 69,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 70,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 4,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 71,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 11,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_RFC_UPDATE_USER",
+          "fields": [
+            "I_USERNAME"
+          ],
+          "tainted": false,
+          "source": "I_USERNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 72,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 14,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_LOG",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "VALUES"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 73,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 21,
+      "operations": [
+        {
+          "operation": "SELECT-INTO",
+          "tableName": "MARA",
+          "fields": [
+            "TABLE"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 74,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 27,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 75,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 30,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_LOG",
+          "fields": [
+            "LS_USER_LOG"
+          ],
+          "tainted": false,
+          "source": "LS_USER_LOG"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTRANSACTION_LOG",
+          "fields": [
+            "LS_USER_LOG"
+          ],
+          "tainted": false,
+          "source": "VALUES"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 76,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 32,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 77,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 35,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [],
+          "tainted": false,
+          "source": ""
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 78,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 42,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZMASTER_DATA",
+          "fields": [
+            "GS_MASTER"
+          ],
+          "tainted": true,
+          "source": "GS_MASTER"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 79,
+      "fileName": "test_insert_values.abap",
+      "lineNumber": 51,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "UNKNOWN"
+        },
+        {
+          "operation": "DB-DELETE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL*"
+          ],
+          "tainted": false,
+          "source": "WHERE_CLAUSE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 80,
+      "fileName": "test_mixed.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 81,
+      "fileName": "test_mixed.abap",
+      "lineNumber": 7,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 82,
+      "fileName": "test_multiline.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 83,
+      "fileName": "test_multiline.abap",
+      "lineNumber": 8,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 84,
+      "fileName": "test_multiline_scenario.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 85,
+      "fileName": "test_multiline_scenario.abap",
+      "lineNumber": 6,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 86,
+      "fileName": "test_multiline_update.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 87,
+      "fileName": "test_multiline_update.abap",
+      "lineNumber": 10,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZUSER_DATA",
+          "fields": [
+            "LAST_CHANGED_BY",
+            "LAST_CHANGED_AT"
+          ],
+          "tainted": true,
+          "source": "GV_USER, SY-DATUM"
+        },
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_RFC_UPDATE_USER",
+          "fields": [
+            "I_USERNAME"
+          ],
+          "tainted": false,
+          "source": "I_USERNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 88,
+      "fileName": "test_multiline_update.abap",
+      "lineNumber": 33,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZEMPLOYEES",
+          "fields": [
+            "APPROVER"
+          ],
+          "tainted": true,
+          "source": "SY-UNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 89,
+      "fileName": "test_multiline_update.abap",
+      "lineNumber": 40,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_RECORDS",
+          "fields": [
+            "LS_RECORD"
+          ],
+          "tainted": true,
+          "source": "LS_RECORD"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 90,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 91,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 4,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 92,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 5,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 93,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 13,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZUSERTAB",
+          "fields": [
+            "LAST_CHANGED_BY",
+            "LAST_CHANGED_AT",
+            "CLIENT"
+          ],
+          "tainted": true,
+          "source": "LV_USERNAME, LV_TIMESTAMP, LV_CLIENT"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 94,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 21,
+      "operations": [
+        {
+          "operation": "SELECT-INTO",
+          "tableName": "MARA",
+          "fields": [
+            "TABLE"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 95,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 36,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [],
+          "tainted": false,
+          "source": ""
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 96,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 48,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_RECORDS",
+          "fields": [
+            "WA_ZTABLE",
+            "LT_ZTABLE",
+            "LT_MARA",
+            "LT_LARGE_DATA"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "UNKNOWN"
+        },
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "FIELD2",
+            "FIELD3",
+            "CHANGED_BY",
+            "CHANGED_ON"
+          ],
+          "tainted": true,
+          "source": "'NEW VALUE', 10, SY-UNAME, SY-DATUM"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 97,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 62,
+      "operations": [
+        {
+          "operation": "SELECT-INTO",
+          "tableName": "ZTABLE",
+          "fields": [
+            "TABLE"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 98,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 68,
+      "operations": [
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "LT_ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 99,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 69,
+      "operations": [
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "LT_ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 100,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 84,
+      "operations": [
+        {
+          "operation": "DB-DELETE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL*"
+          ],
+          "tainted": false,
+          "source": "WHERE_CLAUSE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 101,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 85,
+      "operations": [
+        {
+          "operation": "DB-DELETE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL*"
+          ],
+          "tainted": false,
+          "source": "WHERE_CLAUSE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 102,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 86,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 103,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 95,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_ADMIN_FUNCTION",
+          "fields": [
+            "IV_ADMIN_USER"
+          ],
+          "tainted": false,
+          "source": "IV_ADMIN_USER"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 104,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 97,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_ADMIN_FUNCTION",
+          "fields": [
+            "IV_ADMIN_USER"
+          ],
+          "tainted": false,
+          "source": "IV_ADMIN_USER"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 105,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 100,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_USER_FUNCTION",
+          "fields": [
+            "IV_NORMAL_USER"
+          ],
+          "tainted": false,
+          "source": "IV_NORMAL_USER"
+        },
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_TRANSFORM_USER",
+          "fields": [
+            "IV_INPUT_USER"
+          ],
+          "tainted": false,
+          "source": "IV_INPUT_USER"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 106,
+      "fileName": "test_multiple_rfc.abap",
+      "lineNumber": 112,
+      "operations": [
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "LT_ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZASYNC_RESULTS",
+          "fields": [],
+          "tainted": false,
+          "source": "VALUES"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 107,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 3,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 108,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 4,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 109,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 5,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 110,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 11,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZUSER_DATA",
+          "fields": [
+            "LAST_CHANGED_BY",
+            "LAST_CHANGED_AT"
+          ],
+          "tainted": true,
+          "source": "GV_USER, SY-DATUM"
+        },
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_RFC_UPDATE_USER",
+          "fields": [
+            "I_USERNAME"
+          ],
+          "tainted": false,
+          "source": "I_USERNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 111,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 15,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZUSERTAB",
+          "fields": [
+            "LAST_CHANGED_BY",
+            "LAST_CHANGED_AT",
+            "CLIENT"
+          ],
+          "tainted": true,
+          "source": "LV_USERNAME, LV_TIMESTAMP, LV_CLIENT"
+        },
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_UPDATE_REMOTE_USER",
+          "fields": [
+            "IV_USERNAME",
+            "IV_ACTION"
+          ],
+          "tainted": false,
+          "source": "IV_USERNAME, IV_ACTION"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 112,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 16,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_UPDATE_REMOTE_USER",
+          "fields": [
+            "IV_USERNAME",
+            "IV_ACTION"
+          ],
+          "tainted": false,
+          "source": "IV_USERNAME, IV_ACTION"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 113,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 23,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_SYNC_USER_DATA",
+          "fields": [
+            "IV_SOURCE_USER",
+            "IV_SOURCE_SYSTEM",
+            "IV_SOURCE_CLIENT"
+          ],
+          "tainted": false,
+          "source": "IV_SOURCE_USER, IV_SOURCE_SYSTEM, IV_SOURCE_CLIENT"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 114,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 24,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_SYNC_USER_DATA",
+          "fields": [
+            "IV_SOURCE_USER",
+            "IV_SOURCE_SYSTEM",
+            "IV_SOURCE_CLIENT"
+          ],
+          "tainted": false,
+          "source": "IV_SOURCE_USER, IV_SOURCE_SYSTEM, IV_SOURCE_CLIENT"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 115,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 28,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_LOG",
+          "fields": [
+            "LS_USER_LOG"
+          ],
+          "tainted": false,
+          "source": "LS_USER_LOG"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 116,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 31,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZEMPLOYEES",
+          "fields": [
+            "APPROVER"
+          ],
+          "tainted": true,
+          "source": "SY-UNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 117,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 32,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZEMPLOYEES",
+          "fields": [
+            "APPROVER"
+          ],
+          "tainted": true,
+          "source": "SY-UNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 118,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 38,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "DB-DELETE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL*"
+          ],
+          "tainted": false,
+          "source": "WHERE_CLAUSE"
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZUSER_DATA",
+          "fields": [
+            "WA_ZTABLE",
+            "LT_ZTABLE",
+            "LT_MARA",
+            "LT_LARGE_DATA"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_RECORDS",
+          "fields": [
+            "LS_RECORD"
+          ],
+          "tainted": true,
+          "source": "LS_RECORD"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 119,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 42,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_BATCH_UPDATE_USERS",
+          "fields": [
+            "*PARAMETERS*"
+          ],
+          "tainted": false,
+          "source": "*PARAMETERS*"
+        },
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE1",
+          "fields": [
+            "USER"
+          ],
+          "tainted": true,
+          "source": "LV_USERNAME"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZMASTER_DATA",
+          "fields": [
+            "GS_MASTER"
+          ],
+          "tainted": true,
+          "source": "GS_MASTER"
+        },
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE2",
+          "fields": [
+            "USER"
+          ],
+          "tainted": true,
+          "source": "LV_USERNAME"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_PROCESS",
+          "fields": [
+            "GS_MASTER"
+          ],
+          "tainted": false,
+          "source": "VALUES"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 120,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 48,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_RECORDS",
+          "fields": [
+            "WA_ZTABLE",
+            "LT_ZTABLE",
+            "LT_MARA",
+            "LT_LARGE_DATA"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "UNKNOWN"
+        },
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "FIELD2",
+            "FIELD3",
+            "CHANGED_BY",
+            "CHANGED_ON"
+          ],
+          "tainted": true,
+          "source": "'NEW VALUE', 10, SY-UNAME, SY-DATUM"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 121,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 49,
+      "operations": [
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "UNKNOWN"
+        },
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "FIELD2",
+            "FIELD3",
+            "CHANGED_BY",
+            "CHANGED_ON"
+          ],
+          "tainted": true,
+          "source": "'NEW VALUE', 10, SY-UNAME, SY-DATUM"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "UNKNOWN"
+        },
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_ASYNC_PROCESS",
+          "fields": [
+            "IV_PROCESSOR",
+            "IV_TIMESTAMP"
+          ],
+          "tainted": false,
+          "source": "IV_PROCESSOR, IV_TIMESTAMP"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 122,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 61,
+      "operations": [
+        {
+          "operation": "SELECT-INTO",
+          "tableName": "ZTABLE",
+          "fields": [
+            "TABLE"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 123,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 70,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [],
+          "tainted": false,
+          "source": ""
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "DB-MODIFY",
+          "tableName": "ZMARA",
+          "fields": [
+            "*ALL_FIELDS*"
+          ],
+          "tainted": false,
+          "source": "WA_ZMARA"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 124,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 77,
+      "operations": [
+        {
+          "operation": "DB-DELETE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL*"
+          ],
+          "tainted": false,
+          "source": "WHERE_CLAUSE"
+        },
+        {
+          "operation": "SELECT-INTO",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": false,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE",
+            "LT_ZTABLE",
+            "LT_MARA",
+            "LT_LARGE_DATA"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        },
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_AUDIT_USER",
+          "fields": [
+            "IV_USERNAME"
+          ],
+          "tainted": false,
+          "source": "IV_USERNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 125,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 83,
+      "operations": [
+        {
+          "operation": "SELECT-INTO",
+          "tableName": "ZUSER_MASTER",
+          "fields": [
+            "LV_SELECTED_USER"
+          ],
+          "tainted": false,
+          "source": "LV_SELECTED_USER"
+        },
+        {
+          "operation": "DB-DELETE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "*ALL*"
+          ],
+          "tainted": false,
+          "source": "WHERE_CLAUSE"
+        },
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZPROCESS_LOG",
+          "fields": [
+            "PROCESSOR"
+          ],
+          "tainted": false,
+          "source": "P_USER"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 126,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 89,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_PROCESS_COMPLEX_DATA",
+          "fields": [
+            "IS_COMPLEX_DATA"
+          ],
+          "tainted": false,
+          "source": "IS_COMPLEX_DATA"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZTABLE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": true,
+          "source": "WA_ZTABLE"
+        },
+        {
+          "operation": "SELECT-INTO",
+          "tableName": "ZTABLE",
+          "fields": [
+            "TABLE"
+          ],
+          "tainted": false,
+          "source": "TABLE"
+        },
+        {
+          "operation": "DB-INSERT",
+          "tableName": "ZUSER_TRACE",
+          "fields": [
+            "WA_ZTABLE"
+          ],
+          "tainted": false,
+          "source": "VALUES"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 127,
+      "fileName": "test_perform_using.abap",
+      "lineNumber": 95,
+      "operations": [
+        {
+          "operation": "RFC-CALL",
+          "rfcName": "Z_ADMIN_FUNCTION",
+          "fields": [
+            "IV_ADMIN_USER"
+          ],
+          "tainted": false,
+          "source": "IV_ADMIN_USER"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 128,
+      "fileName": "user_example.abap",
+      "lineNumber": 3,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZTABLE",
+          "fields": [
+            "VOUCHER",
+            "AENAM"
+          ],
+          "tainted": true,
+          "source": "PV_VOUCHER, SY-UNAME"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    },
+    {
+      "id": 129,
+      "fileName": "ztest.abap",
+      "lineNumber": 4,
+      "operations": [],
+      "expectedTainted": true,
+      "actualTainted": false,
+      "passed": false
+    },
+    {
+      "id": 130,
+      "fileName": "ztest.abap",
+      "lineNumber": 9,
+      "operations": [
+        {
+          "operation": "DB-UPDATE",
+          "tableName": "ZUSER_DATA",
+          "fields": [
+            "LAST_CHANGED_BY",
+            "LAST_CHANGED_AT"
+          ],
+          "tainted": true,
+          "source": "GV_USER, SY-DATUM"
+        }
+      ],
+      "expectedTainted": true,
+      "actualTainted": true,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,572 @@
+{
+  "metadata": {
+    "timestamp": "2025-09-09T14:52:32.043Z",
+    "fileName": "combined_sy_uname_test.abap",
+    "seedVariable": "sy-uname",
+    "analyzerVersion": "2.0.0"
+  },
+  "summary": {
+    "totalTaintedVariables": 14,
+    "totalFlows": 19,
+    "totalSinks": 19,
+    "totalPropagationPaths": 14
+  },
+  "taintedVariables": [
+    "SY-UNAME",
+    "GV_USER",
+    "WA_ZTABLE-CREATED_BY",
+    "WA_ZTABLE",
+    "GS_TRACKING-USERNAME",
+    "GS_TRACKING",
+    "LV_CURRENT_USER",
+    "WA_ZTABLE-CHANGED_BY",
+    "WA_ZTABLE-MODIFIED_BY",
+    "LV_REMOTE_USER",
+    "LV_TASKNAME",
+    "LV_PROCESSOR",
+    "WA_ZTABLE-FINAL_PROCESSOR",
+    "LV_SQL"
+  ],
+  "flows": [
+    {
+      "from": "SY-UNAME",
+      "to": "GV_USER",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 35,
+        "column": 3,
+        "statement": "gv_user = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "WA_ZTABLE-CREATED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 54,
+        "column": 3,
+        "statement": "wa_ztable-created_by = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "GS_TRACKING-USERNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 62,
+        "column": 5,
+        "statement": "gs_tracking-username = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "LV_CURRENT_USER",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 76,
+        "column": 3,
+        "statement": "lv_current_user = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "LV_CURRENT_USER",
+      "to": "WA_ZTABLE-CREATED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 80,
+        "column": 3,
+        "statement": "wa_ztable-created_by = lv_current_user."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "WA_ZTABLE-CHANGED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 91,
+        "column": 3,
+        "statement": "wa_ztable-changed_by = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "GS_TRACKING-USERNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 98,
+        "column": 5,
+        "statement": "gs_tracking-username = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "WA_ZTABLE-CREATED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 123,
+        "column": 3,
+        "statement": "wa_ztable-created_by = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "WA_ZTABLE-MODIFIED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 124,
+        "column": 3,
+        "statement": "wa_ztable-modified_by = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "GS_TRACKING-USERNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 130,
+        "column": 5,
+        "statement": "gs_tracking-username = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "WA_ZTABLE-CREATED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 143,
+        "column": 5,
+        "statement": "wa_ztable-created_by = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "WA_ZTABLE-MODIFIED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 144,
+        "column": 5,
+        "statement": "wa_ztable-modified_by = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "WA_ZTABLE-CREATED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 168,
+        "column": 3,
+        "statement": "wa_ztable-created_by = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "LV_REMOTE_USER",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 202,
+        "column": 3,
+        "statement": "lv_remote_user = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "LV_TASKNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 241,
+        "column": 3,
+        "statement": "lv_taskname = |TASK_{ sy-uname }_{ sy-uzeit }|."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "LV_PROCESSOR",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 256,
+        "column": 3,
+        "statement": "lv_processor = sy-uname."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "LV_PROCESSOR",
+      "to": "WA_ZTABLE-CREATED_BY",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 260,
+        "column": 3,
+        "statement": "wa_ztable-created_by = lv_processor."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "LV_PROCESSOR",
+      "to": "WA_ZTABLE-FINAL_PROCESSOR",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 268,
+        "column": 3,
+        "statement": "wa_ztable-final_processor = lv_processor."
+      },
+      "confidence": "high"
+    },
+    {
+      "from": "SY-UNAME",
+      "to": "LV_SQL",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 288,
+        "column": 3,
+        "statement": "lv_sql = |INSERT INTO ztable VALUES ( 'DYN_SQL', '{ sy-uname }', '{ sy-datum }' )|."
+      },
+      "confidence": "high"
+    }
+  ],
+  "sinks": [
+    {
+      "type": "WRITE",
+      "variable": "GV_USER",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 43,
+        "column": 3,
+        "statement": "WRITE gv_user."
+      },
+      "context": "WRITE GV_USER",
+      "severity": "low"
+    },
+    {
+      "type": "DB_INSERT",
+      "variable": "WA_ZTABLE",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 58,
+        "column": 3,
+        "statement": "INSERT ztable FROM wa_ztable."
+      },
+      "context": "INSERT INTO ztable",
+      "severity": "high"
+    },
+    {
+      "type": "DB_INSERT",
+      "variable": "WA_ZTABLE",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 82,
+        "column": 3,
+        "statement": "INSERT ztable FROM wa_ztable."
+      },
+      "context": "INSERT INTO ztable",
+      "severity": "high"
+    },
+    {
+      "type": "DB_UPDATE",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 108,
+        "column": 3,
+        "statement": "UPDATE ztable SET changed_by = sy-uname changed_on = sy-datum status = 'UPDATED' WHERE field1 = 'TEST_INSERT'."
+      },
+      "context": "UPDATE ztable SET changed_by, changed_on, status",
+      "severity": "high"
+    },
+    {
+      "type": "DB_MODIFY",
+      "variable": "WA_ZTABLE",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 126,
+        "column": 3,
+        "statement": "MODIFY ztable FROM wa_ztable."
+      },
+      "context": "MODIFY ztable",
+      "severity": "high"
+    },
+    {
+      "type": "FORM_CALL",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 156,
+        "column": 3,
+        "statement": "PERFORM log_user_action USING sy-uname 'PERFORM_TEST'."
+      },
+      "context": "PERFORM log_user_action",
+      "severity": "low"
+    },
+    {
+      "type": "FORM_CALL",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 158,
+        "column": 3,
+        "statement": "PERFORM process_with_user USING sy-uname CHANGING gv_result."
+      },
+      "context": "PERFORM process_with_user",
+      "severity": "low"
+    },
+    {
+      "type": "FORM_CALL",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 171,
+        "column": 3,
+        "statement": "PERFORM process_user_table TABLES lt_user_log USING sy-uname."
+      },
+      "context": "PERFORM process_user_table",
+      "severity": "low"
+    },
+    {
+      "type": "FORM_CALL",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 179,
+        "column": 3,
+        "statement": "PERFORM start_chain USING sy-uname."
+      },
+      "context": "PERFORM start_chain",
+      "severity": "low"
+    },
+    {
+      "type": "FUNCTION_CALL",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 186,
+        "column": 3,
+        "statement": "CALL FUNCTION 'Z_PROCESS_USER' EXPORTING iv_username = sy-uname iv_action = 'CREATE' IMPORTING ev_result = gv_result EXCEPTIONS error = 1 OTHERS = 2."
+      },
+      "context": "CALL FUNCTION ''Z_PROCESS_USER''",
+      "severity": "low"
+    },
+    {
+      "type": "RFC_CALL",
+      "variable": "LV_REMOTE_USER",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 204,
+        "column": 3,
+        "statement": "CALL FUNCTION 'Z_REMOTE_USER_CHECK' DESTINATION 'RFC_DEST' EXPORTING iv_user = lv_remote_user iv_type = 'CHECK' IMPORTING ev_status = gv_status EXCEPTIONS communication_failure = 1 system_failure = 2."
+      },
+      "context": "CALL FUNCTION ''Z_REMOTE_USER_CHECK'' DESTINATION ...",
+      "severity": "low"
+    },
+    {
+      "type": "DB_INSERT",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 215,
+        "column": 5,
+        "statement": "INSERT INTO zlog VALUES @( VALUE #( log_user = sy-uname log_date = sy-datum log_time = sy-uzeit action = 'RFC_CALL' status = gv_status ) )."
+      },
+      "context": "INSERT INTO zlog",
+      "severity": "high"
+    },
+    {
+      "type": "FUNCTION_CALL",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 229,
+        "column": 3,
+        "statement": "CALL FUNCTION 'Z_BACKGROUND_PROCESS' IN BACKGROUND TASK EXPORTING iv_user = sy-uname iv_task = 'BATCH_JOB'."
+      },
+      "context": "CALL FUNCTION ''Z_BACKGROUND_PROCESS''",
+      "severity": "low"
+    },
+    {
+      "type": "RFC_CALL",
+      "variable": "SY-UNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 243,
+        "column": 3,
+        "statement": "CALL FUNCTION 'Z_ASYNC_PROCESS' STARTING NEW TASK lv_taskname DESTINATION IN GROUP 'parallel_group' EXPORTING iv_user = sy-uname iv_data = 'ASYNC_DATA'."
+      },
+      "context": "CALL FUNCTION ''Z_ASYNC_PROCESS'' DESTINATION ...",
+      "severity": "low"
+    },
+    {
+      "type": "DB_INSERT",
+      "variable": "WA_ZTABLE",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 261,
+        "column": 3,
+        "statement": "INSERT ztable FROM wa_ztable."
+      },
+      "context": "INSERT INTO ztable",
+      "severity": "high"
+    },
+    {
+      "type": "FORM_CALL",
+      "variable": "LV_PROCESSOR",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 264,
+        "column": 3,
+        "statement": "PERFORM update_with_user USING lv_processor CHANGING wa_ztable."
+      },
+      "context": "PERFORM update_with_user",
+      "severity": "low"
+    },
+    {
+      "type": "DB_MODIFY",
+      "variable": "WA_ZTABLE",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 269,
+        "column": 3,
+        "statement": "MODIFY ztable FROM wa_ztable."
+      },
+      "context": "MODIFY ztable",
+      "severity": "high"
+    },
+    {
+      "type": "RFC_CALL",
+      "variable": "LV_PROCESSOR",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 272,
+        "column": 3,
+        "statement": "CALL FUNCTION 'Z_LOG_TRANSACTION' DESTINATION 'LOGGER' EXPORTING iv_user = lv_processor iv_trans = 'COMPLEX_FLOW' EXCEPTIONS OTHERS = 1."
+      },
+      "context": "CALL FUNCTION ''Z_LOG_TRANSACTION'' DESTINATION ...",
+      "severity": "low"
+    },
+    {
+      "type": "WRITE",
+      "variable": "GS_TRACKING-USERNAME",
+      "location": {
+        "file": "combined_sy_uname_test.prog.abap",
+        "line": 305,
+        "column": 5,
+        "statement": "WRITE gs_tracking-username,"
+      },
+      "context": "WRITE GS_TRACKING-USERNAME",
+      "severity": "low"
+    }
+  ],
+  "propagationPaths": [
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    },
+    {
+      "steps": [],
+      "length": 0
+    }
+  ],
+  "operationTracking": {
+    "INSERT": {
+      "count": 4,
+      "variables": [
+        "WA_ZTABLE",
+        "SY-UNAME"
+      ]
+    },
+    "UPDATE": {
+      "count": 1,
+      "variables": [
+        "SY-UNAME"
+      ]
+    },
+    "MODIFY": {
+      "count": 2,
+      "variables": [
+        "WA_ZTABLE"
+      ]
+    },
+    "DELETE": {
+      "count": 0,
+      "variables": []
+    },
+    "RFC_CALL": {
+      "count": 0,
+      "variables": []
+    },
+    "PERFORM": {
+      "count": 0,
+      "variables": []
+    },
+    "OTHER": {
+      "count": 12,
+      "variables": [
+        "GV_USER",
+        "SY-UNAME",
+        "LV_REMOTE_USER",
+        "LV_PROCESSOR",
+        "GS_TRACKING-USERNAME"
+      ]
+    }
+  }
+}

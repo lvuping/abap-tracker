@@ -1,0 +1,36 @@
+Operation,Table/RFC,Fields/Parameters,Line,File,Tainted,Source
+RFC-CALL,Z_UPDATE_MASTER_DATA,"USERNAME;DATA",10,combined_sy_uname_test.abap,No,USERNAME, DATA
+DB-MODIFY,ZTABLE,"WA_ZTABLE",10,combined_sy_uname_test.abap,Yes,WA_ZTABLE
+DB-UPDATE,ZTABLE,"CHANGED_BY;CHANGE_DATE;STATUS",11,combined_sy_uname_test.abap,Yes,SY-UNAME, SY-DATUM, 'MODIFIED'
+DB-MODIFY,ZTABLE,"WA_ZTABLE;LT_ZTABLE",13,combined_sy_uname_test.abap,No,TABLE
+DB-INSERT,ZTABLE,"WA_ZTABLE",15,combined_sy_uname_test.abap,Yes,WA_ZTABLE
+DB-DELETE,ZTABLE,"*ALL*",16,combined_sy_uname_test.abap,No,WHERE_CLAUSE
+DB-UPDATE,ZMARA,"DESCRIPTION",18,combined_sy_uname_test.abap,No,'UPDATED'
+RFC-CALL,BAPI_USER_GET_DETAIL,"USERNAME",19,combined_sy_uname_test.abap,No,USERNAME
+DB-DELETE,ZTABLE_TEMP,"*ALL*",19,combined_sy_uname_test.abap,No,WHERE_CLAUSE
+RFC-CALL,Z_LOCAL_PROCESSING,"INPUT",26,combined_sy_uname_test.abap,No,INPUT
+DB-INSERT,ZTABLE,"WA_ZTABLE",58,combined_sy_uname_test.abap,Yes,WA_ZTABLE
+DB-INSERT,ZTABLE,"WA_ZTABLE",82,combined_sy_uname_test.abap,Yes,WA_ZTABLE
+DB-UPDATE,ZTABLE,"",94,combined_sy_uname_test.abap,No,
+DB-UPDATE,ZTABLE,"CHANGED_BY;CHANGED_ON;STATUS",108,combined_sy_uname_test.abap,Yes,SY-UNAME, SY-DATUM, 'UPDATED'
+DB-MODIFY,ZTABLE,"WA_ZTABLE",126,combined_sy_uname_test.abap,Yes,WA_ZTABLE
+DB-MODIFY,ZTABLE,"WA_ZTABLE;LT_ZTABLE",148,combined_sy_uname_test.abap,No,TABLE
+RFC-CALL,with,"IV_USERNAME",182,combined_sy_uname_test.abap,Yes,IV_USERNAME
+RFC-CALL,with,"IV_USERNAME;IV_ACTION",184,combined_sy_uname_test.abap,Yes,IV_USERNAME
+RFC-CALL,Z_PROCESS_USER,"IV_USERNAME;IV_ACTION",186,combined_sy_uname_test.abap,No,IV_USERNAME, IV_ACTION
+RFC-CALL,Z_REMOTE_USER_CHECK,"IV_USER;IV_TYPE",204,combined_sy_uname_test.abap,No,IV_USER, IV_TYPE
+DB-INSERT,ZLOG,"*ALL_FIELDS*",215,combined_sy_uname_test.abap,No,UNKNOWN
+RFC-CALL,IN,"IV_USER",225,combined_sy_uname_test.abap,Yes,IV_USER
+RFC-CALL,Z_BACKGROUND_PROCESS,"IV_USER;IV_TASK",229,combined_sy_uname_test.abap,No,IV_USER, IV_TASK
+RFC-CALL,STARTING,"IV_USER",236,combined_sy_uname_test.abap,Yes,IV_USER
+RFC-CALL,Z_ASYNC_PROCESS,"IV_USER;IV_DATA",243,combined_sy_uname_test.abap,No,IV_USER, IV_DATA
+DB-INSERT,ZTABLE,"WA_ZTABLE",261,combined_sy_uname_test.abap,Yes,WA_ZTABLE
+DB-MODIFY,ZTABLE,"WA_ZTABLE",269,combined_sy_uname_test.abap,Yes,WA_ZTABLE
+RFC-CALL,Z_LOG_TRANSACTION,"IV_USER;IV_TRANS",272,combined_sy_uname_test.abap,No,IV_USER, IV_TRANS
+DB-INSERT,ZTABLE,"*ALL_FIELDS*",288,combined_sy_uname_test.abap,No,VALUES
+DB-INSERT,ZLOG,"WA_LOG",322,combined_sy_uname_test.abap,No,WA_LOG
+DB-UPDATE,ZLOG,"SECONDARY_USER",336,combined_sy_uname_test.abap,No,LV_SECONDARY_USER
+DB-INSERT,ZAUDIT,"*ALL_FIELDS*",349,combined_sy_uname_test.abap,No,UNKNOWN
+DB-MODIFY,ZTABLE,"WA_ZTABLE;LT_ZTABLE",368,combined_sy_uname_test.abap,No,TABLE
+DB-INSERT,ZCHAIN,"*ALL_FIELDS*",396,combined_sy_uname_test.abap,No,UNKNOWN
+DB-UPDATE,ZTABLE,"",411,combined_sy_uname_test.abap,No,
