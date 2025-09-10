@@ -276,9 +276,29 @@ ProcessKoreanNames(text) {
 
 ; Function to remove strings starting with C
 RemoveCStrings(text) {
-    ; Remove strings that start with C followed by numbers until space
-    ; Example: C2001023213 will be removed
-    text := RegExReplace(text, "\bC\d+\s*", "")
+    ; Remove strings that start with C followed by numbers
+    ; After removal, pad with spaces to maintain 12 character length
+    
+    ; Find and replace C followed by numbers (typically 11 digits for 12 total chars)
+    StartPos := 1
+    While (StartPos := RegExMatch(text, "\bC\d+", Match, StartPos)) {
+        ; Get the length of the matched string
+        MatchLen := StrLen(Match)
+        
+        ; Create replacement string with spaces (12 spaces total)
+        Replacement := ""
+        Loop, 12 {
+            Replacement := Replacement . " "
+        }
+        
+        ; Replace the matched C-string with spaces
+        StringLeft, BeforePart, text, StartPos - 1
+        StringMid, AfterPart, text, StartPos + MatchLen
+        text := BeforePart . Replacement . AfterPart
+        
+        ; Move to next position
+        StartPos := StartPos + 12
+    }
     
     return text
 }
