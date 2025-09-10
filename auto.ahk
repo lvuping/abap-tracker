@@ -279,26 +279,21 @@ RemoveCStrings(text) {
     ; Remove strings that start with C followed by numbers
     ; After removal, pad with spaces to maintain 12 character length
     
-    ; Find and replace C followed by numbers (typically 11 digits for 12 total chars)
-    StartPos := 1
-    While (StartPos := RegExMatch(text, "\bC\d+", Match, StartPos)) {
-        ; Get the length of the matched string
-        MatchLen := StrLen(Match)
-        
-        ; Create replacement string with spaces (12 spaces total)
-        Replacement := ""
-        Loop, 12 {
-            Replacement := Replacement . " "
-        }
-        
-        ; Replace the matched C-string with spaces
-        StringLeft, BeforePart, text, StartPos - 1
-        StringMid, AfterPart, text, StartPos + MatchLen
-        text := BeforePart . Replacement . AfterPart
-        
-        ; Move to next position
-        StartPos := StartPos + 12
+    ; Create 12 spaces for replacement
+    TwelveSpaces := "            "  ; Exactly 12 spaces
+    
+    ; Replace all occurrences of C followed by digits with 12 spaces
+    ; Using a callback function to ensure proper replacement
+    pos := 1
+    While (pos := RegExMatch(text, "C\d{11}", Match, pos)) {
+        ; Replace the found match with 12 spaces
+        StringReplace, text, text, %Match%, %TwelveSpaces%
+        pos := pos + 12
     }
+    
+    ; Also handle cases where C might be followed by fewer than 11 digits
+    ; Replace any C followed by digits (up to word boundary) with 12 spaces
+    text := RegExReplace(text, "\bC\d+\b", TwelveSpaces)
     
     return text
 }
