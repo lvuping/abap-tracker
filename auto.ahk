@@ -344,5 +344,111 @@ ProcessChangeHistory(text) {
     return text
 }
 
+; F6 hotkey - Input saved text to last empty row in Excel column B
+F6::
+    if (SavedText = "") {
+        MsgBox, No saved text. Please use F1 first.
+        return
+    }
+    
+    ; Get Excel COM object
+    try {
+        xl := ComObjActive("Excel.Application")
+    } catch {
+        MsgBox, Excel is not running. Please open Excel first.
+        return
+    }
+    
+    try {
+        ; Get active worksheet
+        ws := xl.ActiveSheet
+        
+        ; Find last used row in column B
+        lastRow := ws.Cells(ws.Rows.Count, 2).End(-4162).Row  ; -4162 = xlUp, 2 = column B
+        
+        ; If column B is completely empty, use 1, otherwise lastRow + 1
+        if (ws.Range("B1").Value = "") {
+            targetRow := 1
+        } else {
+            targetRow := lastRow + 1
+        }
+        
+        ; Input value to target cell
+        ws.Cells(targetRow, 2).Value := SavedText
+        
+        ; Success message
+        TrayTip, Excel Input Complete, Entered in cell B%targetRow%, 2
+        
+    } catch e {
+        MsgBox, Error occurred during Excel operation.`n%e%
+    }
+return
+
+; F9 hotkey - Optimized version to input to specific column
+F9::
+    ; Show input dialog to choose column
+    InputBox, ColumnChoice, Column Selection, Enter column letter (A or B):, , 300, 150
+    
+    if (ErrorLevel = 1) {
+        return  ; User canceled
+    }
+    
+    ; Convert column letter to number
+    if (ColumnChoice = "A" or ColumnChoice = "a") {
+        columnNumber := 1
+    } else if (ColumnChoice = "B" or ColumnChoice = "b") {
+        columnNumber := 2
+    } else {
+        MsgBox, Invalid column. Please use A or B.
+        return
+    }
+    
+    ; Call the optimized function
+    InsertToExcelColumn(columnNumber, ColumnChoice)
+return
+
+; Optimized function to insert text into Excel column
+InsertToExcelColumn(columnNum, columnLetter) {
+    global SavedText
+    
+    if (SavedText = "") {
+        MsgBox, No saved text. Please use F1 first.
+        return
+    }
+    
+    ; Get Excel COM object
+    try {
+        xl := ComObjActive("Excel.Application")
+    } catch {
+        MsgBox, Excel is not running. Please open Excel first.
+        return
+    }
+    
+    try {
+        ; Get active worksheet
+        ws := xl.ActiveSheet
+        
+        ; Find last used row in the specified column
+        lastRow := ws.Cells(ws.Rows.Count, columnNum).End(-4162).Row  ; -4162 = xlUp
+        
+        ; If column is completely empty, use 1, otherwise lastRow + 1
+        cellAddress := columnLetter . "1"
+        if (ws.Range(cellAddress).Value = "") {
+            targetRow := 1
+        } else {
+            targetRow := lastRow + 1
+        }
+        
+        ; Input value to target cell
+        ws.Cells(targetRow, columnNum).Value := SavedText
+        
+        ; Success message
+        TrayTip, Excel Input Complete, Entered in cell %columnLetter%%targetRow%, 2
+        
+    } catch e {
+        MsgBox, Error occurred during Excel operation.`n%e%
+    }
+}
+
 ; ESC key to exit script
 Esc::ExitApp

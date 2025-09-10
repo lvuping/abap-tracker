@@ -1,6 +1,8 @@
 ## Todo list.
 
-- test  를위 한python code 는모두 정리해주고, 실제 csv 를 대상으로 작업 할 수있 는 코 드사용법을 안내해줘. readme.md  에직관적으로 update 해줘 . 
+- auto.ahk  는Version 1 으로 작성해.
+- If I push F5 , now it inserts selected text into excel A1, A2.. A3..  now I want to the same thing on F6:: with B1, B2, B3,,,  
+- F5, F6::  would have duplicated logic about excel .  Is there any way to optimize the code? If so, Please write optimize code on F9::
 
 ## After fixing
 
