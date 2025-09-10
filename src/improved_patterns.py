@@ -33,6 +33,7 @@ class TaintedVariable:
     scope: str = "GLOBAL"
     fields: List[str] = None
     confidence: float = 1.0
+    source: str = None  # 오염의 원인이 된 변수 (예: SY-UNAME)
 
 
 @dataclass
@@ -65,6 +66,11 @@ class ImprovedPatternMatcher:
         self.database_sinks: List[DatabaseSink] = []
         self.internal_table_mappings: Dict[str, str] = {}
         self.work_area_mappings: Dict[str, str] = {}
+        
+        # Early termination flag - stop when first Z/Y table operation is found
+        self.found_target_operation = False
+        self.target_table = None
+        self.target_fields = []
         
         # 향상된 패턴 정의
         self._init_patterns()
@@ -135,6 +141,10 @@ class ImprovedPatternMatcher:
     
     def analyze_line(self, line: str, line_number: int) -> None:
         """한 줄 분석"""
+        # Early termination if target operation already found
+        if self.found_target_operation:
+            return
+            
         line = line.strip()
         if not line or line.startswith('*'):
             return
@@ -168,8 +178,10 @@ class ImprovedPatternMatcher:
                     
                     if self._is_system_variable(value) or self._is_tainted(value):
                         full_path = f"{structure}-{field}"
-                        self._mark_tainted(full_path, line_number, f"Assignment from {value}")
-                        self._mark_tainted(structure, line_number, f"Contains tainted field {field}")
+                        # source 정보 전달 - SY-UNAME인지 확인
+                        source = value.upper() if 'SY-UNAME' in value.upper() else self._get_taint_source(value)
+                        self._mark_tainted(full_path, line_number, f"Assignment from {value}", source)
+                        self._mark_tainted(structure, line_number, f"Contains tainted field {field}", source)
                         self._add_flow(value, full_path, line_number, OperationType.STRUCTURE_FIELD)
                         
                 elif assign_type == 'value':
@@ -186,7 +198,9 @@ class ImprovedPatternMatcher:
                     target = match.group(2).upper()
                     
                     if self._is_system_variable(source) or self._is_tainted(source):
-                        self._mark_tainted(target, line_number, f"MOVE from {source}")
+                        # source 정보 전달
+                        taint_source = source.upper() if 'SY-UNAME' in source.upper() else self._get_taint_source(source)
+                        self._mark_tainted(target, line_number, f"MOVE from {source}", taint_source)
                         self._add_flow(source, target, line_number, OperationType.ASSIGNMENT)
                         
                 else:  # direct
@@ -195,7 +209,9 @@ class ImprovedPatternMatcher:
                     source = match.group(2).strip()
                     
                     if self._is_system_variable(source) or self._is_tainted(source):
-                        self._mark_tainted(target, line_number, f"Assignment from {source}")
+                        # source 정보 전달
+                        taint_source = source.upper() if 'SY-UNAME' in source.upper() else self._get_taint_source(source)
+                        self._mark_tainted(target, line_number, f"Assignment from {source}", taint_source)
                         self._add_flow(source, target, line_number, OperationType.ASSIGNMENT)
     
     def _check_database_operations(self, line: str, line_number: int) -> None:
@@ -216,9 +232,15 @@ class ImprovedPatternMatcher:
                     source = match.group(2).upper()
                     
                     if self._is_tainted(source):
-                        # 오염된 구조체에서 필드 추출
-                        fields = self._get_tainted_fields(source)
-                        self._add_sink(table, op_type.value, line_number, fields, source)
+                        # SY-UNAME에서 오염된 필드만 추출
+                        fields = self._get_tainted_fields_from_source(source, 'SY-UNAME')
+                        if fields:  # Only if we have SY-UNAME affected fields
+                            self._add_sink(table, op_type.value, line_number, fields, source)
+                            # Mark that we found the target operation
+                            self.found_target_operation = True
+                            self.target_table = table
+                            self.target_fields = fields
+                            return  # Stop processing further
                         
                 elif op_type == OperationType.DATABASE_UPDATE and len(match.groups()) >= 3:
                     # UPDATE SET 절 처리
@@ -227,6 +249,11 @@ class ImprovedPatternMatcher:
                         fields = self._parse_set_clause(set_clause, line_number)
                         if fields:
                             self._add_sink(table, op_type.value, line_number, fields, "SET_CLAUSE")
+                            # Mark that we found the target operation
+                            self.found_target_operation = True
+                            self.target_table = table
+                            self.target_fields = fields
+                            return  # Stop processing further
     
     def _check_internal_tables(self, line: str, line_number: int) -> None:
         """Internal Table 작업 검사"""
@@ -253,8 +280,15 @@ class ImprovedPatternMatcher:
                         # Internal table이 DB 테이블과 연결되어 있으면 sink 추가
                         if int_table in self.internal_table_mappings:
                             db_table = self.internal_table_mappings[int_table]
-                            fields = self._get_tainted_fields(work_area)
-                            self._add_sink(db_table, f"INDIRECT_{op_type.upper()}", line_number, fields, work_area)
+                            # SY-UNAME에서 오염된 필드만 추출
+                            fields = self._get_tainted_fields_from_source(work_area, 'SY-UNAME')
+                            if fields and (db_table.startswith('Z') or db_table.startswith('Y')):
+                                self._add_sink(db_table, f"INDIRECT_{op_type.upper()}", line_number, fields, work_area)
+                                # Mark that we found the target operation
+                                self.found_target_operation = True
+                                self.target_table = db_table
+                                self.target_fields = fields
+                                return  # Stop processing further
                             
                 elif op_type == 'modify':
                     # MODIFY internal table
@@ -272,7 +306,16 @@ class ImprovedPatternMatcher:
             if match:
                 if op_type == OperationType.RFC_CALL:
                     func_name = match.group(1)
-                    self._add_flow("SY-UNAME", func_name, line_number, op_type)
+                    # Check if it's a Z/Y function and has tainted data
+                    if (func_name.startswith('Z') or func_name.startswith('Y')):
+                        # Check if SY-UNAME data is being passed
+                        if any(self._is_tainted(var) for var in self.tainted_variables):
+                            self._add_flow("SY-UNAME", func_name, line_number, op_type)
+                            # Mark as found for RFC calls too
+                            self.found_target_operation = True
+                            self.target_table = func_name  # Store RFC name as target
+                            self.target_fields = ["RFC_PARAMETER"]  # Generic RFC parameter
+                            return
                     
                 elif op_type == OperationType.PERFORM_CALL:
                     routine = match.group(1)
@@ -402,14 +445,38 @@ class ImprovedPatternMatcher:
         
         return fields
     
-    def _mark_tainted(self, variable: str, line: int, reason: str) -> None:
+    def _get_tainted_fields_from_source(self, structure: str, source: str = 'SY-UNAME') -> List[str]:
+        """특정 source(예: SY-UNAME)에서 오염된 구조체 필드만 반환"""
+        structure = structure.upper()
+        source = source.upper()
+        fields = []
+        
+        for var_name, tainted_var in self.tainted_variables.items():
+            if var_name.startswith(f"{structure}-"):
+                # source가 일치하거나, chain으로 연결된 경우
+                if tainted_var.source == source or (tainted_var.source and source in tainted_var.source):
+                    field = var_name[len(structure) + 1:]
+                    if field:
+                        fields.append(field)
+        
+        return fields
+    
+    def _get_taint_source(self, variable: str) -> str:
+        """변수의 오염 source를 반환"""
+        variable = variable.upper()
+        if variable in self.tainted_variables:
+            return self.tainted_variables[variable].source or variable
+        return variable
+    
+    def _mark_tainted(self, variable: str, line: int, reason: str, source: str = None) -> None:
         """변수를 오염된 것으로 표시"""
         variable = variable.upper()
         if variable not in self.tainted_variables:
             self.tainted_variables[variable] = TaintedVariable(
                 name=variable,
                 line=line,
-                reason=reason
+                reason=reason,
+                source=source
             )
     
     def _add_flow(self, source: str, target: str, line: int, operation: OperationType) -> None:

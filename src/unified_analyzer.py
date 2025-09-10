@@ -179,6 +179,11 @@ class UnifiedAnalyzer:
             
             # 중요한 작업 로깅
             self._log_important_operations(line, i + 1)
+            
+            # Check if we found the first Z/Y table operation - stop analysis
+            if self.pattern_matcher.found_target_operation:
+                self.trace_steps.append(f"✅ Found target operation at line {i + 1}, stopping analysis")
+                break
     
     def _log_important_operations(self, line: str, line_number: int):
         """중요한 작업 로깅"""

@@ -1,8 +1,0 @@
-﻿ID,Source_File,Line_Number,Status,Type,Table,Fields,RFC_Name,Operation,Description,Error,Trace_Steps
-1,input/test_basic.abap,10,Not Found,,,,,,,,0
-2,input/user_example.abap,5,Not Found,,,,,,,,0
-3,input/01_database_insert.abap,50,Not Found,,,,,,,,0
-4,input/02_database_update.abap,45,Not Found,,,,,,,,0
-5,input/03_database_modify.abap,60,Not Found,,,,,,,,0
-6,input/test_complex_flow.abap,25,Found,DATABASE_INSERT_FIELD,ZMASTER_DATA,"HEADER-APPROVER, CREATED_BY, DETAILS-MODIFIED_BY",,,,,0
-7,input/test_multiline_update.abap,30,Not Found,,,,,,,,0

@@ -18,9 +18,15 @@ SY-UNAME 추적 결과를 CSV로 출력하는 스크립트
 
 import csv
 import os
+import sys
 from datetime import datetime
+
+# Add src to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+
 from analyzer import trace_sy_uname_in_snippet
 from encoding_utils import safe_file_read
+from unified_analyzer import UnifiedAnalyzer
 
 
 def analyze_and_export_to_csv():

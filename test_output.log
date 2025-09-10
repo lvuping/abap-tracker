@@ -1,0 +1,380 @@
+
+🔍 Starting Enhanced SY-UNAME Analysis
+📁 Input file: input/sy_uname_locations.csv
+================================================================================
+📊 Found 131 entries to analyze
+
+📍 [1/131] 01_database_insert.abap (line 34)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: INSERT
+      Confidence: 0.69
+📍 [2/131] 01_database_insert.abap (line 60)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: INSERT, APPEND
+      Confidence: 0.85
+📍 [3/131] 01_database_insert.abap (line 118)
+   ⚠️  Partial
+📍 [4/131] 02_database_update.abap (line 33)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: UPDATE
+      Confidence: 0.74
+📍 [5/131] 02_database_update.abap (line 51)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: UPDATE, SELECT, MODIFY
+      Confidence: 0.89
+📍 [6/131] 02_database_update.abap (line 67)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: UPDATE, SELECT, MODIFY
+      Confidence: 0.89
+📍 [7/131] 02_database_update.abap (line 134)
+   ⚠️  Partial
+📍 [8/131] 02_database_update.abap (line 154)
+   ⚠️  Partial
+📍 [9/131] 02_database_update.abap (line 206)
+   ⚠️  Partial
+📍 [10/131] 03_database_modify.abap (line 23)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: MODIFY, INSERT, UPDATE
+      Confidence: 0.70
+  Progress: 10/131 analyzed...
+📍 [11/131] 03_database_modify.abap (line 35)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: MODIFY, INSERT, UPDATE
+      Confidence: 0.85
+📍 [12/131] 03_database_modify.abap (line 61)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: MODIFY, APPEND, UPDATE
+      Confidence: 0.89
+📍 [13/131] 03_database_modify.abap (line 122)
+   ✅ Complete
+      Tables: ZTABLE
+      Keywords: MODIFY, APPEND
+      Confidence: 0.92
+📍 [14/131] 03_database_modify.abap (line 247)
+   ⚠️  Partial
+📍 [15/131] 04_database_delete.abap (line 64)
+   ⚠️  Partial
+📍 [16/131] 04_database_delete.abap (line 217)
+   ⚠️  Partial
+📍 [17/131] 06_move_operations.abap (line 81)
+   ⚠️  Partial
+📍 [18/131] 09_data_declarations.abap (line 210)
+   ⚠️  Partial
+📍 [19/131] 10_if_else.abap (line 162)
+   ⚠️  Partial
+📍 [20/131] 11_case_when.abap (line 105)
+   ⚠️  Partial
+  Progress: 20/131 analyzed...
+📍 [21/131] 11_case_when.abap (line 109)
+   ⚠️  Partial
+📍 [22/131] 13_try_catch.abap (line 118)
+   ⚠️  Partial
+📍 [23/131] 34_multiline_colon.abap (line 162)
+   ⚠️  Partial
+📍 [24/131] 34_multiline_colon.abap (line 233)
+   ⚠️  Partial
+📍 [25/131] business_scenario.abap (line 7)
+   ⚠️  Partial
+📍 [26/131] business_scenario.abap (line 14)
+   ⚠️  Partial
+📍 [27/131] comment_find.abap (line 3)
+   ⚠️  Partial
+📍 [28/131] complex_structure.abap (line 4)
+   ⚠️  Partial
+📍 [29/131] complex_structure.abap (line 10)
+   ⚠️  Partial
+📍 [30/131] long_code_find.abap (line 44)
+   ⚠️  Partial
+  Progress: 30/131 analyzed...
+📍 [31/131] multiline_complex.abap (line 3)
+   ⚠️  Partial
+📍 [32/131] simple_find.abap (line 3)
+   ⚠️  Partial
+📍 [33/131] simple_find.abap (line 6)
+   ⚠️  Partial
+📍 [34/131] substring_negative.abap (line 3)
+   ⚠️  Partial
+📍 [35/131] test_basic.abap (line 3)
+   ⚠️  Partial
+📍 [36/131] test_colon_comma.abap (line 3)
+   ⚠️  Partial
+📍 [37/131] test_colon_comma.abap (line 7)
+   ⚠️  Partial
+📍 [38/131] test_complex_flow.abap (line 4)
+   ✅ Complete
+      Tables: ZMASTER_DATA
+      RFC: Z_TRANSFORM_USER
+      Keywords: SELECT
+      Confidence: 0.72
+📍 [39/131] test_complex_flow.abap (line 5)
+   ✅ Complete
+      Tables: ZMASTER_DATA
+      RFC: Z_TRANSFORM_USER
+      Keywords: SELECT
+      Confidence: 0.91
+📍 [40/131] test_complex_flow.abap (line 11)
+   ✅ Complete
+      Tables: ZMASTER_DATA
+      RFC: Z_TRANSFORM_USER
+      Keywords: SELECT
+      Confidence: 0.91
+  Progress: 40/131 analyzed...
+📍 [41/131] test_complex_flow.abap (line 18)
+   ✅ Complete
+      Tables: ZMASTER_DATA
+      RFC: Z_TRANSFORM_USER
+      Keywords: SELECT
+      Confidence: 0.91
+📍 [42/131] test_complex_flow.abap (line 24)
+   ✅ Complete
+      Tables: ZMASTER_DATA
+      RFC: Z_TRANSFORM_USER
+      Keywords: SELECT, INSERT
+      Confidence: 0.91
+📍 [43/131] test_complex_flow.abap (line 25)
+   ✅ Complete
+      Tables: ZMASTER_DATA
+      RFC: Z_TRANSFORM_USER
+      Keywords: SELECT, INSERT
+      Confidence: 0.91
+📍 [44/131] test_complex_flow.abap (line 26)
+   ✅ Complete
+      Tables: ZMASTER_DATA
+      RFC: Z_TRANSFORM_USER
+      Keywords: SELECT, INSERT
+      Confidence: 0.91
+📍 [45/131] test_complex_flow.abap (line 29)
+   ✅ Complete
+      Tables: ZMASTER_DATA
+      RFC: Z_TRANSFORM_USER
+      Keywords: SELECT, INSERT
+      Confidence: 0.91
+📍 [46/131] test_complex_flow.abap (line 66)
+   ⚠️  Partial
+📍 [47/131] test_complex_flow.abap (line 72)
+   ⚠️  Partial
+📍 [48/131] test_complex_flow.abap (line 79)
+   ⚠️  Partial
+📍 [49/131] test_complex_flow.abap (line 80)
+   ⚠️  Partial
+📍 [50/131] test_complex_flow.abap (line 96)
+   ⚠️  Partial
+  Progress: 50/131 analyzed...
+📍 [51/131] test_complex_flow.abap (line 97)
+   ⚠️  Partial
+📍 [52/131] test_complex_flow.abap (line 132)
+   ⚠️  Partial
+📍 [53/131] test_complex_flow.abap (line 146)
+   ⚠️  Partial
+📍 [54/131] test_comprehensive_scenario.abap (line 3)
+   ⚠️  Partial
+📍 [55/131] test_comprehensive_scenario.abap (line 4)
+   ⚠️  Partial
+📍 [56/131] test_comprehensive_scenario.abap (line 5)
+   ⚠️  Partial
+📍 [57/131] test_comprehensive_scenario.abap (line 8)
+   ⚠️  Partial
+📍 [58/131] test_comprehensive_scenario.abap (line 18)
+   ⚠️  Partial
+📍 [59/131] test_comprehensive_scenario.abap (line 44)
+   ⚠️  Partial
+📍 [60/131] test_default.abap (line 3)
+   ⚠️  Partial
+  Progress: 60/131 analyzed...
+📍 [61/131] test_default.abap (line 8)
+   ⚠️  Partial
+📍 [62/131] test_extended_scenarios.abap (line 3)
+   ⚠️  Partial
+📍 [63/131] test_extended_scenarios.abap (line 4)
+   ⚠️  Partial
+📍 [64/131] test_extended_scenarios.abap (line 5)
+   ⚠️  Partial
+📍 [65/131] test_extended_scenarios.abap (line 10)
+   ⚠️  Partial
+📍 [66/131] test_extended_scenarios.abap (line 17)
+   ⚠️  Partial
+📍 [67/131] test_extended_scenarios.abap (line 22)
+   ⚠️  Partial
+📍 [68/131] test_extended_scenarios.abap (line 26)
+   ⚠️  Partial
+📍 [69/131] test_insert_values.abap (line 3)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: INSERT, SELECT
+      Confidence: 0.78
+📍 [70/131] test_insert_values.abap (line 4)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: INSERT, SELECT
+      Confidence: 0.89
+  Progress: 70/131 analyzed...
+📍 [71/131] test_insert_values.abap (line 11)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: INSERT, SELECT
+      Confidence: 0.89
+📍 [72/131] test_insert_values.abap (line 14)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: INSERT, SELECT, UPDATE, DELETE
+      Confidence: 0.89
+📍 [73/131] test_insert_values.abap (line 21)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: INSERT, SELECT, UPDATE, DELETE
+      Confidence: 0.89
+📍 [74/131] test_insert_values.abap (line 27)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: SELECT, INSERT, UPDATE, DELETE, APPEND
+      Confidence: 0.85
+📍 [75/131] test_insert_values.abap (line 30)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: INSERT, UPDATE, DELETE, APPEND
+      Confidence: 0.92
+📍 [76/131] test_insert_values.abap (line 32)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: INSERT, UPDATE, DELETE, APPEND, SELECT
+      Confidence: 0.92
+📍 [77/131] test_insert_values.abap (line 35)
+   ✅ Complete
+      Tables: ZUSER_RECORDS
+      Keywords: INSERT, UPDATE, DELETE, APPEND, SELECT
+      Confidence: 0.92
+📍 [78/131] test_insert_values.abap (line 42)
+   ⚠️  Partial
+📍 [79/131] test_insert_values.abap (line 51)
+   ⚠️  Partial
+📍 [80/131] test_mixed.abap (line 3)
+   ⚠️  Partial
+  Progress: 80/131 analyzed...
+📍 [81/131] test_mixed.abap (line 7)
+   ⚠️  Partial
+📍 [82/131] test_multiline.abap (line 3)
+   ⚠️  Partial
+📍 [83/131] test_multiline.abap (line 8)
+   ⚠️  Partial
+📍 [84/131] test_multiline_scenario.abap (line 3)
+   ⚠️  Partial
+📍 [85/131] test_multiline_scenario.abap (line 6)
+   ⚠️  Partial
+📍 [86/131] test_multiline_update.abap (line 3)
+   ⚠️  Partial
+📍 [87/131] test_multiline_update.abap (line 10)
+   ⚠️  Partial
+📍 [88/131] test_multiline_update.abap (line 33)
+   ⚠️  Partial
+📍 [89/131] test_multiline_update.abap (line 40)
+   ⚠️  Partial
+📍 [90/131] test_multiple_rfc.abap (line 3)
+   ⚠️  Partial
+  Progress: 90/131 analyzed...
+📍 [91/131] test_multiple_rfc.abap (line 4)
+   ⚠️  Partial
+📍 [92/131] test_multiple_rfc.abap (line 5)
+   ⚠️  Partial
+📍 [93/131] test_multiple_rfc.abap (line 13)
+   ⚠️  Partial
+📍 [94/131] test_multiple_rfc.abap (line 21)
+   ⚠️  Partial
+📍 [95/131] test_multiple_rfc.abap (line 36)
+   ⚠️  Partial
+📍 [96/131] test_multiple_rfc.abap (line 48)
+   ⚠️  Partial
+📍 [97/131] test_multiple_rfc.abap (line 62)
+   ⚠️  Partial
+📍 [98/131] test_multiple_rfc.abap (line 68)
+   ⚠️  Partial
+📍 [99/131] test_multiple_rfc.abap (line 69)
+   ⚠️  Partial
+📍 [100/131] test_multiple_rfc.abap (line 84)
+   ⚠️  Partial
+  Progress: 100/131 analyzed...
+📍 [101/131] test_multiple_rfc.abap (line 85)
+   ⚠️  Partial
+📍 [102/131] test_multiple_rfc.abap (line 86)
+   ⚠️  Partial
+📍 [103/131] test_multiple_rfc.abap (line 95)
+   ⚠️  Partial
+📍 [104/131] test_multiple_rfc.abap (line 97)
+   ⚠️  Partial
+📍 [105/131] test_multiple_rfc.abap (line 100)
+   ⚠️  Partial
+📍 [106/131] test_multiple_rfc.abap (line 112)
+   ⚠️  Partial
+📍 [107/131] test_perform_using.abap (line 3)
+   ⚠️  Partial
+📍 [108/131] test_perform_using.abap (line 4)
+   ⚠️  Partial
+📍 [109/131] test_perform_using.abap (line 5)
+   ⚠️  Partial
+📍 [110/131] test_perform_using.abap (line 11)
+   ⚠️  Partial
+  Progress: 110/131 analyzed...
+📍 [111/131] test_perform_using.abap (line 15)
+   ⚠️  Partial
+📍 [112/131] test_perform_using.abap (line 16)
+   ⚠️  Partial
+📍 [113/131] test_perform_using.abap (line 23)
+   ⚠️  Partial
+📍 [114/131] test_perform_using.abap (line 24)
+   ⚠️  Partial
+📍 [115/131] test_perform_using.abap (line 28)
+   ⚠️  Partial
+📍 [116/131] test_perform_using.abap (line 31)
+   ⚠️  Partial
+📍 [117/131] test_perform_using.abap (line 32)
+   ⚠️  Partial
+📍 [118/131] test_perform_using.abap (line 38)
+   ⚠️  Partial
+📍 [119/131] test_perform_using.abap (line 42)
+   ⚠️  Partial
+📍 [120/131] test_perform_using.abap (line 48)
+   ⚠️  Partial
+  Progress: 120/131 analyzed...
+📍 [121/131] test_perform_using.abap (line 49)
+   ⚠️  Partial
+📍 [122/131] test_perform_using.abap (line 61)
+   ⚠️  Partial
+📍 [123/131] test_perform_using.abap (line 70)
+   ⚠️  Partial
+📍 [124/131] test_perform_using.abap (line 77)
+   ⚠️  Partial
+📍 [125/131] test_perform_using.abap (line 83)
+   ⚠️  Partial
+📍 [126/131] test_perform_using.abap (line 89)
+   ⚠️  Partial
+📍 [127/131] test_perform_using.abap (line 95)
+   ⚠️  Partial
+📍 [128/131] user_example.abap (line 3)
+   ⚠️  Partial
+📍 [129/131] ztest.abap (line 4)
+   ⚠️  Partial
+📍 [130/131] ztest.abap (line 9)
+   ⚠️  Partial
+  Progress: 130/131 analyzed...
+📍 [131/131] test_cp949.abap (line 3)
+   ⚠️  Partial
+
+================================================================================
+✅ Analysis complete!
+📁 Results saved:
+   CSV: output/analysis_20250910_234438.csv
+   JSON: output/analysis_20250910_234438.json
+
+📊 Analysis Summary:
+  Total analyzed: 131
+  Successful: 0 (0.0%)
+  With DB operations: 26
+  With RFC calls: 40
+  High confidence (>0.7): 95
