@@ -27,8 +27,16 @@ F1::
     
     if (ErrorLevel = 0) {
         ; OK button clicked
+        ; Release the drag selection first
+        Send, {Esc}
+        Sleep, 50
+        
+        ; Move to end of line and insert new line
+        Send, {End}
+        Send, {Enter}
+        
+        ; Insert the processed text
         Clipboard := UserInput
-        ; Replace selected text with new text
         Send, %UserInput%
         
         ; Save to memory
@@ -240,19 +248,24 @@ ProcessDate(text) {
 
 ; Korean name processing function
 ProcessKoreanNames(text) {
-    ; Regular expression to match 3-character Korean names after date patterns
-    ; Korean character range: [\x{AC00}-\x{D7AF}] but AutoHotkey v1 doesn't support Unicode regex well
-    ; So we use a different approach for Korean text detection
+    ; Since AutoHotkey v1 has limited Unicode regex support, we'll use a different approach
+    ; We'll look for common Korean name patterns that appear as 2-4 characters
     
-    ; Pattern to find date followed by Korean name (3 characters)
-    ; This regex looks for date patterns followed by exactly 3 Korean characters
-    ; Note: AutoHotkey v1 has limited Unicode regex support, so this is a simplified version
+    ; First, try to replace any 3-character sequence that could be a Korean name
+    ; This includes checking for Korean characters by their byte patterns
     
-    ; Replace patterns like "2024.01.10 홍길동" with "2024.01.10 Kim Dong-hyun"
-    ; Due to AutoHotkey v1 limitations with Unicode regex, we'll use a simpler approach
+    ; Common Korean names are 2-4 characters, usually 3
+    ; We'll look for patterns after dates or in common positions
     
-    ; Match date followed by space and 3 characters that might be Korean name
-    text := RegExReplace(text, "(\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2})\s+.{3}\b", "$1 Kim Dong-hyun")
+    ; Replace date followed by potential Korean name (2-4 non-ASCII characters)
+    text := RegExReplace(text, "(\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2})\s+[^\x00-\x7F]{2,4}\b", "$1 Kim Dong-hyun")
+    
+    ; Also replace standalone Korean names not preceded by dates
+    ; Look for 2-4 character sequences that are likely Korean names
+    text := RegExReplace(text, "\b[^\x00-\x7F]{2,4}\b", "Kim Dong-hyun")
+    
+    ; Specifically handle the name "강득수" if it appears
+    StringReplace, text, text, 강득수, Kim Dong-hyun, All
     
     return text
 }
