@@ -70,12 +70,19 @@ F4::
     }
 return
 
-; F5 hotkey - Input saved text to last empty row in Excel column A
+; F5 hotkey - Input selected text to last empty row in Excel column A
 F5::
-    if (SavedText = "") {
-        MsgBox, No saved text. Please use F1 first.
+    ; Get currently selected text
+    Clipboard := ""
+    Send, ^c
+    ClipWait, 1
+    
+    if (ErrorLevel) {
+        MsgBox, Please select text first.
         return
     }
+    
+    SelectedText := Clipboard
     
     ; Get Excel COM object
     try {
@@ -100,7 +107,7 @@ F5::
         }
         
         ; Input value to target cell
-        ws.Cells(targetRow, 1).Value := SavedText
+        ws.Cells(targetRow, 1).Value := SelectedText
         
         ; Success message
         TrayTip, Excel Input Complete, Entered in cell A%targetRow%, 2
@@ -344,12 +351,19 @@ ProcessChangeHistory(text) {
     return text
 }
 
-; F6 hotkey - Input saved text to last empty row in Excel column B
+; F6 hotkey - Input selected text to last empty row in Excel column B
 F6::
-    if (SavedText = "") {
-        MsgBox, No saved text. Please use F1 first.
+    ; Get currently selected text
+    Clipboard := ""
+    Send, ^c
+    ClipWait, 1
+    
+    if (ErrorLevel) {
+        MsgBox, Please select text first.
         return
     }
+    
+    SelectedText := Clipboard
     
     ; Get Excel COM object
     try {
@@ -374,7 +388,7 @@ F6::
         }
         
         ; Input value to target cell
-        ws.Cells(targetRow, 2).Value := SavedText
+        ws.Cells(targetRow, 2).Value := SelectedText
         
         ; Success message
         TrayTip, Excel Input Complete, Entered in cell B%targetRow%, 2
@@ -384,8 +398,20 @@ F6::
     }
 return
 
-; F9 hotkey - Optimized version to input to specific column
+; F9 hotkey - Optimized version to input selected text to specific column
 F9::
+    ; Get currently selected text first
+    Clipboard := ""
+    Send, ^c
+    ClipWait, 1
+    
+    if (ErrorLevel) {
+        MsgBox, Please select text first.
+        return
+    }
+    
+    SelectedText := Clipboard
+    
     ; Show input dialog to choose column
     InputBox, ColumnChoice, Column Selection, Enter column letter (A or B):, , 300, 150
     
@@ -404,18 +430,11 @@ F9::
     }
     
     ; Call the optimized function
-    InsertToExcelColumn(columnNumber, ColumnChoice)
+    InsertToExcelColumn(columnNumber, ColumnChoice, SelectedText)
 return
 
 ; Optimized function to insert text into Excel column
-InsertToExcelColumn(columnNum, columnLetter) {
-    global SavedText
-    
-    if (SavedText = "") {
-        MsgBox, No saved text. Please use F1 first.
-        return
-    }
-    
+InsertToExcelColumn(columnNum, columnLetter, textToInsert) {
     ; Get Excel COM object
     try {
         xl := ComObjActive("Excel.Application")
@@ -440,7 +459,7 @@ InsertToExcelColumn(columnNum, columnLetter) {
         }
         
         ; Input value to target cell
-        ws.Cells(targetRow, columnNum).Value := SavedText
+        ws.Cells(targetRow, columnNum).Value := textToInsert
         
         ; Success message
         TrayTip, Excel Input Complete, Entered in cell %columnLetter%%targetRow%, 2
