@@ -2,149 +2,155 @@
 SendMode Input
 SetWorkingDir %A_ScriptDir%
 
-; 전역 변수
+; Global variables
 TooltipText := ""
 ShowTooltip := false
-SavedText := ""  ; 메모리에 저장할 텍스트
+SavedText := ""  ; Text to store in memory
 
-; F1 핫키 - 선택된 텍스트 처리
+; F1 hotkey - Process selected text
 F1::
-    ; 현재 선택된 텍스트 가져오기
+    ; Get currently selected text
     Clipboard := ""
     Send, ^c
     ClipWait, 1
     
     if (ErrorLevel) {
-        MsgBox, 텍스트를 선택해주세요.
+        MsgBox, Please select text first.
         return
     }
     
     OriginalText := Clipboard
     ProcessedText := ProcessSequenceAndDate(OriginalText)
     
-    ; InputBox 표시
-    InputBox, UserInput, 텍스트 처리, 처리된 텍스트:, , 500, 200, , , , , %ProcessedText%
+    ; Show InputBox
+    InputBox, UserInput, Text Processing, Processed text:, , 500, 200, , , , , %ProcessedText%
     
     if (ErrorLevel = 0) {
-        ; OK 버튼 클릭시
+        ; OK button clicked
         Clipboard := UserInput
-        ; 선택된 텍스트를 새 텍스트로 교체
+        ; Replace selected text with new text
         Send, %UserInput%
         
-        ; 메모리에 저장
+        ; Save to memory
         SavedText := UserInput
         
-        ; 툴팁 표시 시작
+        ; Start tooltip display
         TooltipText := UserInput
         ShowTooltip := true
         SetTimer, UpdateTooltip, 100
     }
 return
 
-; F2 핫키 - 툴팁 종료
+; F2 hotkey - Stop tooltip
 F2::
     ShowTooltip := false
     SetTimer, UpdateTooltip, Off
     ToolTip
 return
 
-; F3 핫키 - "* 저장된 문장" 형식으로 입력
+; F3 hotkey - Input as "* saved text" format
 F3::
     if (SavedText != "") {
         OutputText := "* " . SavedText
         Clipboard := OutputText
         Send, %OutputText%
     } else {
-        MsgBox, 저장된 텍스트가 없습니다. F1을 먼저 사용해주세요.
+        MsgBox, No saved text. Please use F1 first.
     }
 return
 
-; F4 핫키 - '"저장된 문장" 형식으로 입력
+; F4 hotkey - Input as '"saved text" format
 F4::
     if (SavedText != "") {
         OutputText := "'" . chr(34) . SavedText . chr(34)
         Clipboard := OutputText
         Send, %OutputText%
     } else {
-        MsgBox, 저장된 텍스트가 없습니다. F1을 먼저 사용해주세요.
+        MsgBox, No saved text. Please use F1 first.
     }
 return
 
-; F5 핫키 - Excel A열의 마지막 빈칸에 저장된 텍스트 입력
+; F5 hotkey - Input saved text to last empty row in Excel column A
 F5::
     if (SavedText = "") {
-        MsgBox, 저장된 텍스트가 없습니다. F1을 먼저 사용해주세요.
+        MsgBox, No saved text. Please use F1 first.
         return
     }
     
-    ; Excel COM 객체 가져오기
+    ; Get Excel COM object
     try {
         xl := ComObjActive("Excel.Application")
     } catch {
-        MsgBox, Excel이 실행되지 않았습니다. Excel을 먼저 열어주세요.
+        MsgBox, Excel is not running. Please open Excel first.
         return
     }
     
     try {
-        ; 활성 워크시트 가져오기
+        ; Get active worksheet
         ws := xl.ActiveSheet
         
-        ; A열의 마지막 사용된 행 찾기
+        ; Find last used row in column A
         lastRow := ws.Cells(ws.Rows.Count, 1).End(-4162).Row  ; -4162 = xlUp
         
-        ; A열이 완전히 비어있으면 1, 아니면 lastRow + 1
+        ; If column A is completely empty, use 1, otherwise lastRow + 1
         if (ws.Range("A1").Value = "") {
             targetRow := 1
         } else {
             targetRow := lastRow + 1
         }
         
-        ; 해당 셀에 값 입력
+        ; Input value to target cell
         ws.Cells(targetRow, 1).Value := SavedText
         
-        ; 성공 메시지
-        TrayTip, Excel 입력 완료, A%targetRow% 셀에 입력되었습니다., 2
+        ; Success message
+        TrayTip, Excel Input Complete, Entered in cell A%targetRow%, 2
         
     } catch e {
-        MsgBox, Excel 작업 중 오류가 발생했습니다.`n%e%
+        MsgBox, Error occurred during Excel operation.`n%e%
     }
 return
 
-; 툴팁 업데이트 타이머
+; Tooltip update timer
 UpdateTooltip:
     if (ShowTooltip) {
-        ; 화면 우측 상단에 툴팁 표시
-        xPos := A_ScreenWidth - 200
-        ToolTip, %TooltipText%, %xPos%, 30
+        ; Display tooltip at top right corner of screen (doubled size area)
+        xPos := A_ScreenWidth - 400
+        ToolTip, %TooltipText%, %xPos%, 60
     } else {
         ToolTip
     }
 return
 
-; 시퀀스와 날짜를 처리하는 함수
+; Function to process sequence and date
 ProcessSequenceAndDate(text) {
-    ; 1. 시퀀스 처리 (N, U1, U2, U3...)
+    ; 1. Process sequence (N, U1, U2, U3...)
     text := ProcessSequence(text)
     
-    ; 2. 날짜 처리
+    ; 2. Process date
     text := ProcessDate(text)
+    
+    ; 3. Process Korean names (replace 3-character Korean names after date with "Kim Dong-hyun")
+    text := ProcessKoreanNames(text)
+    
+    ; 4. Remove strings starting with C (like C2001023213) until space
+    text := RemoveCStrings(text)
     
     return text
 }
 
-; 시퀀스 처리 함수
+; Sequence processing function
 ProcessSequence(text) {
-    ; N 또는 U + 숫자 패턴 찾기
+    ; Find N or U + number patterns
     HasN := false
     HasU := false
     MaxUNumber := 0
     
-    ; N 체크 - 단독 N만 찾기
+    ; Check for standalone N
     if (RegExMatch(text, "\bN\b")) {
         HasN := true
     }
     
-    ; U + 숫자 패턴 찾기 및 최대값 찾기
+    ; Find U + number patterns and find maximum value
     StartPos := 1
     While (StartPos := RegExMatch(text, "\bU(\d+)\b", Match, StartPos)) {
         HasU := true
@@ -155,29 +161,29 @@ ProcessSequence(text) {
         StartPos += StrLen(Match)
     }
     
-    ; 처리 로직
+    ; Processing logic
     if (HasN) {
-        ; N을 U1으로 교체하고 기존 U 숫자들 증가
+        ; Replace N with U1 and increment existing U numbers
         text := ReplaceUPattern(text, MaxUNumber, true)
     }
     else if (HasU) {
-        ; U 숫자들만 증가
+        ; Only increment U numbers
         text := IncrementUNumbers(text, MaxUNumber)
     }
     else {
-        ; 아무것도 없으면 맨 앞에 N 추가
+        ; If nothing exists, add N at the beginning
         text := "N " . text
     }
     
     return text
 }
 
-; U 패턴 교체 함수
+; U pattern replacement function
 ReplaceUPattern(text, maxNum, hasN) {
     result := text
     
     if (hasN) {
-        ; 큰 숫자부터 증가시켜야 중복 방지
+        ; Increment from largest number to prevent duplication
         Loop, %maxNum% {
             currentNum := maxNum - A_Index + 1
             oldPattern := "\bU" . currentNum . "\b"
@@ -186,18 +192,18 @@ ReplaceUPattern(text, maxNum, hasN) {
             result := RegExReplace(result, oldPattern, newPattern)
         }
         
-        ; N을 U1으로 교체
+        ; Replace N with U1
         result := RegExReplace(result, "\bN\b", "U1")
     }
     
     return result
 }
 
-; U 숫자 증가 함수
+; U number increment function
 IncrementUNumbers(text, maxNum) {
     result := text
     
-    ; 큰 숫자부터 증가시켜야 중복 방지
+    ; Increment from largest number to prevent duplication
     Loop, %maxNum% {
         currentNum := maxNum - A_Index + 1
         oldPattern := "\bU" . currentNum . "\b"
@@ -209,28 +215,56 @@ IncrementUNumbers(text, maxNum) {
     return result
 }
 
-; 날짜 처리 함수
+; Date processing function
 ProcessDate(text) {
-    ; 오늘 날짜 가져오기
+    ; Get today's date
     FormatTime, Today, , yyyy.MM.dd
     FormatTime, TodayDash, , yyyy-MM-dd
     FormatTime, TodaySlash, , yyyy/MM/dd
     
-    ; 다양한 날짜 형식 패턴 처리
-    ; yyyy.MM.dd 형식
+    ; Process various date format patterns
+    ; yyyy.MM.dd format
     text := RegExReplace(text, "\d{4}\.\d{1,2}\.\d{1,2}", Today)
     
-    ; yyyy-MM-dd 형식
+    ; yyyy-MM-dd format
     text := RegExReplace(text, "\d{4}-\d{1,2}-\d{1,2}", TodayDash)
     
-    ; yyyy/MM/dd 형식
+    ; yyyy/MM/dd format
     text := RegExReplace(text, "\d{4}/\d{1,2}/\d{1,2}", TodaySlash)
     
-    ; yyyy-MM.dd 또는 yyyy.MM-dd 형식
+    ; yyyy-MM.dd or yyyy.MM-dd format
     text := RegExReplace(text, "\d{4}[-\.]\d{1,2}[-\.]\d{1,2}", Today)
     
     return text
 }
 
-; ESC 키로 스크립트 종료
+; Korean name processing function
+ProcessKoreanNames(text) {
+    ; Regular expression to match 3-character Korean names after date patterns
+    ; Korean character range: [\x{AC00}-\x{D7AF}] but AutoHotkey v1 doesn't support Unicode regex well
+    ; So we use a different approach for Korean text detection
+    
+    ; Pattern to find date followed by Korean name (3 characters)
+    ; This regex looks for date patterns followed by exactly 3 Korean characters
+    ; Note: AutoHotkey v1 has limited Unicode regex support, so this is a simplified version
+    
+    ; Replace patterns like "2024.01.10 홍길동" with "2024.01.10 Kim Dong-hyun"
+    ; Due to AutoHotkey v1 limitations with Unicode regex, we'll use a simpler approach
+    
+    ; Match date followed by space and 3 characters that might be Korean name
+    text := RegExReplace(text, "(\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2})\s+.{3}\b", "$1 Kim Dong-hyun")
+    
+    return text
+}
+
+; Function to remove strings starting with C
+RemoveCStrings(text) {
+    ; Remove strings that start with C followed by numbers until space
+    ; Example: C2001023213 will be removed
+    text := RegExReplace(text, "\bC\d+\s*", "")
+    
+    return text
+}
+
+; ESC key to exit script
 Esc::ExitApp
