@@ -7,7 +7,7 @@ TooltipText := ""
 ShowTooltip := false
 SavedText := ""  ; Text to store in memory
 
-; F1 hotkey - Process selected text
+; F1 hotkey - Process selected text and replace it
 F1::
     ; Get currently selected text
     Clipboard := ""
@@ -27,17 +27,9 @@ F1::
     
     if (ErrorLevel = 0) {
         ; OK button clicked
-        ; Release the drag selection first
-        Send, {Esc}
-        Sleep, 50
-        
-        ; Move to end of line and insert new line
-        Send, {End}
-        Send, {Enter}
-        
-        ; Insert the processed text
+        ; Replace the selected text with the processed text
         Clipboard := UserInput
-        Send, %UserInput%
+        Send, ^v
         
         ; Save to memory
         SavedText := UserInput
@@ -137,11 +129,14 @@ ProcessSequenceAndDate(text) {
     ; 2. Process date
     text := ProcessDate(text)
     
-    ; 3. Process Korean names (replace 3-character Korean names after date with "Kim Dong-hyun")
+    ; 3. Process Korean names (replace 3-character Korean names with "DH2025.KIM")
     text := ProcessKoreanNames(text)
     
     ; 4. Remove strings starting with C (like C2001023213) until space
     text := RemoveCStrings(text)
+    
+    ; 5. Replace the last part (변경내역) with "SAP ID replacement"
+    text := ProcessChangeHistory(text)
     
     return text
 }
@@ -257,17 +252,17 @@ ProcessKoreanNames(text) {
     
     ; First, replace Korean names that appear after dates
     ; Match: date pattern + space + 3 non-ASCII characters
-    text := RegExReplace(text, "(\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}\s+)[^\x00-\x7F]{3}\b", "$1Kim Dong-hyun")
+    text := RegExReplace(text, "(\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}\s+)[^\x00-\x7F]{3}\b", "$1DH2025.KIM")
     
     ; Also replace standalone 3-character Korean names anywhere in the text
     ; Match: word boundary + 3 non-ASCII characters + word boundary
-    text := RegExReplace(text, "\b[^\x00-\x7F]{3}\b", "Kim Dong-hyun")
+    text := RegExReplace(text, "\b[^\x00-\x7F]{3}\b", "DH2025.KIM")
     
     ; Handle 2-character Korean names (less common but possible)
-    text := RegExReplace(text, "\b[^\x00-\x7F]{2}\b", "Kim Dong-hyun")
+    text := RegExReplace(text, "\b[^\x00-\x7F]{2}\b", "DH2025.KIM")
     
     ; Handle 4-character Korean names (rare but possible)
-    text := RegExReplace(text, "\b[^\x00-\x7F]{4}\b", "Kim Dong-hyun")
+    text := RegExReplace(text, "\b[^\x00-\x7F]{4}\b", "DH2025.KIM")
     
     return text
 }
@@ -277,6 +272,74 @@ RemoveCStrings(text) {
     ; Remove strings that start with C followed by numbers until space
     ; Example: C2001023213 will be removed
     text := RegExReplace(text, "\bC\d+\s*", "")
+    
+    return text
+}
+
+; Function to process change history (변경내역)
+ProcessChangeHistory(text) {
+    ; Replace the last part of the text with "SAP ID replacement"
+    ; We'll look for the last significant text after all the processed elements
+    
+    ; Split text by spaces and tabs
+    StringSplit, parts, text, %A_Space%%A_Tab%
+    
+    ; Find the position after the Korean name (DH2025.KIM) or date
+    ; and replace everything after that with "SAP ID replacement"
+    
+    ; Look for DH2025.KIM in the text
+    if (InStr(text, "DH2025.KIM")) {
+        ; Find position after DH2025.KIM
+        pos := InStr(text, "DH2025.KIM") + StrLen("DH2025.KIM")
+        
+        ; Get the part before and after
+        beforePart := SubStr(text, 1, pos)
+        afterPart := SubStr(text, pos + 1)
+        
+        ; Trim spaces from afterPart
+        afterPart := Trim(afterPart)
+        
+        ; If there's text after DH2025.KIM, replace it
+        if (StrLen(afterPart) > 0) {
+            text := beforePart . " SAP ID replacement"
+        }
+    }
+    else {
+        ; If no Korean name found, look for the last substantial text
+        ; and replace it with "SAP ID replacement"
+        
+        ; Find the last non-empty part
+        lastPartIndex := 0
+        Loop, %parts0% {
+            if (StrLen(parts%A_Index%) > 0) {
+                lastPartIndex := A_Index
+            }
+        }
+        
+        ; If we have parts, replace the last one
+        if (lastPartIndex > 0) {
+            ; Rebuild the text without the last part
+            newText := ""
+            Loop, % lastPartIndex - 1 {
+                if (StrLen(parts%A_Index%) > 0) {
+                    if (StrLen(newText) > 0) {
+                        newText := newText . " " . parts%A_Index%
+                    }
+                    else {
+                        newText := parts%A_Index%
+                    }
+                }
+            }
+            
+            ; Add "SAP ID replacement" as the last part
+            if (StrLen(newText) > 0) {
+                text := newText . " SAP ID replacement"
+            }
+            else {
+                text := "SAP ID replacement"
+            }
+        }
+    }
     
     return text
 }
