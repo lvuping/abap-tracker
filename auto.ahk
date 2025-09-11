@@ -254,16 +254,23 @@ ProcessKoreanNames(text) {
 return text
 }
 
-; Function to remove strings starting with C
+; Function to remove strings starting with C or CR
 RemoveCStrings(text) {
-    ; Remove strings that start with C followed by numbers
+    ; Remove strings that start with C or CR followed by numbers
     ; After removal, pad with spaces to maintain 12 character length
 
     ; Create 12 spaces for replacement
     TwelveSpaces := "            " ; Exactly 12 spaces
 
-    ; Replace all occurrences of C followed by digits with 12 spaces
-    ; Using a callback function to ensure proper replacement
+    ; First, handle CR followed by 10 digits (total 12 chars like CR2102090002)
+    pos := 1
+    While (pos := RegExMatch(text, "CR\d{10}", Match, pos)) {
+        ; Replace the found match with 12 spaces
+        StringReplace, text, text, %Match%, %TwelveSpaces%
+        pos := pos + 12
+    }
+
+    ; Then handle C followed by 11 digits (total 12 chars)
     pos := 1
     While (pos := RegExMatch(text, "C\d{11}", Match, pos)) {
         ; Replace the found match with 12 spaces
@@ -271,9 +278,11 @@ RemoveCStrings(text) {
         pos := pos + 12
     }
 
-    ; Also handle cases where C might be followed by fewer than 11 digits
-    ; Replace any C followed by digits (up to word boundary) with 12 spaces
-    text := RegExReplace(text, "\bC\d+\b", TwelveSpaces)
+    ; Also handle cases where C or CR might be followed by any number of digits
+    ; Replace CR followed by digits
+    text := RegExReplace(text, "\bCR\d+\b", TwelveSpaces)
+    ; Replace C followed by digits (but not CR)
+    text := RegExReplace(text, "\bC(?!R)\d+\b", TwelveSpaces)
 
 return text
 }
