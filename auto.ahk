@@ -6,6 +6,12 @@ SetWorkingDir %A_ScriptDir%
 TooltipText := ""
 ShowTooltip := false
 SavedText := "" ; Text to store in memory
+CurrentSequence := "N" ; Track current sequence (N, U1, U2, U3, etc.)
+
+; Win+1 hotkey - Type current sequence + " SAP ID Replace"
+#1::
+    SendInput, %CurrentSequence% SAP ID Replace
+return
 
 F9::
     ; Get currently selected text
@@ -22,6 +28,9 @@ F9::
 
     ; Process the text with special F9 requirements
     ProcessedText := ProcessF9Text(OriginalText)
+
+    ; Extract and save the current sequence from processed text
+    UpdateCurrentSequence(ProcessedText)
 
     ; Replace the selected text with the processed text
     Clipboard := ProcessedText
@@ -118,6 +127,36 @@ ProcessSequence(text) {
     }
 
 return text
+}
+
+; Function to extract and update the current sequence from processed text
+UpdateCurrentSequence(text) {
+    ; Find the first sequence pattern in the text (N, U1, U2, etc.)
+    if (RegExMatch(text, "\b(N|U\d+)\b", Match)) {
+        ; If we found N, the next sequence should be U1
+        if (Match = "N") {
+            CurrentSequence := "U1"
+        }
+        ; If we found U + number, increment it
+        else if (RegExMatch(Match, "U(\d+)", UMatch)) {
+            CurrentNumber := UMatch1
+            NextNumber := CurrentNumber + 1
+            CurrentSequence := "U" . NextNumber
+        }
+    }
+    ; If no sequence found in processed text, keep current or reset to N
+    else {
+        ; Check if we should reset or keep current
+        ; For now, let's increment from current if we have one
+        if (CurrentSequence = "N") {
+            CurrentSequence := "U1"
+        }
+        else if (RegExMatch(CurrentSequence, "U(\d+)", CurMatch)) {
+            CurNumber := CurMatch1
+            NextNumber := CurNumber + 1
+            CurrentSequence := "U" . NextNumber
+        }
+    }
 }
 
 ; U pattern replacement function
