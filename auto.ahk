@@ -368,13 +368,19 @@ ProcessChangeHistory(text) {
 
 ; Function to process text for F9 hotkey
 ProcessF9Text(text) {
-    ; 1. Process date - replace with today's date
-    text := ProcessDate(text)
+    ; 1. Process sequence (N, U1, U2, U3...) first
+    text := ProcessSequence(text)
     
     ; 2. Replace C followed by 11 digits (total 12 chars) with 12 spaces
     text := RemoveCStrings(text)
     
-    ; 3. Find the date position to handle everything after it
+    ; 3. Process date - replace with today's date
+    text := ProcessDate(text)
+    
+    ; 4. Process Korean names (replace 김동현 with DH2025.KIM)
+    text := ProcessKoreanNames(text)
+    
+    ; 5. Find the date position to handle everything after it
     ; Match various date patterns
     datePos := 0
     if (RegExMatch(text, "\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}", Match, 1)) {
@@ -384,12 +390,20 @@ ProcessF9Text(text) {
         ; Get the part before and including the date
         beforeDate := SubStr(text, 1, dateEndPos)
         
-        ; Replace everything after the date with {DH2025.KIM} {SAP ID Replace}
-        text := beforeDate . " {DH2025.KIM} {SAP ID Replace}"
+        ; Replace everything after the date with DH2025.KIM SAP ID Replace
+        text := beforeDate . " DH2025.KIM SAP ID Replace"
     }
     else {
-        ; If no date found, just append at the end
-        text := text . " {DH2025.KIM} {SAP ID Replace}"
+        ; If no date found, look for DH2025.KIM and replace everything after it
+        if (InStr(text, "DH2025.KIM")) {
+            pos := InStr(text, "DH2025.KIM")
+            beforeKIM := SubStr(text, 1, pos - 1)
+            text := beforeKIM . "DH2025.KIM SAP ID Replace"
+        }
+        else {
+            ; If neither date nor DH2025.KIM found, just append at the end
+            text := text . " DH2025.KIM SAP ID Replace"
+        }
     }
     
     return text
