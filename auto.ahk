@@ -8,9 +8,9 @@ ShowTooltip := false
 SavedText := "" ; Text to store in memory
 CurrentSequence := "N" ; Track current sequence (N, U1, U2, U3, etc.)
 
-; Win+1 hotkey - Type current sequence + " SAP ID Replace"
+; Win+1 hotkey - Type current sequence + " SAP ID Replace" with quote at start
 #1::
-    SendInput, %CurrentSequence% SAP ID Replace
+    SendInput, "%CurrentSequence% SAP ID Replace
 return
 
 F9::
@@ -131,8 +131,13 @@ return text
 
 ; Function to extract and update the current sequence from processed text
 UpdateCurrentSequence(text) {
+    ; First check for N followed by a number (like N3)
+    if (RegExMatch(text, "\b(N\d+)\b", Match)) {
+        ; Save the exact pattern (like N3)
+        CurrentSequence := Match
+    }
     ; Find the first sequence pattern in the text (N, U1, U2, etc.)
-    if (RegExMatch(text, "\b(N|U\d+)\b", Match)) {
+    else if (RegExMatch(text, "\b(N|U\d+)\b", Match)) {
         ; If we found N, the next sequence should be U1
         if (Match = "N") {
             CurrentSequence := "U1"
