@@ -352,33 +352,33 @@ ProcessF9Text(text) {
     ; 3. Process date - replace with today's date
     text := ProcessDate(text)
 
-    ; 4. Process Korean names (replace 김동현 with DH2025.KIM)
-    text := ProcessKoreanNames(text)
-
-    ; 5. Find the date position to handle everything after it
-    ; Match various date patterns
+    ; 4. Find the date position to handle everything after it
+    ; Match various date patterns including YYYYMMDD format
     datePos := 0
-    if (RegExMatch(text, "\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}", Match, 1)) {
+    dateEndPos := 0
+    
+    ; Check for YYYYMMDD format (8 digits)
+    if (RegExMatch(text, "\b\d{8}\b", Match, 1)) {
+        datePos := RegExMatch(text, "\b\d{8}\b", Match, 1)
+        dateEndPos := datePos + StrLen(Match)
+    }
+    ; Check for date with separators
+    else if (RegExMatch(text, "\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}", Match, 1)) {
         datePos := RegExMatch(text, "\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}", Match, 1)
         dateEndPos := datePos + StrLen(Match)
-
+    }
+    
+    ; If date found, replace everything after it
+    if (datePos > 0) {
         ; Get the part before and including the date
         beforeDate := SubStr(text, 1, dateEndPos)
-
+        
         ; Replace everything after the date with DH2025.KIM SAP ID Replace
         text := beforeDate . " DH2025.KIM SAP ID Replace"
     }
     else {
-        ; If no date found, look for DH2025.KIM and replace everything after it
-        if (InStr(text, "DH2025.KIM")) {
-            pos := InStr(text, "DH2025.KIM")
-            beforeKIM := SubStr(text, 1, pos - 1)
-            text := beforeKIM . "DH2025.KIM SAP ID Replace"
-        }
-        else {
-            ; If neither date nor DH2025.KIM found, just append at the end
-            text := text . " DH2025.KIM SAP ID Replace"
-        }
+        ; If no date found, just append at the end
+        text := text . " DH2025.KIM SAP ID Replace"
     }
 
 return text
