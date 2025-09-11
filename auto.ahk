@@ -260,7 +260,7 @@ RemoveCStrings(text) {
     ; After removal, pad with spaces to maintain 12 character length
 
     ; Create 12 spaces for replacement
-    TwelveSpaces := " " ; Exactly 12 spaces
+    TwelveSpaces := "            " ; Exactly 12 spaces
 
     ; Replace all occurrences of C followed by digits with 12 spaces
     ; Using a callback function to ensure proper replacement
