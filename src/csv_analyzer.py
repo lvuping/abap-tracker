@@ -197,13 +197,13 @@ class EnhancedCSVAnalyzer:
                 analysis_result.get('database_operations')
             )
             
-            # Update with complete analysis
-            if complete_result['table']:
+            # Update with complete analysis - only fill missing values
+            if complete_result['table'] and not analysis_result.get('final_table'):
                 analysis_result['final_table'] = complete_result['table']
                 if not tables:
                     tables = [complete_result['table']]
             
-            if complete_result['field']:
+            if complete_result['field'] and not analysis_result.get('final_fields'):
                 analysis_result['final_fields'] = complete_result['field']
                 if not fields:
                     fields = [complete_result['field']]
@@ -284,9 +284,12 @@ class EnhancedCSVAnalyzer:
             sink_fields = first_sink.get('fields', [])
             for field in sink_fields:
                 if field and field not in fields:
-                    # Only include fields ending with _BY (user tracking fields)
+                    # Include user tracking fields and common SAP user fields
                     field_upper = field.upper()
-                    if field_upper.endswith('_BY') or field_upper == 'SY-UNAME' or field_upper == 'RFC_PARAMETER':
+                    # Common SAP user fields: ERNAM (created by), AENAM (changed by), UNAME (user name)
+                    if (field_upper.endswith('_BY') or 
+                        field_upper in ['SY-UNAME', 'RFC_PARAMETER', 'ERNAM', 'AENAM', 'UNAME', 
+                                       'CREATED_BY', 'CHANGED_BY', 'MODIFIED_BY', 'DELETED_BY']):
                         fields.append(field)
         
         # Priority 2: Check for INSERT VALUES patterns using the enhanced handler

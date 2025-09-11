@@ -1,0 +1,2 @@
+﻿ID,Source_File,Line_Number,Status,Final_Table,Final_Fields,DB_Operations,RFC_Functions,PERFORM_Calls,Confidence,Tainted_Variables,Description
+1,/Users/aiden/workspace/sap/abap-tracker/test_zmc0042.abap,6,Partial,ZMC0042,CREATED_BY,"DELETE, INSERT",,,0.85,"SY-UNAME, PTAB-ERNAM, PTAB, PTAB-ERDAT, PTAB-UZEIT","Operations: Assignment, Structure Field, Assignment | Tables: ZMC0042 | Variables: 5 tainted"

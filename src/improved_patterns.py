@@ -93,12 +93,12 @@ class ImprovedPatternMatcher:
         # 데이터베이스 작업 패턴
         self.database_patterns = [
             # INSERT 작업
-            (r'^\s*INSERT\s+(\w+)(?:\s+FROM\s+(\w+))?', OperationType.DATABASE_INSERT),
+            (r'^\s*INSERT\s+(\w+)(?:\s+FROM\s+(?:TABLE\s+)?(\w+))(?:\s+ACCEPTING\s+DUPLICATE\s+KEYS)?', OperationType.DATABASE_INSERT),
             (r'^\s*INSERT\s+INTO\s+(\w+)\s+VALUES\s+(\w+)', OperationType.DATABASE_INSERT),
             # UPDATE 작업
-            (r'^\s*UPDATE\s+(\w+)\s+(?:FROM\s+(\w+)|SET\s+(.+?))', OperationType.DATABASE_UPDATE),
+            (r'^\s*UPDATE\s+(\w+)\s+(?:FROM\s+(?:TABLE\s+)?(\w+)|SET\s+(.+?))', OperationType.DATABASE_UPDATE),
             # MODIFY 작업
-            (r'^\s*MODIFY\s+(\w+)(?:\s+FROM\s+(\w+))?', OperationType.DATABASE_MODIFY),
+            (r'^\s*MODIFY\s+(\w+)(?:\s+FROM\s+(?:TABLE\s+)?(\w+))?', OperationType.DATABASE_MODIFY),
             # DELETE 작업
             (r'^\s*DELETE\s+(?:FROM\s+)?(\w+)(?:\s+WHERE\s+(.+?))?', OperationType.DATABASE_DELETE),
         ]
