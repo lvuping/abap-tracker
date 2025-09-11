@@ -202,8 +202,12 @@ ProcessDate(text) {
     FormatTime, Today, , yyyy.MM.dd
     FormatTime, TodayDash, , yyyy-MM-dd
     FormatTime, TodaySlash, , yyyy/MM/dd
+    FormatTime, TodayNoSep, , yyyyMMdd
 
     ; Process various date format patterns
+    ; yyyyMMdd format (8 digits without separators - like 20211003)
+    text := RegExReplace(text, "\b\d{8}\b", TodayNoSep)
+
     ; yyyy.MM.dd format
     text := RegExReplace(text, "\d{4}\.\d{1,2}\.\d{1,2}", Today)
 
