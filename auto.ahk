@@ -10,10 +10,12 @@ CurrentSequence := "N" ; Track current sequence (N, U1, U2, U3, etc.)
 
 ; Win+1 hotkey - Type current sequence + " SAP ID Replace" with quote at start
 #1::
+    global CurrentSequence
     SendInput, "%CurrentSequence% SAP ID Replace
 return
 
 F9::
+    global CurrentSequence
     ; Get currently selected text
     Clipboard := ""
     Send, ^c
@@ -131,37 +133,24 @@ return text
 
 ; Function to extract and update the current sequence from processed text
 UpdateCurrentSequence(text) {
+    global CurrentSequence
+    
     ; First check for N followed by a number (like N3)
     if (RegExMatch(text, "\b(N\d+)\b", Match)) {
         ; Save the exact pattern (like N3)
         CurrentSequence := Match
     }
-    ; Find the first sequence pattern in the text (N, U1, U2, etc.)
-    else if (RegExMatch(text, "\b(N|U\d+)\b", Match)) {
-        ; If we found N, the next sequence should be U1
-        if (Match = "N") {
-            CurrentSequence := "U1"
-        }
-        ; If we found U + number, increment it
-        else if (RegExMatch(Match, "U(\d+)", UMatch)) {
-            CurrentNumber := UMatch1
-            NextNumber := CurrentNumber + 1
-            CurrentSequence := "U" . NextNumber
-        }
+    ; Check for U followed by a number (like U1, U2, etc.)
+    else if (RegExMatch(text, "\b(U\d+)\b", Match)) {
+        ; Save the exact U pattern found (don't increment here)
+        CurrentSequence := Match
     }
-    ; If no sequence found in processed text, keep current or reset to N
-    else {
-        ; Check if we should reset or keep current
-        ; For now, let's increment from current if we have one
-        if (CurrentSequence = "N") {
-            CurrentSequence := "U1"
-        }
-        else if (RegExMatch(CurrentSequence, "U(\d+)", CurMatch)) {
-            CurNumber := CurMatch1
-            NextNumber := CurNumber + 1
-            CurrentSequence := "U" . NextNumber
-        }
+    ; Check for standalone N
+    else if (RegExMatch(text, "\b(N)\b", Match)) {
+        ; Save N as is
+        CurrentSequence := "N"
     }
+    ; If no sequence found in processed text, don't change CurrentSequence
 }
 
 ; U pattern replacement function
