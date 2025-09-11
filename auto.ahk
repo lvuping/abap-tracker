@@ -371,22 +371,25 @@ ProcessF9Text(text) {
     ; 1. Process date - replace with today's date
     text := ProcessDate(text)
     
-    ; 2. Replace C followed by 12 characters with 12 spaces
+    ; 2. Replace C followed by 11 digits (total 12 chars) with 12 spaces
     text := RemoveCStrings(text)
     
-    ; 3. Replace Korean names with "DH2025.KIM"
-    text := ProcessKoreanNames(text)
-    
-    ; 4. Remove all text after the name and add "SAP ID Replace"
-    ; Find position of DH2025.KIM
-    if (InStr(text, "DH2025.KIM")) {
-        pos := InStr(text, "DH2025.KIM") + StrLen("DH2025.KIM")
-        beforePart := SubStr(text, 1, pos)
-        text := beforePart . " SAP ID Replace"
+    ; 3. Find the date position to handle everything after it
+    ; Match various date patterns
+    datePos := 0
+    if (RegExMatch(text, "\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}", Match, 1)) {
+        datePos := RegExMatch(text, "\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}", Match, 1)
+        dateEndPos := datePos + StrLen(Match)
+        
+        ; Get the part before and including the date
+        beforeDate := SubStr(text, 1, dateEndPos)
+        
+        ; Replace everything after the date with {DH2025.KIM} {SAP ID Replace}
+        text := beforeDate . " {DH2025.KIM} {SAP ID Replace}"
     }
     else {
-        ; If no Korean name was found/replaced, add at the end
-        text := text . " SAP ID Replace"
+        ; If no date found, just append at the end
+        text := text . " {DH2025.KIM} {SAP ID Replace}"
     }
     
     return text
