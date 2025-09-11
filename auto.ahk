@@ -366,23 +366,67 @@ ProcessChangeHistory(text) {
     return text
 }
 
+; Function to increment date by one day
+IncrementDate(dateStr) {
+    ; Parse the date string (supports yyyy.MM.dd, yyyy-MM-dd, yyyy/MM/dd)
+    if (RegExMatch(dateStr, "(\d{4})([\.\-/])(\d{1,2})([\.\-/])(\d{1,2})", Match)) {
+        year := Match1
+        separator := Match2
+        month := Match3
+        day := Match5
+        
+        ; Remove leading zeros for calculation
+        month := month + 0
+        day := day + 0
+        
+        ; Days in each month (non-leap year)
+        daysInMonth := [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        
+        ; Check for leap year
+        if ((Mod(year, 4) = 0 && Mod(year, 100) != 0) || Mod(year, 400) = 0) {
+            daysInMonth[2] := 29
+        }
+        
+        ; Increment day
+        day := day + 1
+        
+        ; Check if we need to roll over to next month
+        if (day > daysInMonth[month]) {
+            day := 1
+            month := month + 1
+            
+            ; Check if we need to roll over to next year
+            if (month > 12) {
+                month := 1
+                year := year + 1
+            }
+        }
+        
+        ; Format the new date with leading zeros
+        monthStr := month < 10 ? "0" . month : month
+        dayStr := day < 10 ? "0" . day : day
+        
+        ; Return the incremented date with the same separator
+        return year . separator . monthStr . separator . dayStr
+    }
+    
+    ; If date format not recognized, return original
+    return dateStr
+}
+
 ; Function to process text for F9 hotkey
 ProcessF9Text(text) {
     ; 1. Process sequence (N, U1, U2, U3...) first
     text := ProcessSequence(text)
     
-    ; 2. Replace C followed by 11 digits (total 12 chars) with 12 spaces
-    text := RemoveCStrings(text)
+    ; 2. Replace C followed by digits with spaces (maintaining alignment)
+    text := RemoveCStringsForF9(text)
     
-    ; 3. Process date - replace with today's date
-    text := ProcessDate(text)
+    ; 3. Increment date by 1 day
+    text := IncrementDatesInText(text)
     
-    ; 4. Process Korean names (replace 김동현 with DH2025.KIM)
-    text := ProcessKoreanNames(text)
-    
-    ; 5. Find the date position to handle everything after it
+    ; 4. Find the date position and replace everything after it
     ; Match various date patterns
-    datePos := 0
     if (RegExMatch(text, "\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}", Match, 1)) {
         datePos := RegExMatch(text, "\d{4}[\.\-/]\d{1,2}[\.\-/]\d{1,2}", Match, 1)
         dateEndPos := datePos + StrLen(Match)
@@ -390,23 +434,71 @@ ProcessF9Text(text) {
         ; Get the part before and including the date
         beforeDate := SubStr(text, 1, dateEndPos)
         
-        ; Replace everything after the date with DH2025.KIM SAP ID Replace
-        text := beforeDate . " DH2025.KIM SAP ID Replace"
+        ; Replace everything after the date with DH2025.KIM  SAP ID Replace (two spaces)
+        text := beforeDate . " DH2025.KIM  SAP ID Replace"
     }
     else {
-        ; If no date found, look for DH2025.KIM and replace everything after it
-        if (InStr(text, "DH2025.KIM")) {
-            pos := InStr(text, "DH2025.KIM")
-            beforeKIM := SubStr(text, 1, pos - 1)
-            text := beforeKIM . "DH2025.KIM SAP ID Replace"
-        }
-        else {
-            ; If neither date nor DH2025.KIM found, just append at the end
-            text := text . " DH2025.KIM SAP ID Replace"
-        }
+        ; If no date found, just append at the end
+        text := text . " DH2025.KIM  SAP ID Replace"
     }
     
     return text
+}
+
+; Function to increment all dates in text
+IncrementDatesInText(text) {
+    result := text
+    
+    ; Process yyyy.MM.dd format
+    pos := 1
+    While (pos := RegExMatch(result, "O)(\d{4}\.\d{1,2}\.\d{1,2})", Match, pos)) {
+        oldDate := Match.Value
+        newDate := IncrementDate(oldDate)
+        StringReplace, result, result, %oldDate%, %newDate%
+        pos := Match.Pos + StrLen(newDate)
+    }
+    
+    ; Process yyyy-MM-dd format
+    pos := 1
+    While (pos := RegExMatch(result, "O)(\d{4}-\d{1,2}-\d{1,2})", Match, pos)) {
+        oldDate := Match.Value
+        newDate := IncrementDate(oldDate)
+        StringReplace, result, result, %oldDate%, %newDate%
+        pos := Match.Pos + StrLen(newDate)
+    }
+    
+    ; Process yyyy/MM/dd format
+    pos := 1
+    While (pos := RegExMatch(result, "O)(\d{4}/\d{1,2}/\d{1,2})", Match, pos)) {
+        oldDate := Match.Value
+        newDate := IncrementDate(oldDate)
+        StringReplace, result, result, %oldDate%, %newDate%
+        pos := Match.Pos + StrLen(newDate)
+    }
+    
+    return result
+}
+
+; Function to remove C-strings for F9 (maintains proper spacing)
+RemoveCStringsForF9(text) {
+    ; Remove strings that start with C followed by numbers
+    ; Replace with appropriate number of spaces to maintain alignment
+    
+    result := text
+    
+    ; Match C followed by digits and replace with equivalent spaces
+    pos := 1
+    While (pos := RegExMatch(result, "O)(C\d+)", Match, pos)) {
+        matchLen := StrLen(Match.Value)
+        spaces := ""
+        Loop, %matchLen% {
+            spaces := spaces . " "
+        }
+        StringReplace, result, result, % Match.Value, %spaces%
+        pos := Match.Pos + matchLen
+    }
+    
+    return result
 }
 
 ; F6 hotkey - Input selected text to last empty row in Excel column B

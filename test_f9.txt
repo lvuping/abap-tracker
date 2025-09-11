@@ -1,10 +1,52 @@
-Test input:
-* U3 C12345678901  GSDK!@#$%^ 2025.09.10 {some text1} {some text2}
+Test Cases for F9 Hotkey Functionality
+=======================================
 
-Expected output:
-* U3               GSDK!@#$%^ 2025.09.11 {DH2025.KIM} {SAP ID Replace}
+Test Case 1: Basic example from requirements
+AS-IS: * U3 C12345678901  GSDK!@#$%^ 2025.09.10 {some text1} {some text2}
+TO-BE: * U4               GSDK!@#$%^ 2025.09.11 DH2025.KIM  SAP ID Replace
 
-Test ProcessF9Text function:
-1. Date should change from 2025.09.10 to today's date
-2. C12345678901 should become 12 spaces
-3. Everything after date should be replaced with {DH2025.KIM} {SAP ID Replace}
+Test Case 2: N to U1 conversion
+AS-IS: * N C98765432101 TEST123 2025.12.31 김동현 변경내역
+TO-BE: * U1              TEST123 2026.01.01 DH2025.KIM  SAP ID Replace
+
+Test Case 3: U1 to U2 increment
+AS-IS: * U1 C55555555555 ABC!@# 2025.02.28 홍길동 some random text
+TO-BE: * U2              ABC!@# 2025.03.01 DH2025.KIM  SAP ID Replace
+
+Test Case 4: Multiple U patterns (U1, U2, U3)
+AS-IS: U1 data U2 more U3 C11111111111 XYZ 2025.01.15 이순신 description
+TO-BE: U2 data U3 more U4              XYZ 2025.01.16 DH2025.KIM  SAP ID Replace
+
+Test Case 5: Date with different separators (-)
+AS-IS: * U5 C22222222222 DEF456 2025-06-30 박지성 some notes
+TO-BE: * U6              DEF456 2025-07-01 DH2025.KIM  SAP ID Replace
+
+Test Case 6: Date with different separators (/)
+AS-IS: * U7 C33333333333 GHI789 2025/11/30 김연아 additional info
+TO-BE: * U8              GHI789 2025/12/01 DH2025.KIM  SAP ID Replace
+
+Test Case 7: Leap year date handling
+AS-IS: * U9 C44444444444 JKL012 2024.02.28 최민호 test data
+TO-BE: * U10              JKL012 2024.02.29 DH2025.KIM  SAP ID Replace
+
+Test Case 8: Year rollover
+AS-IS: * U11 C66666666666 MNO345 2024.12.31 정수민 year end data
+TO-BE: * U12              MNO345 2025.01.01 DH2025.KIM  SAP ID Replace
+
+Test Case 9: No C-string present
+AS-IS: * U13 PQR678 2025.07.15 강민수 some content
+TO-BE: * U14 PQR678 2025.07.16 DH2025.KIM  SAP ID Replace
+
+Test Case 10: Complex special characters
+AS-IS: * U15 C77777777777 !@#$%^&*() 2025.08.20 윤서준 complex chars
+TO-BE: * U16              !@#$%^&*() 2025.08.21 DH2025.KIM  SAP ID Replace
+
+INSTRUCTIONS FOR TESTING:
+1. Select each AS-IS line with your mouse
+2. Press F9
+3. The text should be replaced with the TO-BE version
+4. Verify that:
+   - U numbers increment correctly (N→U1, U1→U2, etc.)
+   - C-strings are replaced with spaces
+   - Dates are incremented by 1 day
+   - Everything after date becomes "DH2025.KIM  SAP ID Replace"
