@@ -381,21 +381,6 @@ return text
 }
 
 ; Optimized function to insert text into Excel column
-InsertToExcelColumnByLetter(columnLetter, textToInsert) {
-    ; Normalize and validate column letter
-    columnLetter := Trim(columnLetter)
-    if (StrLen(columnLetter) != 1) {
-        MsgBox, Please enter a single column letter like A, B, C, or D.
-        return
-    }
-    StringUpper, upper, %columnLetter%
-    colNum := Asc(upper) - Asc("A") + 1
-    if (colNum < 1 || colNum > 26) {
-        MsgBox, Invalid column letter: %columnLetter%
-        return
-    }
-    InsertToExcelColumn(colNum, upper, textToInsert)
-}
 InsertToExcelColumnByLetter(columnLetter, textToInsert, titleKeyword:="") {
     ; Normalize and validate column letter
     columnLetter := Trim(columnLetter)
@@ -410,40 +395,6 @@ InsertToExcelColumnByLetter(columnLetter, textToInsert, titleKeyword:="") {
         return
     }
     InsertToExcelColumn(colNum, upper, textToInsert, titleKeyword)
-}
-InsertToExcelColumn(columnNum, columnLetter, textToInsert) {
-    ; Get Excel COM object
-    try {
-        xl := ComObjActive("Excel.Application")
-    } catch {
-        MsgBox, Excel is not running. Please open Excel first.
-        return
-    }
-
-    try {
-        ; Get active worksheet
-        ws := xl.ActiveSheet
-
-        ; Find last used row in the specified column
-        lastRow := ws.Cells(ws.Rows.Count, columnNum).End(-4162).Row ; -4162 = xlUp
-
-        ; If column is completely empty, use 1, otherwise lastRow + 1
-        cellAddress := columnLetter . "1"
-        if (ws.Range(cellAddress).Value = "") {
-            targetRow := 1
-        } else {
-            targetRow := lastRow + 1
-        }
-
-        ; Input value to target cell
-        ws.Cells(targetRow, columnNum).Value := textToInsert
-
-        ; Success message
-        TrayTip, Excel Input Complete, Entered in cell %columnLetter%%targetRow%, 2
-
-    } catch e {
-        MsgBox, Error occurred during Excel operation.`n%e%
-    }
 }
 InsertToExcelColumn(columnNum, columnLetter, textToInsert, titleKeyword:="") {
     ; Get Excel COM object
