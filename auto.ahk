@@ -366,6 +366,32 @@ ProcessChangeHistory(text) {
     return text
 }
 
+; Function to process text for F9 hotkey
+ProcessF9Text(text) {
+    ; 1. Process date - replace with today's date
+    text := ProcessDate(text)
+    
+    ; 2. Replace C followed by 12 characters with 12 spaces
+    text := RemoveCStrings(text)
+    
+    ; 3. Replace Korean names with "DH2025.KIM"
+    text := ProcessKoreanNames(text)
+    
+    ; 4. Remove all text after the name and add "SAP ID Replace"
+    ; Find position of DH2025.KIM
+    if (InStr(text, "DH2025.KIM")) {
+        pos := InStr(text, "DH2025.KIM") + StrLen("DH2025.KIM")
+        beforePart := SubStr(text, 1, pos)
+        text := beforePart . " SAP ID Replace"
+    }
+    else {
+        ; If no Korean name was found/replaced, add at the end
+        text := text . " SAP ID Replace"
+    }
+    
+    return text
+}
+
 ; F6 hotkey - Input selected text to last empty row in Excel column B
 F6::
     ; Get currently selected text
@@ -413,9 +439,9 @@ F6::
     }
 return
 
-; F9 hotkey - Optimized version to input selected text to specific column
+; F9 hotkey - Process text and replace with formatted version
 F9::
-    ; Get currently selected text first
+    ; Get currently selected text
     Clipboard := ""
     Send, ^c
     ClipWait, 1
@@ -425,27 +451,14 @@ F9::
         return
     }
     
-    SelectedText := Clipboard
+    OriginalText := Clipboard
     
-    ; Show input dialog to choose column
-    InputBox, ColumnChoice, Column Selection, Enter column letter (A or B):, , 300, 150
+    ; Process the text with special F9 requirements
+    ProcessedText := ProcessF9Text(OriginalText)
     
-    if (ErrorLevel = 1) {
-        return  ; User canceled
-    }
-    
-    ; Convert column letter to number
-    if (ColumnChoice = "A" or ColumnChoice = "a") {
-        columnNumber := 1
-    } else if (ColumnChoice = "B" or ColumnChoice = "b") {
-        columnNumber := 2
-    } else {
-        MsgBox, Invalid column. Please use A or B.
-        return
-    }
-    
-    ; Call the optimized function
-    InsertToExcelColumn(columnNumber, ColumnChoice, SelectedText)
+    ; Replace the selected text with the processed text
+    Clipboard := ProcessedText
+    Send, ^v
 return
 
 ; Optimized function to insert text into Excel column
