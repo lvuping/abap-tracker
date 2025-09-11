@@ -40,6 +40,10 @@ Markdown
 ### 2-1. 메인 프로그램 조회/이동용 유틸리티 프로그램
 
 -   **역할**: 하위 오브젝트(Include 등)의 메인 프로그램을 찾아 즉시 에디터로 이동시켜 줍니다.
+-   **개선된 전략**: 
+    - D010INC 테이블 사용: D010SINF보다 Include 관계에 특화되어 더 정확한 결과 제공
+    - RS_EU_CROSSREF 함수 사용: 존재하지 않는 RS_GET_WHERE_USED_LIST 대신 실제 SAP 표준 함수 사용
+    - 2단계 검색: 먼저 빠른 DB 조회 시도, 실패 시 표준 FM으로 폴백
 
 1.  **T-CODE: `SE38`** 실행
 2.  `프로그램`에 `Z_FIND_MAIN` 입력 후 `생성` 클릭
@@ -54,37 +58,43 @@ REPORT z_find_main.
 
 PARAMETERS: p_objnm TYPE sobj_name OBLIGATORY. "입력 파라미터
 
-DATA: lv_main_prog  TYPE program,
-      lt_where_used TYPE TABLE OF rseu_wn,
-      lv_object_type TYPE trobjtype.
+DATA: lv_main_prog  TYPE program.
 
 START-OF-SELECTION.
   DATA(lv_objnm) = p_objnm.
   TRANSLATE lv_objnm TO UPPER CASE.
 
-  " 1. 가장 빠른 방법: Include의 경우 D010SINF 직접 조회
+  " 1. 가장 빠른 방법: Include의 경우 D010INC 직접 조회
   SELECT SINGLE master
     INTO lv_main_prog
-    FROM d010sinf
-   WHERE prog = lv_objnm.
+    FROM d010inc
+   WHERE include = lv_objnm.
 
-  " 2. D010SINF에 없거나 다른 타입일 경우, 표준 FM 사용 (더 안정적)
+  " 2. D010INC에 없거나 다른 타입일 경우, 표준 FM 사용 (더 안정적)
   IF sy-subrc <> 0.
-    SELECT SINGLE objtype INTO lv_object_type FROM tadir WHERE obj_name = lv_objnm.
-    IF sy-subrc = 0.
-      CALL FUNCTION 'RS_GET_WHERE_USED_LIST'
-        EXPORTING
-          object_name     = lv_objnm
-          object_type     = lv_object_type
-        TABLES
-          where_used_list = lt_where_used
-        EXCEPTIONS OTHERS = 1.
-
-      READ TABLE lt_where_used INTO DATA(ls_where_used) WITH KEY object_type = 'REPT'. "REPT = Main Program
-      IF sy-subrc = 0.
-        lv_main_prog = ls_where_used-object_name.
-      ENDIF.
-    ENDIF.
+    " RS_EU_CROSSREF를 사용하여 where-used 리스트 획득
+    DATA: lt_findstrings TYPE TABLE OF rsfind,
+          ls_findstring  TYPE rsfind,
+          lt_founds      TYPE TABLE OF rsfindlst.
+    
+    ls_findstring-object = lv_objnm.
+    APPEND ls_findstring TO lt_findstrings.
+    
+    CALL FUNCTION 'RS_EU_CROSSREF'
+      EXPORTING
+        i_find_obj_cls = 'INCL'  " Include 타입으로 검색
+        no_dialog      = 'X'
+      TABLES
+        i_findstrings  = lt_findstrings
+        o_founds       = lt_founds
+      EXCEPTIONS
+        OTHERS         = 1.
+    
+    " 첫 번째 프로그램 타입 결과를 메인으로 간주
+    LOOP AT lt_founds INTO DATA(ls_found) WHERE encl_objtype = 'PROG'.
+      lv_main_prog = ls_found-encl_object.
+      EXIT.
+    ENDLOOP.
   ENDIF.
 
   " 3. 찾은 메인 프로그램으로 즉시 이동
