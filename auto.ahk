@@ -387,24 +387,9 @@ ProcessF9Text(text) {
 return text
 }
 
-; Optimized function to insert text into Excel column
+; Simplified function to insert text into Excel column
 InsertToExcelColumnByLetter(columnLetter, textToInsert, titleKeyword:="") {
-    ; Normalize and validate column letter
-    columnLetter := Trim(columnLetter)
-    if (StrLen(columnLetter) != 1) {
-        MsgBox, Please enter a single column letter like A, B, C, or D.
-        return
-    }
-    StringUpper, upper, %columnLetter%
-    colNum := Asc(upper) - Asc("A") + 1
-    if (colNum < 1 || colNum > 26) {
-        MsgBox, Invalid column letter: %columnLetter%
-        return
-    }
-    InsertToExcelColumn(colNum, upper, textToInsert, titleKeyword)
-}
-InsertToExcelColumn(columnNum, columnLetter, textToInsert, titleKeyword:="") {
-    ; Get Excel COM object
+    ; Get Excel COM object first
     try {
         xl := ComObjActive("Excel.Application")
     } catch {
@@ -424,54 +409,57 @@ InsertToExcelColumn(columnNum, columnLetter, textToInsert, titleKeyword:="") {
             }
         }
 
-        ; Get active worksheet (after targeting workbook if provided)
+        ; Get active worksheet
         ws := xl.ActiveSheet
-
-        ; Find the last row using a more efficient approach
-        targetRow := 1
         
-        ; Method 1: Try using Excel's End method (xlUp)
-        xlUp := -4162
-        try {
-            ; Get the last cell in the column
-            lastCell := ws.Cells(1048576, columnNum) ; Excel max row
-            ; Find the last non-empty cell going up
-            lastUsedCell := lastCell.End(xlUp)
-            lastRow := lastUsedCell.Row
-            
-            ; Check if the entire column is empty
-            if (lastRow = 1 && ws.Cells(1, columnNum).Value = "") {
-                targetRow := 1
-            } else {
-                targetRow := lastRow + 1
-            }
-        } catch {
-            ; Fallback Method: Scan from top to find first empty cell
-            Loop, 10000 {
-                currentRow := A_Index
-                try {
-                    cellValue := ws.Cells(currentRow, columnNum).Value
-                    if (cellValue = "" || cellValue = 0) {
-                        targetRow := currentRow
-                        break
-                    }
-                } catch {
-                    targetRow := currentRow
+        ; Simple column letter validation and usage
+        columnLetter := Trim(columnLetter)
+        StringUpper, columnLetter, columnLetter
+        
+        ; Validate it's a single letter A-Z
+        if (StrLen(columnLetter) != 1) {
+            MsgBox, Please enter a single column letter like A, B, C, or D.
+            return
+        }
+        
+        ; Check if it's a valid letter
+        if (!RegExMatch(columnLetter, "^[A-Z]$")) {
+            MsgBox, Invalid column letter. Please use A-Z.
+            return
+        }
+        
+        ; Find the first empty row in the column
+        targetRow := 1
+        maxCheck := 10000
+        
+        ; Simple approach: check each cell until we find an empty one
+        Loop, %maxCheck% {
+            cellRef := columnLetter . A_Index
+            try {
+                cellValue := ws.Range(cellRef).Value
+                if (cellValue = "" || cellValue = " " || !cellValue) {
+                    targetRow := A_Index
                     break
                 }
+            } catch {
+                ; If we get an error reading the cell, use this row
+                targetRow := A_Index
+                break
             }
         }
-
-        ; Input value to target cell
-        ws.Cells(targetRow, columnNum).Value := textToInsert
-
+        
+        ; Construct the cell reference (e.g., "A1", "B5", etc.)
+        targetCell := columnLetter . targetRow
+        
+        ; Input value to target cell using Range method
+        ws.Range(targetCell).Value := textToInsert
+        
         ; Success message
-        TrayTip, Excel Input Complete, Entered in cell %columnLetter%%targetRow%, 2
+        TrayTip, Excel Input Complete, Text entered in cell %targetCell%, 2
 
     } catch e {
         errorMsg := e.Message
-        errorCode := e.Number
-        MsgBox, Error occurred during Excel operation.`nError Code: %errorCode%`nDetails: %errorMsg%`n`nPlease ensure:`n1. Excel is open`n2. A worksheet is active`n3. The worksheet is not protected`n4. You have write permissions
+        MsgBox, Error during Excel operation: %errorMsg%`n`nPlease ensure:`n1. Excel is open with an active worksheet`n2. The worksheet is not protected`n3. Column %columnLetter% is accessible
     }
 }
 FindWorkbookByKeyword(xl, keyword) {
