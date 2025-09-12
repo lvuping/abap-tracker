@@ -20,20 +20,40 @@ SetTitleMatchMode, 2 ; Match partial window titles
     
     ; -------------------- 2. Create RFC Function Control --------------------
     Try {
-        ; Create COM object for RFC calls (Unicode system)
-        FunctionCtrl := ComObjCreate("SAP.Functions.Unicode")
-        FunctionCtrl.Connection := SAP_Session.Connection
+        ; Create COM object for RFC calls
+        ; Try without Unicode first as it's more compatible
+        FunctionCtrl := ComObjCreate("SAP.Functions")
+        
+        ; Get the connection from the session
+        conn := SAP_Session.Connection
+        FunctionCtrl.Connection := conn
         
         ; Add the Z_USER_INFO function module
         UserInfoFunc := FunctionCtrl.Add("Z_USER_INFO")
         
         ; Set the import parameter USER_ID to "TEST"
-        UserInfoFunc.Exports("USER_ID").Value := "TEST"
+        ; Try different syntaxes for compatibility
+        Try {
+            ; Method 1: Using exports with Item (most common)
+            UserInfoFunc.exports.Item("USER_ID").Value := "TEST"
+        } Catch {
+            Try {
+                ; Method 2: Using Exports with direct access
+                UserInfoFunc.Exports("USER_ID").Value := "TEST"
+            } Catch {
+                ; Method 3: Using exports with direct access (lowercase)
+                UserInfoFunc.exports("USER_ID").Value := "TEST"
+            }
+        }
         
         MsgBox, 64, RFC Setup, RFC Function Z_USER_INFO configured.`nCalling with USER_ID = TEST...
         
     } Catch e {
-        MsgBox, 16, Error, Failed to setup RFC function:`n%A_LastError%
+        errorMsg := "Failed to setup RFC function.`n"
+        If (A_LastError != "")
+            errorMsg .= "Error: " . A_LastError . "`n"
+        errorMsg .= "`nPlease ensure:`n1. SAP GUI Scripting is enabled`n2. Z_USER_INFO RFC exists in SAP`n3. USER_ID parameter is defined as Import"
+        MsgBox, 16, Error, %errorMsg%
         Return
     }
     
@@ -47,9 +67,10 @@ SetTitleMatchMode, 2 ; Match partial window titles
             ; Note: You may need to adjust these based on actual Z_USER_INFO export parameters
             Try {
                 ; Example of reading potential export parameters
+                ; Note: imports (lowercase) receives data FROM the function
                 ; Uncomment and adjust parameter names as needed:
-                ; userName := UserInfoFunc.Imports("USER_NAME").Value
-                ; userDept := UserInfoFunc.Imports("DEPARTMENT").Value
+                ; userName := UserInfoFunc.imports.Item("USER_NAME").Value
+                ; userDept := UserInfoFunc.imports.Item("DEPARTMENT").Value
                 ; MsgBox, 64, Results, User Info Retrieved:`nName: %userName%`nDepartment: %userDept%
                 
                 MsgBox, 64, Complete, RFC call completed successfully.`nCheck SAP system for any results.
@@ -96,10 +117,11 @@ CallRFC_Z_USER_INFO(userId) {
         }
         
         ; Setup and call RFC
-        FunctionCtrl := ComObjCreate("SAP.Functions.Unicode")
-        FunctionCtrl.Connection := SAP_Session.Connection
+        FunctionCtrl := ComObjCreate("SAP.Functions")
+        conn := SAP_Session.Connection
+        FunctionCtrl.Connection := conn
         UserInfoFunc := FunctionCtrl.Add("Z_USER_INFO")
-        UserInfoFunc.Exports("USER_ID").Value := userId
+        UserInfoFunc.exports.Item("USER_ID").Value := userId
         
         If (UserInfoFunc.Call() = True) {
             ; Collect any results here if needed
