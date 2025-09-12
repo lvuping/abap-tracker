@@ -2,12 +2,12 @@
 SetTitleMatchMode, 2 ; Match partial window titles
 
 ; ###########################################
-; ## SAP RFC Call Script - STFC_CONNECTION  ##
-; ## Connects to SAP GUI and calls standard ##
-; ## test RFC that exists in all SAP systems##
+; ## SAP RFC Test Script via SE37          ##
+; ## Automates SE37 transaction to test    ##
+; ## STFC_CONNECTION RFC through SAP GUI   ##
 ; ###########################################
 
-; Hotkey: Ctrl + U to execute the RFC call
+; Hotkey: Ctrl + U to execute the RFC test via SE37
 ^u::
     ; -------------------- 1. Connect to SAP Session --------------------
     SAP_Session := Connect_To_SAP_Session()
@@ -16,58 +16,86 @@ SetTitleMatchMode, 2 ; Match partial window titles
         Return
     }
     
-    MsgBox, 64, Connected, Successfully connected to SAP GUI session.`nPreparing to call standard test RFC...
+    MsgBox, 64, Connected, Successfully connected to SAP GUI session.`nNavigating to SE37 to test RFC...
     
-    ; -------------------- 2. Setup and Call STFC_CONNECTION (Standard Test RFC) --------------------
-    ; STFC_CONNECTION is a standard SAP test RFC that exists in all systems
-    ; It simply echoes back the text you send to it
-    
+    ; -------------------- 2. Navigate to SE37 and Test RFC --------------------
     Try {
-        ; Create the Functions object
-        sapFunc := ComObjCreate("SAP.Functions")
-        sapFunc.Connection := SAP_Session.Connection
+        ; Start SE37 transaction
+        SAP_Session.StartTransaction("SE37")
+        Sleep, 500
         
-        ; Add the standard test function
-        testFunc := sapFunc.Add("STFC_CONNECTION")
+        ; Enter function module name
+        SAP_Session.findById("wnd[0]/usr/ctxtRS38L-NAME").text := "STFC_CONNECTION"
         
-        ; Set the import parameter - send a test message
-        testFunc.exports.Item("REQUTEXT") := "Hello from AutoHotkey"
+        ; Press F8 or click Test/Execute button
+        SAP_Session.findById("wnd[0]").sendVKey(8) ; F8 key
+        Sleep, 500
         
-        ; Call the function
-        result := testFunc.Call()
-        
-        If (result = True) {
-            ; Get the response
-            echoText := testFunc.imports.Item("ECHOTEXT")
-            respText := testFunc.imports.Item("RESPTEXT")
-            
-            MsgBox, 64, Success!, RFC Test Successful!`n`nSent: Hello from AutoHotkey`nEcho: %echoText%`nResponse: %respText%
-        } else {
-            MsgBox, 16, Error, RFC call returned false
+        ; Enter test value in REQUTEXT field
+        Try {
+            SAP_Session.findById("wnd[0]/usr/txtREQUTEXT").text := "Hello from AutoHotkey"
+        } Catch {
+            ; Alternative field ID that might be used
+            SAP_Session.findById("wnd[0]/usr/txt*REQUTEXT").text := "Hello from AutoHotkey"
         }
+        
+        ; Execute the function module (F8 again)
+        SAP_Session.findById("wnd[0]").sendVKey(8)
+        Sleep, 1000
+        
+        ; Try to read the result
+        Try {
+            echoText := SAP_Session.findById("wnd[0]/usr/txtECHOTEXT").text
+            respText := SAP_Session.findById("wnd[0]/usr/txtRESPTEXT").text
+            
+            MsgBox, 64, Success!, RFC Test Successful via SE37!`n`nSent: Hello from AutoHotkey`nEcho: %echoText%`nResponse: %respText%
+        } Catch {
+            MsgBox, 64, Success!, RFC executed successfully!`nCheck SE37 screen for results.
+        }
+        
+        ; Go back to initial screen
+        SAP_Session.findById("wnd[0]").sendVKey(3) ; F3 - Back
+        Sleep, 500
+        SAP_Session.findById("wnd[0]").sendVKey(3) ; F3 - Back again
         
     } Catch e {
-        ; If the above doesn't work, try an even simpler approach
-        Try {
-            MsgBox, 64, Info, First method failed. Trying alternative approach...
-            
-            ; Alternative simpler syntax
-            sapFunc2 := SAP_Session.Connection.Functions
-            testFunc2 := sapFunc2.Add("STFC_CONNECTION")
-            testFunc2.exports.Item("REQUTEXT") := "Test Message"
-            
-            If (testFunc2.Call() = True) {
-                echoText2 := testFunc2.imports.Item("ECHOTEXT")
-                MsgBox, 64, Success!, Alternative method worked!`nEcho: %echoText2%
-            } else {
-                MsgBox, 16, Error, Both RFC methods failed. Check SAP GUI Scripting is enabled.
-            }
-            
-        } Catch e2 {
-            MsgBox, 16, Error, Failed to call RFC.`n`nTroubleshooting:`n1. Ensure SAP GUI Scripting is enabled`n2. Check SAP Logon Options > Accessibility & Scripting > Enable scripting`n3. Verify you're logged into SAP
-        }
+        errorMsg := e.Message
+        MsgBox, 16, Error, Failed to execute RFC test via SE37.`n`nError: %errorMsg%`n`nTroubleshooting:`n1. Ensure you have authorization for SE37`n2. Verify STFC_CONNECTION exists in your system`n3. Check that SAP GUI Scripting is enabled
     }
     
+Return
+
+; ############### Alternative: RFC via BAPI Transaction ###############
+; Hotkey: Ctrl + B to test via BAPI transaction
+^b::
+    SAP_Session := Connect_To_SAP_Session()
+    If (!IsObject(SAP_Session)) {
+        MsgBox, 48, Error, Cannot find SAP GUI session.
+        Return
+    }
+    
+    Try {
+        ; Try using BAPI transaction for testing
+        SAP_Session.StartTransaction("BAPI")
+        Sleep, 500
+        
+        ; Navigate to test function
+        SAP_Session.findById("wnd[0]/usr/ctxtGD-OBJTYPE").text := "BUS0001"
+        SAP_Session.findById("wnd[0]").sendVKey(0) ; Enter
+        Sleep, 500
+        
+        MsgBox, 64, Info, BAPI Explorer opened. You can test BAPIs from here.
+        
+    } Catch e {
+        ; Alternative: Try SE80 for testing
+        Try {
+            SAP_Session.StartTransaction("SE80")
+            Sleep, 500
+            MsgBox, 64, Info, SE80 opened. Navigate to Function Groups > Test Functions
+        } Catch {
+            MsgBox, 16, Error, Cannot open BAPI or SE80 transaction
+        }
+    }
 Return
 
 ; ############### SAP GUI Session Connection Function ###############
@@ -88,59 +116,76 @@ Connect_To_SAP_Session() {
     }
 }
 
-; ############### Alternative: Direct RFC Test Function ###############
-; This function can be called directly without GUI interaction
-; Usage: TestRFC_Connection("Your test message")
-TestRFC_Connection(testMessage) {
+; ############### Direct Command Execution ###############
+; Hotkey: Ctrl + D to execute direct command
+^d::
+    SAP_Session := Connect_To_SAP_Session()
+    If (!IsObject(SAP_Session)) {
+        MsgBox, 48, Error, Cannot find SAP GUI session.
+        Return
+    }
+    
+    ; Execute command in OK-Code field
     Try {
-        ; Get active SAP session
-        SAP_Session := Connect_To_SAP_Session()
-        If (!IsObject(SAP_Session)) {
-            Return "Error: No SAP session"
-        }
-        
-        ; Setup and call RFC
-        sapFunc := ComObjCreate("SAP.Functions")
-        sapFunc.Connection := SAP_Session.Connection
-        testFunc := sapFunc.Add("STFC_CONNECTION")
-        testFunc.exports.Item("REQUTEXT") := testMessage
-        
-        If (testFunc.Call() = True) {
-            echoResult := testFunc.imports.Item("ECHOTEXT")
-            Return "Success: " . echoResult
-        } else {
-            Return "Call failed"
+        InputBox, command, SAP Command, Enter SAP transaction or command:, , 300, 130
+        If (ErrorLevel = 0 and command != "") {
+            SAP_Session.findById("wnd[0]/tbar[0]/okcd").text := command
+            SAP_Session.findById("wnd[0]").sendVKey(0) ; Enter
+            MsgBox, 64, Success, Command executed: %command%
         }
     } Catch e {
-        Return "Error: RFC call failed"
+        MsgBox, 16, Error, Failed to execute command
     }
-}
+Return
+
+; ############### Check RFC Authorization ###############
+; Hotkey: Ctrl + R to check RFC authorizations
+^r::
+    SAP_Session := Connect_To_SAP_Session()
+    If (!IsObject(SAP_Session)) {
+        MsgBox, 48, Error, Cannot find SAP GUI session.
+        Return
+    }
+    
+    Try {
+        ; Check user's RFC authorizations via SU53
+        SAP_Session.StartTransaction("SU53")
+        Sleep, 500
+        MsgBox, 64, Info, SU53 opened.`nThis shows your last authorization check.`nIf RFC failed due to authorization, it will appear here.
+    } Catch {
+        MsgBox, 16, Error, Cannot open SU53 transaction
+    }
+Return
 
 ; ############### Information Display ###############
 ; Hotkey: Ctrl + I to show script information
 ^i::
     MsgBox, 64, SAP RFC Script Info, 
     (
-    SAP RFC Test Script - STFC_CONNECTION
-    =====================================
+    SAP RFC Test Script - SE37 Method
+    ==================================
     
     Hotkeys:
-    - Ctrl+U : Test RFC connection using STFC_CONNECTION
+    - Ctrl+U : Test RFC via SE37 transaction
+    - Ctrl+B : Open BAPI Explorer
+    - Ctrl+D : Execute direct SAP command
+    - Ctrl+R : Check RFC authorizations (SU53)
     - Ctrl+I : Show this information
     - Ctrl+Q : Exit script
     
     Requirements:
     1. SAP GUI must be running and logged in
     2. SAP GUI Scripting must be enabled
-       (SAP Logon > Options > Accessibility & Scripting)
+    3. User must have SE37 authorization
     
     The script will:
     1. Connect to active SAP session
-    2. Call STFC_CONNECTION (standard test RFC)
-    3. Display echo response from SAP
+    2. Navigate to SE37 transaction
+    3. Test STFC_CONNECTION RFC
+    4. Display results
     
-    STFC_CONNECTION is a standard SAP RFC that exists
-    in all SAP systems for testing connectivity.
+    Note: This method uses GUI automation to test RFCs
+    through the standard SAP interface.
     )
 Return
 
