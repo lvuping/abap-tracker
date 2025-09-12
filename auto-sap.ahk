@@ -31,15 +31,15 @@ SetTitleMatchMode, 2 ; Match partial window titles
         testFunc := sapFunc.Add("STFC_CONNECTION")
         
         ; Set the import parameter - send a test message
-        testFunc.exports("REQUTEXT").Value := "Hello from AutoHotkey"
+        testFunc.exports.Item("REQUTEXT").Value := "Hello from AutoHotkey"
         
         ; Call the function
         result := testFunc.Call()
         
         If (result = True) {
             ; Get the response
-            echoText := testFunc.imports("ECHOTEXT").Value
-            respText := testFunc.imports("RESPTEXT").Value
+            echoText := testFunc.imports.Item("ECHOTEXT").Value
+            respText := testFunc.imports.Item("RESPTEXT").Value
             
             MsgBox, 64, Success!, RFC Test Successful!`n`nSent: Hello from AutoHotkey`nEcho: %echoText%`nResponse: %respText%
         } else {
