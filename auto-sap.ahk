@@ -33,7 +33,7 @@ SetTitleMatchMode, 2 ; Match partial window titles
         MsgBox, 64, RFC Setup, RFC Function Z_USER_INFO configured.`nCalling with USER_ID = TEST...
         
     } Catch e {
-        MsgBox, 16, Error, Failed to setup RFC function:`n%e.Message%
+        MsgBox, 16, Error, Failed to setup RFC function:`n%A_LastError%
         Return
     }
     
@@ -60,7 +60,7 @@ SetTitleMatchMode, 2 ; Match partial window titles
             Throw, UserInfoFunc.Exception
         }
     } Catch e {
-        MsgBox, 16, Error, RFC call failed:`n%e.Message%`n`nPlease verify that Z_USER_INFO exists in the SAP system.
+        MsgBox, 16, Error, RFC call failed:`n%A_LastError%`n`nPlease verify that Z_USER_INFO exists in the SAP system.
         Return
     }
     
@@ -108,7 +108,7 @@ CallRFC_Z_USER_INFO(userId) {
             Return "Call failed"
         }
     } Catch e {
-        Return "Error: " . e.Message
+        Return "Error: " . A_LastError
     }
 }
 
