@@ -2,9 +2,9 @@
 SetTitleMatchMode, 2 ; Match partial window titles
 
 ; ###########################################
-; ## SAP RFC Call Script - Z_USER_INFO      ##
-; ## Connects to SAP GUI and calls RFC      ##
-; ## with USER_ID = TEST parameter          ##
+; ## SAP RFC Call Script - STFC_CONNECTION  ##
+; ## Connects to SAP GUI and calls standard ##
+; ## test RFC that exists in all SAP systems##
 ; ###########################################
 
 ; Hotkey: Ctrl + U to execute the RFC call
@@ -16,73 +16,56 @@ SetTitleMatchMode, 2 ; Match partial window titles
         Return
     }
     
-    MsgBox, 64, Connected, Successfully connected to SAP GUI session.`nPreparing to call RFC Z_USER_INFO...
+    MsgBox, 64, Connected, Successfully connected to SAP GUI session.`nPreparing to call standard test RFC...
     
-    ; -------------------- 2. Create RFC Function Control --------------------
-    Try {
-        ; Create COM object for RFC calls
-        ; Try without Unicode first as it's more compatible
-        FunctionCtrl := ComObjCreate("SAP.Functions")
-        
-        ; Get the connection from the session
-        conn := SAP_Session.Connection
-        FunctionCtrl.Connection := conn
-        
-        ; Add the Z_USER_INFO function module
-        UserInfoFunc := FunctionCtrl.Add("Z_USER_INFO")
-        
-        ; Set the import parameter USER_ID to "TEST"
-        ; Try different syntaxes for compatibility
-        Try {
-            ; Method 1: Using exports with Item (most common)
-            UserInfoFunc.exports.Item("USER_ID").Value := "TEST"
-        } Catch {
-            Try {
-                ; Method 2: Using Exports with direct access
-                UserInfoFunc.Exports("USER_ID").Value := "TEST"
-            } Catch {
-                ; Method 3: Using exports with direct access (lowercase)
-                UserInfoFunc.exports("USER_ID").Value := "TEST"
-            }
-        }
-        
-        MsgBox, 64, RFC Setup, RFC Function Z_USER_INFO configured.`nCalling with USER_ID = TEST...
-        
-    } Catch e {
-        errorMsg := "Failed to setup RFC function.`n"
-        If (A_LastError != "")
-            errorMsg .= "Error: " . A_LastError . "`n"
-        errorMsg .= "`nPlease ensure:`n1. SAP GUI Scripting is enabled`n2. Z_USER_INFO RFC exists in SAP`n3. USER_ID parameter is defined as Import"
-        MsgBox, 16, Error, %errorMsg%
-        Return
-    }
+    ; -------------------- 2. Setup and Call STFC_CONNECTION (Standard Test RFC) --------------------
+    ; STFC_CONNECTION is a standard SAP test RFC that exists in all systems
+    ; It simply echoes back the text you send to it
     
-    ; -------------------- 3. Call the RFC Function --------------------
     Try {
+        ; Create the Functions object
+        sapFunc := ComObjCreate("SAP.Functions")
+        sapFunc.Connection := SAP_Session.Connection
+        
+        ; Add the standard test function
+        testFunc := sapFunc.Add("STFC_CONNECTION")
+        
+        ; Set the import parameter - send a test message
+        testFunc.exports("REQUTEXT").Value := "Hello from AutoHotkey"
+        
         ; Call the function
-        If (UserInfoFunc.Call() = True) {
-            MsgBox, 64, Success, RFC Z_USER_INFO called successfully!`n`nChecking for return values...
+        result := testFunc.Call()
+        
+        If (result = True) {
+            ; Get the response
+            echoText := testFunc.imports("ECHOTEXT").Value
+            respText := testFunc.imports("RESPTEXT").Value
             
-            ; Try to retrieve any export parameters if they exist
-            ; Note: You may need to adjust these based on actual Z_USER_INFO export parameters
-            Try {
-                ; Example of reading potential export parameters
-                ; Note: imports (lowercase) receives data FROM the function
-                ; Uncomment and adjust parameter names as needed:
-                ; userName := UserInfoFunc.imports.Item("USER_NAME").Value
-                ; userDept := UserInfoFunc.imports.Item("DEPARTMENT").Value
-                ; MsgBox, 64, Results, User Info Retrieved:`nName: %userName%`nDepartment: %userDept%
-                
-                MsgBox, 64, Complete, RFC call completed successfully.`nCheck SAP system for any results.
-            } Catch {
-                MsgBox, 64, Info, RFC executed but no export parameters to display.
-            }
+            MsgBox, 64, Success!, RFC Test Successful!`n`nSent: Hello from AutoHotkey`nEcho: %echoText%`nResponse: %respText%
         } else {
-            Throw, UserInfoFunc.Exception
+            MsgBox, 16, Error, RFC call returned false
         }
+        
     } Catch e {
-        MsgBox, 16, Error, RFC call failed:`n%A_LastError%`n`nPlease verify that Z_USER_INFO exists in the SAP system.
-        Return
+        ; If the above doesn't work, try an even simpler approach
+        Try {
+            MsgBox, 64, Info, First method failed. Trying alternative approach...
+            
+            ; Alternative simpler syntax
+            sapFunc2 := SAP_Session.Connection.Functions
+            testFunc2 := sapFunc2.Add("STFC_CONNECTION")
+            testFunc2.exports.Item("REQUTEXT").Value := "Test Message"
+            
+            If (testFunc2.Call() = True) {
+                echoText2 := testFunc2.imports.Item("ECHOTEXT").Value
+                MsgBox, 64, Success!, Alternative method worked!`nEcho: %echoText2%
+            } else {
+                MsgBox, 16, Error, Both RFC methods failed. Check SAP GUI Scripting is enabled.
+            }
+            
+        } Catch e2 {
+            MsgBox, 16, Error, Failed to call RFC.`n`nTroubleshooting:`n1. Ensure SAP GUI Scripting is enabled`n2. Check SAP Logon Options > Accessibility & Scripting > Enable scripting`n3. Verify you're logged into SAP
+        }
     }
     
 Return
@@ -105,10 +88,10 @@ Connect_To_SAP_Session() {
     }
 }
 
-; ############### Alternative: Direct RFC Call Without GUI ###############
+; ############### Alternative: Direct RFC Test Function ###############
 ; This function can be called directly without GUI interaction
-; Usage: CallRFC_Z_USER_INFO("TEST")
-CallRFC_Z_USER_INFO(userId) {
+; Usage: TestRFC_Connection("Your test message")
+TestRFC_Connection(testMessage) {
     Try {
         ; Get active SAP session
         SAP_Session := Connect_To_SAP_Session()
@@ -117,20 +100,19 @@ CallRFC_Z_USER_INFO(userId) {
         }
         
         ; Setup and call RFC
-        FunctionCtrl := ComObjCreate("SAP.Functions")
-        conn := SAP_Session.Connection
-        FunctionCtrl.Connection := conn
-        UserInfoFunc := FunctionCtrl.Add("Z_USER_INFO")
-        UserInfoFunc.exports.Item("USER_ID").Value := userId
+        sapFunc := ComObjCreate("SAP.Functions")
+        sapFunc.Connection := SAP_Session.Connection
+        testFunc := sapFunc.Add("STFC_CONNECTION")
+        testFunc.exports("REQUTEXT").Value := testMessage
         
-        If (UserInfoFunc.Call() = True) {
-            ; Collect any results here if needed
-            Return "Success"
+        If (testFunc.Call() = True) {
+            echoResult := testFunc.imports("ECHOTEXT").Value
+            Return "Success: " . echoResult
         } else {
             Return "Call failed"
         }
     } Catch e {
-        Return "Error: " . A_LastError
+        Return "Error: RFC call failed"
     }
 }
 
@@ -139,23 +121,26 @@ CallRFC_Z_USER_INFO(userId) {
 ^i::
     MsgBox, 64, SAP RFC Script Info, 
     (
-    SAP RFC Call Script - Z_USER_INFO
-    ================================
+    SAP RFC Test Script - STFC_CONNECTION
+    =====================================
     
     Hotkeys:
-    - Ctrl+U : Call Z_USER_INFO RFC with USER_ID=TEST
+    - Ctrl+U : Test RFC connection using STFC_CONNECTION
     - Ctrl+I : Show this information
     - Ctrl+Q : Exit script
     
     Requirements:
     1. SAP GUI must be running and logged in
     2. SAP GUI Scripting must be enabled
-    3. Z_USER_INFO RFC must exist in SAP system
+       (SAP Logon > Options > Accessibility & Scripting)
     
     The script will:
     1. Connect to active SAP session
-    2. Call Z_USER_INFO with USER_ID="TEST"
-    3. Display results if available
+    2. Call STFC_CONNECTION (standard test RFC)
+    3. Display echo response from SAP
+    
+    STFC_CONNECTION is a standard SAP RFC that exists
+    in all SAP systems for testing connectivity.
     )
 Return
 
