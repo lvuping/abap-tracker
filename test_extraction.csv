@@ -1,0 +1,78 @@
+File,Line,Variable,Context,Target,Statement,Confidence
+test/comprehensive_db_ops_test.abap,10,SY-UNAME,Assignment,,"lv_user TYPE sy-uname,",0.95
+test/comprehensive_db_ops_test.abap,19,SY-UNAME,Assignment,created_by,ls_record-created_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,20,SY-DATUM,Assignment,created_date,ls_record-created_date = sy-datum.,0.95
+test/comprehensive_db_ops_test.abap,24,SY-DATUM,Database Insert,,"INSERT INTO ztable VALUES ( '001', 'DATA', sy-uname, sy-datum ).",0.95
+test/comprehensive_db_ops_test.abap,24,SY-UNAME,Database Insert,,"INSERT INTO ztable VALUES ( '001', 'DATA', sy-uname, sy-datum ).",0.95
+test/comprehensive_db_ops_test.abap,27,SY-DATUM,Database Insert,,"INSERT ztable VALUES ( 'A001', sy-uname, 'CREATE', sy-datum ),",0.95
+test/comprehensive_db_ops_test.abap,27,SY-UNAME,Database Insert,,"INSERT ztable VALUES ( 'A001', sy-uname, 'CREATE', sy-datum ),",0.95
+test/comprehensive_db_ops_test.abap,28,SY-DATUM,Assignment,,"( 'A002', sy-uname, 'CREATE', sy-datum ),",0.95
+test/comprehensive_db_ops_test.abap,28,SY-UNAME,Assignment,,"( 'A002', sy-uname, 'CREATE', sy-datum ),",0.95
+test/comprehensive_db_ops_test.abap,29,SY-DATUM,Assignment,,"( 'A003', sy-uname, 'CREATE', sy-datum ).",0.95
+test/comprehensive_db_ops_test.abap,29,SY-UNAME,Assignment,,"( 'A003', sy-uname, 'CREATE', sy-datum ).",0.95
+test/comprehensive_db_ops_test.abap,34,SY-UNAME,Assignment,created_by,created_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,35,SY-DATUM,Assignment,created_on,created_on = sy-datum ) ).,0.95
+test/comprehensive_db_ops_test.abap,40,SY-UNAME,Assignment,username,username = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,47,SY-UNAME,Assignment,lt_records,lt_records = VALUE #( ( id = '001' created_by = sy-uname ),0.95
+test/comprehensive_db_ops_test.abap,48,SY-UNAME,Assignment,id,( id = '002' created_by = sy-uname ),0.95
+test/comprehensive_db_ops_test.abap,49,SY-UNAME,Assignment,id,( id = '003' created_by = sy-uname ) ).,0.95
+test/comprehensive_db_ops_test.abap,59,SY-UNAME,Assignment,created_by,<fs_record>-created_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,64,SY-UNAME,Assignment,created_by,created_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,65,SY-DATUM,Assignment,created_date,created_date = sy-datum ).,0.95
+test/comprehensive_db_ops_test.abap,70,SY-UNAME,Assignment,created_by,( created_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,71,SY-DATUM,Assignment,created_date,created_date = sy-datum,0.95
+test/comprehensive_db_ops_test.abap,79,SY-UNAME,Assignment,changed_by,UPDATE ztable SET changed_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,83,SY-UNAME,Assignment,changed_by,"UPDATE ztable SET changed_by = sy-uname,",0.95
+test/comprehensive_db_ops_test.abap,84,SY-DATUM,Assignment,changed_date,"changed_date = sy-datum,",0.95
+test/comprehensive_db_ops_test.abap,90,SY-UNAME,Assignment,changed_by,SET changed_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,91,SY-DATUM,Assignment,changed_date,changed_date = sy-datum,0.95
+test/comprehensive_db_ops_test.abap,97,SY-UNAME,Assignment,last_modified_by,"UPDATE zuser_table SET last_modified_by = sy-uname,",0.95
+test/comprehensive_db_ops_test.abap,98,SY-DATUM,Assignment,last_modified_date,last_modified_date = sy-datum,0.95
+test/comprehensive_db_ops_test.abap,100,SY-DATUM,Assignment,,AND created_date < sy-datum ),0.95
+test/comprehensive_db_ops_test.abap,104,SY-UNAME,Assignment,changed_by,ls_record-changed_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,105,SY-DATUM,Assignment,changed_date,ls_record-changed_date = sy-datum.,0.95
+test/comprehensive_db_ops_test.abap,109,SY-UNAME,Assignment,processor,UPDATE ztable SET processor = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,115,SY-UNAME,Assignment,changed_by,SET changed_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,122,SY-UNAME,Assignment,updated_by,"updated_by = sy-uname,",0.95
+test/comprehensive_db_ops_test.abap,133,SY-UNAME,Assignment,processor,processor = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,134,SY-DATUM,Assignment,created_date,WHERE created_date = sy-datum.,0.95
+test/comprehensive_db_ops_test.abap,137,SY-DATUM,Database Update,,"UPDATE ztable SET ( changed_by, changed_date ) = ( sy-uname, sy-datum )",0.95
+test/comprehensive_db_ops_test.abap,137,SY-UNAME,Database Update,,"UPDATE ztable SET ( changed_by, changed_date ) = ( sy-uname, sy-datum )",0.95
+test/comprehensive_db_ops_test.abap,146,SY-UNAME,Assignment,modified_by,ls_record-modified_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,147,SY-DATUM,Assignment,modified_date,ls_record-modified_date = sy-datum.,0.95
+test/comprehensive_db_ops_test.abap,152,SY-UNAME,Assignment,modified_by,ls_record-modified_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,153,SY-DATUM,Assignment,modified_date,ls_record-modified_date = sy-datum.,0.95
+test/comprehensive_db_ops_test.abap,160,SY-UNAME,Assignment,modified_by,ls_record-modified_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,167,SY-UNAME,Assignment,processor,ls_record-processor = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,174,SY-UNAME,Assignment,modified_by,ls_record-modified_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,183,SY-UNAME,Assignment,modified_by,modified_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,184,SY-DATUM,Assignment,modified_date,modified_date = sy-datum ).,0.95
+test/comprehensive_db_ops_test.abap,189,SY-UNAME,Assignment,modified_by,modified_by = sy-uname ).,0.95
+test/comprehensive_db_ops_test.abap,193,SY-UNAME,Assignment,last_changed_by,<fs_record>-last_changed_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,194,SY-DATUM,Assignment,last_changed_date,<fs_record>-last_changed_date = sy-datum.,0.95
+test/comprehensive_db_ops_test.abap,203,SY-UNAME,Assignment,lv_user,lv_user = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,218,SY-UNAME,Assignment,user,user = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,219,SY-DATUM,Assignment,date,date = sy-datum,0.95
+test/comprehensive_db_ops_test.abap,230,SY-UNAME,Assignment,created_by,ls_nested-header-created_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,234,SY-UNAME,Assignment,id,"INSERT: ztable FROM VALUE #( id = 'CH001' created_by = sy-uname ),",0.95
+test/comprehensive_db_ops_test.abap,235,SY-UNAME,Assignment,id,"ztable FROM VALUE #( id = 'CH002' created_by = sy-uname ),",0.95
+test/comprehensive_db_ops_test.abap,236,SY-UNAME,Assignment,id,ztable FROM VALUE #( id = 'CH003' created_by = sy-uname ).,0.95
+test/comprehensive_db_ops_test.abap,239,SY-UNAME,Assignment,changed_by,UPDATE ztable AS t1 SET t1~changed_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,247,SY-UNAME,Assignment,created_by,created_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,251,SY-UNAME,Assignment,created_by,created_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,256,SY-UNAME,Database Insert,,PERFORM insert_record USING sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,258,SY-UNAME,Database Insert,,FORM insert_record USING p_user TYPE sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,265,SY-UNAME,Assignment,changed_by,"SET changed_by = sy-uname      "" Current user",0.95
+test/comprehensive_db_ops_test.abap,266,SY-DATUM,Assignment,changed_date,"changed_date = sy-datum     "" Current date",0.95
+test/comprehensive_db_ops_test.abap,274,SY-UNAME,Assignment,lv_converted_user,lv_converted_user = |{ sy-uname ALPHA = IN }|.,0.95
+test/comprehensive_db_ops_test.abap,281,SY-UNAME,Assignment,modified_by,ls_record-modified_by = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,305,SY-UNAME,Assignment,user,ls_source-user = sy-uname.,0.95
+test/comprehensive_db_ops_test.abap,309,SY-UNAME,Assignment,changed_by,UPDATE ztable SET changed_by = @sy-uname,0.95
+test/comprehensive_db_ops_test.abap,317,SY-UNAME,Assignment,modified_by,modified_by = sy-uname ) ) ).,0.95
+test/comprehensive_db_ops_test.abap,322,SY-UNAME,Assignment,created_by,WHERE created_by = sy-uname ).,0.95
+test/comprehensive_db_ops_test.abap,325,SY-DATUM,Assignment,description,"UPDATE ztable SET description = |User { sy-uname } modified on { sy-datum }|,",0.95
+test/comprehensive_db_ops_test.abap,325,SY-UNAME,Assignment,description,"UPDATE ztable SET description = |User { sy-uname } modified on { sy-datum }|,",0.95
+test/comprehensive_db_ops_test.abap,326,SY-UNAME,Assignment,changed_by,changed_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,333,SY-UNAME,Assignment,modified_by,modified_by = sy-uname ).,0.95
+test/comprehensive_db_ops_test.abap,339,SY-UNAME,Assignment,created_by,created_by = sy-uname,0.95
+test/comprehensive_db_ops_test.abap,340,SY-DATUM,Assignment,created_date,created_date = sy-datum ) TO lt_batch.,0.95
