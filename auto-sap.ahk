@@ -31,15 +31,15 @@ SetTitleMatchMode, 2 ; Match partial window titles
         testFunc := sapFunc.Add("STFC_CONNECTION")
         
         ; Set the import parameter - send a test message
-        testFunc.exports.Item("REQUTEXT").Value := "Hello from AutoHotkey"
+        testFunc.exports.Item("REQUTEXT") := "Hello from AutoHotkey"
         
         ; Call the function
         result := testFunc.Call()
         
         If (result = True) {
             ; Get the response
-            echoText := testFunc.imports.Item("ECHOTEXT").Value
-            respText := testFunc.imports.Item("RESPTEXT").Value
+            echoText := testFunc.imports.Item("ECHOTEXT")
+            respText := testFunc.imports.Item("RESPTEXT")
             
             MsgBox, 64, Success!, RFC Test Successful!`n`nSent: Hello from AutoHotkey`nEcho: %echoText%`nResponse: %respText%
         } else {
@@ -54,10 +54,10 @@ SetTitleMatchMode, 2 ; Match partial window titles
             ; Alternative simpler syntax
             sapFunc2 := SAP_Session.Connection.Functions
             testFunc2 := sapFunc2.Add("STFC_CONNECTION")
-            testFunc2.exports.Item("REQUTEXT").Value := "Test Message"
+            testFunc2.exports.Item("REQUTEXT") := "Test Message"
             
             If (testFunc2.Call() = True) {
-                echoText2 := testFunc2.imports.Item("ECHOTEXT").Value
+                echoText2 := testFunc2.imports.Item("ECHOTEXT")
                 MsgBox, 64, Success!, Alternative method worked!`nEcho: %echoText2%
             } else {
                 MsgBox, 16, Error, Both RFC methods failed. Check SAP GUI Scripting is enabled.
@@ -103,10 +103,10 @@ TestRFC_Connection(testMessage) {
         sapFunc := ComObjCreate("SAP.Functions")
         sapFunc.Connection := SAP_Session.Connection
         testFunc := sapFunc.Add("STFC_CONNECTION")
-        testFunc.exports("REQUTEXT").Value := testMessage
+        testFunc.exports.Item("REQUTEXT") := testMessage
         
         If (testFunc.Call() = True) {
-            echoResult := testFunc.imports("ECHOTEXT").Value
+            echoResult := testFunc.imports.Item("ECHOTEXT")
             Return "Success: " . echoResult
         } else {
             Return "Call failed"
