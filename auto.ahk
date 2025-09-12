@@ -427,15 +427,39 @@ InsertToExcelColumn(columnNum, columnLetter, textToInsert, titleKeyword:="") {
         ; Get active worksheet (after targeting workbook if provided)
         ws := xl.ActiveSheet
 
-        ; Find last used row in the specified column
-        lastRow := ws.Cells(ws.Rows.Count, columnNum).End(-4162).Row ; -4162 = xlUp
-
-        ; If column is completely empty, use 1, otherwise lastRow + 1
-        cellAddress := columnLetter . "1"
-        if (ws.Range(cellAddress).Value = "") {
-            targetRow := 1
-        } else {
-            targetRow := lastRow + 1
+        ; Find the last row using a more efficient approach
+        targetRow := 1
+        
+        ; Method 1: Try using Excel's End method (xlUp)
+        xlUp := -4162
+        try {
+            ; Get the last cell in the column
+            lastCell := ws.Cells(1048576, columnNum) ; Excel max row
+            ; Find the last non-empty cell going up
+            lastUsedCell := lastCell.End(xlUp)
+            lastRow := lastUsedCell.Row
+            
+            ; Check if the entire column is empty
+            if (lastRow = 1 && ws.Cells(1, columnNum).Value = "") {
+                targetRow := 1
+            } else {
+                targetRow := lastRow + 1
+            }
+        } catch {
+            ; Fallback Method: Scan from top to find first empty cell
+            Loop, 10000 {
+                currentRow := A_Index
+                try {
+                    cellValue := ws.Cells(currentRow, columnNum).Value
+                    if (cellValue = "" || cellValue = 0) {
+                        targetRow := currentRow
+                        break
+                    }
+                } catch {
+                    targetRow := currentRow
+                    break
+                }
+            }
         }
 
         ; Input value to target cell
@@ -445,7 +469,9 @@ InsertToExcelColumn(columnNum, columnLetter, textToInsert, titleKeyword:="") {
         TrayTip, Excel Input Complete, Entered in cell %columnLetter%%targetRow%, 2
 
     } catch e {
-        MsgBox, Error occurred during Excel operation.`n%e%
+        errorMsg := e.Message
+        errorCode := e.Number
+        MsgBox, Error occurred during Excel operation.`nError Code: %errorCode%`nDetails: %errorMsg%`n`nPlease ensure:`n1. Excel is open`n2. A worksheet is active`n3. The worksheet is not protected`n4. You have write permissions
     }
 }
 FindWorkbookByKeyword(xl, keyword) {
