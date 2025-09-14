@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-ABAP Tracker - Enhanced SY-UNAME Analysis Tool
-Comprehensive CSV processing with keyword, table, field, and RFC extraction
+ABAP Tracker - Enhanced SY-UNAME Analysis Tool with Advanced Pattern Detection
+Comprehensive CSV processing with context-aware taint tracking and performance optimizations
 
 Usage:
-    python main.py analyze                    # Analyze default CSV
-    python main.py analyze input/test.csv     # Analyze specific CSV
-    python main.py test                        # Run test suite
-    python main.py report                      # Generate analysis report
-    python main.py --help                      # Show help
+    python main.py analyze                           # Analyze default CSV with standard mode
+    python main.py analyze --enhanced                # Use enhanced analyzer with optimizations
+    python main.py analyze input/test.csv            # Analyze specific CSV
+    python main.py analyze --enhanced --window 100   # Custom window size
+    python main.py test                              # Run test suite
+    python main.py report                            # Generate analysis report
+    python main.py benchmark                         # Run performance benchmark
+    python main.py --help                            # Show help
 """
 
 import os
@@ -16,466 +19,623 @@ import sys
 import json
 import csv
 import argparse
+import time
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import asdict
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 # Import project modules
-from csv_analyzer import EnhancedCSVAnalyzer, ComprehensiveAnalysis
-from encoding_utils import safe_file_read
-from unified_analyzer import UnifiedAnalyzer
+from core.csv_analyzer import EnhancedCSVAnalyzer, ComprehensiveAnalysis
+from utils.encoding_utils import safe_file_read
+from core.unified_analyzer import UnifiedAnalyzer
+
+# Import enhanced modules
+try:
+    from core.enhanced_analyzer import EnhancedABAPAnalyzer
+    from patterns.advanced_patterns import AdvancedPatternDetector
+    from utils.context_aware_taint import ContextAwareTaintTracker
+    ENHANCED_MODE_AVAILABLE = True
+except ImportError:
+    ENHANCED_MODE_AVAILABLE = False
+    print("⚠️  Enhanced mode modules not found. Using standard analyzer.")
 
 
 class ABAPTracker:
     """Enhanced ABAP SY-UNAME Tracker with comprehensive analysis"""
-    
-    def __init__(self, verbose: bool = False):
+
+    def __init__(self, verbose: bool = False, enhanced: bool = False,
+                 window_size: int = 50, enable_cache: bool = True):
         self.verbose = verbose
+        self.enhanced = enhanced and ENHANCED_MODE_AVAILABLE
         self.results = []
-        self.analyzer = EnhancedCSVAnalyzer()
-        
+
+        # Initialize analyzer based on mode
+        if self.enhanced:
+            self.analyzer = EnhancedABAPAnalyzer(
+                enable_caching=enable_cache,
+                enable_sliding_window=True,
+                window_size=window_size
+            )
+            print("🚀 Using Enhanced Analyzer with advanced pattern detection")
+        else:
+            self.analyzer = EnhancedCSVAnalyzer()
+            print("📝 Using Standard Analyzer")
+
         # Setup directories
         self.input_dir = Path("input")
         self.output_dir = Path("output")
         self.test_dir = Path("test")
         self.src_dir = Path("src")
-        
+
         # Ensure directories exist
         for dir_path in [self.output_dir]:
             dir_path.mkdir(exist_ok=True)
-        
+
     def analyze_csv(self, input_file: str = None) -> bool:
         """
-        Analyze CSV file with enhanced SY-UNAME tracking
-        Extracts keywords, tables, fields, RFC information
-        
+        Analyze CSV file with enhanced or standard SY-UNAME tracking
+
         CSV format:
             id,file_path,line_number
             1,example.abap,45
             2,another.abap,123
         """
-        
+
         # Default input file
         if not input_file:
             input_file = str(self.input_dir / "sy_uname_locations.csv")
-        
+
         input_path = Path(input_file)
         if not input_path.exists():
             self._print_error(f"Input file not found: {input_file}")
             self._print_csv_format_help()
             return False
-        
-        print(f"\n🔍 Starting Enhanced SY-UNAME Analysis")
+
+        print(f"\n🔍 Starting {'Enhanced' if self.enhanced else 'Standard'} SY-UNAME Analysis")
         print(f"📁 Input file: {input_file}")
         print("=" * 80)
-        
-        # CSV 파일 읽기
+
+        if self.enhanced:
+            # Use enhanced analyzer
+            return self._analyze_enhanced(input_path)
+        else:
+            # Use standard analyzer
+            return self._analyze_standard(input_path)
+
+    def _analyze_enhanced(self, input_path: Path) -> bool:
+        """Analyze with enhanced analyzer"""
+        try:
+            # Generate timestamp for output
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_json = self.output_dir / f"analysis_{timestamp}.json"
+            output_csv = self.output_dir / f"analysis_{timestamp}.csv"
+
+            # Run enhanced analysis
+            print("\n🔬 Running enhanced analysis with:")
+            print(f"  • Advanced pattern detection (EXEC SQL, CDS, BAPI, etc.)")
+            print(f"  • Context-aware taint tracking")
+            print(f"  • Performance optimizations")
+            print(f"  • Sliding window: {self.analyzer.sliding_window.window_size if self.analyzer.sliding_window else 'Disabled'}")
+
+            start_time = time.time()
+            results, metrics = self.analyzer.analyze_csv(str(input_path))
+            analysis_time = time.time() - start_time
+
+            # Process results
+            print(f"\n✅ Analysis completed in {analysis_time:.2f} seconds")
+            print(f"📊 Found {len(results)} matches")
+
+            # Group results by operation type
+            operations = {}
+            advanced_patterns = {}
+            tainted_count = 0
+
+            for result in results:
+                # Count operations
+                if result.operation:
+                    operations[result.operation] = operations.get(result.operation, 0) + 1
+
+                # Count advanced patterns
+                for pattern in result.advanced_patterns:
+                    pattern_type = pattern.get('operation_type', 'Unknown')
+                    advanced_patterns[pattern_type] = advanced_patterns.get(pattern_type, 0) + 1
+
+                # Count tainted variables
+                if result.tainted_variables:
+                    tainted_count += 1
+
+            # Print summary
+            print("\n📈 Analysis Summary:")
+            print("-" * 40)
+
+            if operations:
+                print("Database Operations:")
+                for op, count in sorted(operations.items()):
+                    print(f"  • {op}: {count}")
+
+            if advanced_patterns:
+                print("\nAdvanced Patterns Detected:")
+                for pattern, count in sorted(advanced_patterns.items()):
+                    print(f"  • {pattern}: {count}")
+
+            print(f"\nTaint Analysis:")
+            print(f"  • Operations with tainted variables: {tainted_count}")
+            print(f"  • Taint coverage: {(tainted_count/len(results)*100):.1f}%" if results else "  • No results")
+
+            # Performance metrics
+            print("\n⚡ Performance Metrics:")
+            for key, value in metrics.items():
+                if isinstance(value, float):
+                    if 'time' in key:
+                        print(f"  • {key}: {value:.4f}s")
+                    elif 'pct' in key or 'rate' in key:
+                        print(f"  • {key}: {value:.2f}%")
+                    else:
+                        print(f"  • {key}: {value:.4f}")
+                else:
+                    print(f"  • {key}: {value}")
+
+            # Save results
+            self._save_enhanced_results(results, output_json, output_csv)
+
+            print(f"\n💾 Results saved to:")
+            print(f"  • JSON: {output_json}")
+            print(f"  • CSV: {output_csv}")
+
+            return True
+
+        except Exception as e:
+            self._print_error(f"Enhanced analysis failed: {str(e)}")
+            if self.verbose:
+                import traceback
+                traceback.print_exc()
+            return False
+
+    def _analyze_standard(self, input_path: Path) -> bool:
+        """Analyze with standard analyzer (legacy mode)"""
         try:
             lines, encoding = safe_file_read(str(input_path))
             if self.verbose:
                 print(f"📝 File encoding: {encoding}")
-            
-            # CSV 파싱
+
+            # CSV parsing
             import io
             csv_content = io.StringIO(''.join(lines))
             reader = csv.DictReader(csv_content)
-            
+
             # Process rows
             rows = list(reader)
             total = len(rows)
-            
+
             if total == 0:
                 self._print_warning("No data to process")
                 return False
-            
+
             print(f"📊 Found {total} entries to analyze\n")
-            
+
             # Analyze each entry
             for idx, row in enumerate(rows, 1):
                 result = self._analyze_entry(row, idx, total)
                 if result:
                     self.results.append(result)
-                
-                # Progress indicator
-                if idx % 10 == 0:
-                    print(f"  Progress: {idx}/{total} analyzed...")
-            
+
+            # Save results
+            if self.results:
+                self._save_results()
+
+            # Print summary
+            self._print_summary()
+
+            return True
+
         except Exception as e:
-            self._print_error(f"Error processing CSV: {str(e)}")
+            self._print_error(f"Standard analysis failed: {str(e)}")
             return False
-        
-        # Save results
-        if self.results:
-            self.save_results()
-        
+
+    def _save_enhanced_results(self, results: List, output_json: Path, output_csv: Path):
+        """Save enhanced analysis results"""
+        # Save JSON
+        json_data = []
+        for result in results:
+            result_dict = asdict(result) if hasattr(result, '__dict__') else result
+            json_data.append(result_dict)
+
+        with open(output_json, 'w', encoding='utf-8') as f:
+            json.dump(json_data, f, indent=2, ensure_ascii=False)
+
+        # Save CSV
+        if json_data:
+            with open(output_csv, 'w', encoding='utf-8', newline='') as f:
+                fieldnames = [
+                    'file_path', 'line_number', 'status', 'operation',
+                    'table', 'confidence', 'tainted_variables',
+                    'advanced_patterns', 'context_scope'
+                ]
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+
+                for item in json_data:
+                    row = {
+                        'file_path': item.get('file_path', ''),
+                        'line_number': item.get('line_number', ''),
+                        'status': item.get('status', ''),
+                        'operation': item.get('operation', ''),
+                        'table': item.get('table', ''),
+                        'confidence': f"{item.get('confidence', 0):.2f}",
+                        'tainted_variables': ', '.join(item.get('tainted_variables', [])),
+                        'advanced_patterns': len(item.get('advanced_patterns', [])),
+                        'context_scope': item.get('context_info', {}).get('scope', '')
+                    }
+                    writer.writerow(row)
+
+    def benchmark(self) -> bool:
+        """Run performance benchmark comparing standard vs enhanced mode"""
+        if not ENHANCED_MODE_AVAILABLE:
+            print("❌ Enhanced mode not available for benchmarking")
+            return False
+
+        print("\n" + "="*80)
+        print("PERFORMANCE BENCHMARK")
+        print("="*80)
+
+        # Create test file if not exists
+        test_file = self.input_dir / "benchmark_test.csv"
+        if not test_file.exists():
+            # Create sample CSV
+            with open(test_file, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['id', 'file_path', 'line_number'])
+                # Add some sample entries
+                test_abap = self.input_dir / "test.abap"
+                if test_abap.exists():
+                    for i in range(1, 11):
+                        writer.writerow([i, str(test_abap), i * 10])
+
+        results = {}
+
+        # Test standard analyzer
+        print("\n📝 Testing Standard Analyzer...")
+        tracker_std = ABAPTracker(enhanced=False)
+        start = time.time()
+        success_std = tracker_std.analyze_csv(str(test_file))
+        time_std = time.time() - start
+        results['standard'] = {
+            'time': time_std,
+            'success': success_std
+        }
+
+        # Test enhanced analyzer
+        print("\n🚀 Testing Enhanced Analyzer...")
+        tracker_enh = ABAPTracker(enhanced=True)
+        start = time.time()
+        success_enh = tracker_enh.analyze_csv(str(test_file))
+        time_enh = time.time() - start
+        results['enhanced'] = {
+            'time': time_enh,
+            'success': success_enh
+        }
+
+        # Compare results
+        print("\n" + "="*80)
+        print("BENCHMARK RESULTS")
+        print("="*80)
+        print(f"Standard Analyzer: {time_std:.4f}s")
+        print(f"Enhanced Analyzer: {time_enh:.4f}s")
+
+        if time_std > 0:
+            speedup = ((time_std - time_enh) / time_std) * 100
+            if speedup > 0:
+                print(f"✅ Enhanced is {speedup:.1f}% faster")
+            else:
+                print(f"⚠️  Enhanced is {abs(speedup):.1f}% slower")
+
         return True
-    
-    def _analyze_entry(self, row: Dict, idx: int, total: int) -> Optional[ComprehensiveAnalysis]:
-        """Analyze single CSV entry with comprehensive extraction"""
+
+    def run_tests(self) -> bool:
+        """Run comprehensive test suite"""
+        print("\n" + "="*80)
+        print("RUNNING TEST SUITE")
+        print("="*80)
+
+        test_results = []
+
+        # Test 1: Basic functionality
+        print("\n🧪 Test 1: Basic Functionality")
         try:
-            # Extract ID, file path, and line number
-            id_value = row.get('id', str(idx))
+            test_csv = self.input_dir / "test.csv"
+            if test_csv.exists():
+                success = self.analyze_csv(str(test_csv))
+                test_results.append(("Basic Functionality", success))
+                print(f"  Result: {'✅ PASSED' if success else '❌ FAILED'}")
+            else:
+                print(f"  ⚠️  Test file not found: {test_csv}")
+                test_results.append(("Basic Functionality", False))
+        except Exception as e:
+            print(f"  ❌ Error: {e}")
+            test_results.append(("Basic Functionality", False))
+
+        # Test 2: Enhanced mode (if available)
+        if ENHANCED_MODE_AVAILABLE:
+            print("\n🧪 Test 2: Enhanced Mode")
+            try:
+                tracker = ABAPTracker(enhanced=True)
+                test_csv = self.input_dir / "test.csv"
+                if test_csv.exists():
+                    success = tracker.analyze_csv(str(test_csv))
+                    test_results.append(("Enhanced Mode", success))
+                    print(f"  Result: {'✅ PASSED' if success else '❌ FAILED'}")
+                else:
+                    test_results.append(("Enhanced Mode", False))
+            except Exception as e:
+                print(f"  ❌ Error: {e}")
+                test_results.append(("Enhanced Mode", False))
+
+        # Summary
+        print("\n" + "="*80)
+        print("TEST SUMMARY")
+        print("="*80)
+        passed = sum(1 for _, result in test_results if result)
+        total = len(test_results)
+        print(f"Passed: {passed}/{total}")
+
+        for test_name, result in test_results:
+            status = "✅ PASSED" if result else "❌ FAILED"
+            print(f"  {test_name}: {status}")
+
+        return passed == total
+
+    def _analyze_entry(self, row: Dict, idx: int, total: int) -> Optional[Dict]:
+        """Analyze single CSV entry (standard mode)"""
+        try:
             file_path = row.get('file_path', '').strip()
             line_number = int(row.get('line_number', 0))
-            
-            # Normalize path
-            if file_path and not file_path.endswith('.abap'):
-                file_path += '.abap'
-            
-            # Check if path is relative
-            if not os.path.isabs(file_path):
-                file_path = str(self.input_dir / file_path)
-            
-            print(f"📍 [{idx}/{total}] {os.path.basename(file_path)} (line {line_number})")
-            
-            # Check file existence
-            if not os.path.exists(file_path):
-                self._print_error(f"   File not found: {file_path}", indent=True)
+            entry_id = row.get('id', idx)
+
+            if not file_path:
+                self._print_warning(f"Entry {entry_id}: Missing file path")
                 return None
-            
-            # Read file content
-            lines, _ = safe_file_read(file_path)
-            
-            # Extract analysis context - asymmetric range (less above, more below)
-            # Above: UPDATE, CALL RFC, colon syntax etc. (30 lines sufficient)
-            # Below: Need to trace the actual usage in DB operations (150 lines)
-            start = max(0, line_number - 30)  # 30 lines before for context
-            end = min(len(lines), line_number + 150)  # 150 lines after to find first DB operation
-            snippet = lines[start:end]
-            
-            # Perform comprehensive analysis
-            analysis = self.analyzer.analyze_location(
-                id_value=id_value,
-                file_path=file_path,
-                line_number=line_number - start - 1,  # 0-based relative line number
-                code_snippet=snippet,
-                actual_line_number=line_number  # Pass the actual line number from CSV
+
+            # Check if file exists
+            abap_file = Path(file_path)
+            if not abap_file.is_absolute():
+                # Try relative to input directory
+                abap_file = self.input_dir / file_path
+
+            if not abap_file.exists():
+                self._print_warning(f"Entry {entry_id}: File not found: {file_path}")
+                return None
+
+            # Read ABAP file
+            lines, encoding = safe_file_read(str(abap_file))
+
+            if line_number > len(lines):
+                self._print_warning(f"Entry {entry_id}: Line {line_number} exceeds file length")
+                return None
+
+            # Create analysis
+            analysis = ComprehensiveAnalysis(
+                id=entry_id,
+                source_file=str(abap_file),
+                line_number=line_number,
+                abap_lines=lines
             )
-            
-            # Print summary
-            self._print_analysis_summary(analysis)
-            
-            return analysis
-            
+
+            # Run analysis
+            result = self.analyzer.analyze_comprehensive(analysis)
+
+            # Progress indicator
+            if self.verbose or idx % 10 == 0:
+                progress = (idx / total) * 100
+                print(f"  [{idx}/{total}] {progress:.1f}% - {file_path}:{line_number}")
+
+            return result
+
         except Exception as e:
-            self._print_error(f"   Analysis error: {str(e)}", indent=True)
+            self._print_error(f"Entry {idx}: {str(e)}")
             return None
-    
-    def save_results(self):
-        """Save analysis results to CSV and JSON"""
+
+    def _save_results(self):
+        """Save analysis results (standard mode)"""
         if not self.results:
-            print("No results to save")
             return
-        
+
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        
-        # Save as CSV
-        csv_file = self.output_dir / f"analysis_{timestamp}.csv"
-        self._save_csv(str(csv_file))
-        
-        # Save as JSON
+
+        # Save JSON
         json_file = self.output_dir / f"analysis_{timestamp}.json"
-        self._save_json(str(json_file))
-        
-        print("\n" + "=" * 80)
-        print("✅ Analysis complete!")
-        print(f"📁 Results saved:")
-        print(f"   CSV: {csv_file}")
-        print(f"   JSON: {json_file}")
-        
-        # Print summary
-        self._print_summary()
-    
-    def _save_json(self, filename: str):
-        """Save results as JSON"""
-        output = {
-            'timestamp': datetime.now().isoformat(),
-            'total_analyzed': len(self.results),
-            'results': [asdict(r) if hasattr(r, '__dict__') else r for r in self.results]
-        }
-        
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(output, f, ensure_ascii=False, indent=2)
-    
-    def _save_csv(self, filename: str):
-        """Save results as comprehensive CSV"""
-        if not self.results:
-            return
-        
-        # Get fieldnames from first result
-        first_result = self.results[0]
-        if isinstance(first_result, ComprehensiveAnalysis):
-            fieldnames = list(first_result.to_csv_row().keys())
-        else:
-            fieldnames = ['ID', 'Source_File', 'Line_Number', 'Status', 'Description']
-        
-        with open(filename, 'w', newline='', encoding='utf-8-sig') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            
-            for result in self.results:
-                if isinstance(result, ComprehensiveAnalysis):
-                    row = result.to_csv_row()
-                else:
-                    row = {k: result.get(k, '') for k in fieldnames}
-                writer.writerow(row)
-    
-    def _print_analysis_summary(self, analysis: ComprehensiveAnalysis):
-        """Print analysis summary"""
-        if analysis.status == 'Success' or analysis.status == 'Complete':
-            print(f"   ✅ {analysis.status}")
-            
-            if analysis.tables:
-                print(f"      Tables: {', '.join(analysis.tables[:3])}")
-            
-            if analysis.rfc_functions:
-                print(f"      RFC: {', '.join(analysis.rfc_functions[:2])}")
-            
-            if analysis.keywords:
-                print(f"      Keywords: {', '.join(analysis.keywords[:5])}")
-            
-            print(f"      Confidence: {analysis.confidence:.2f}")
-        elif analysis.status == 'Error':
-            print(f"   ❌ {analysis.status}")
-        elif analysis.status == 'Partial':
-            print(f"   ⚠️  {analysis.status}")
-        else:
-            print(f"   ❓ {analysis.status}")
-    
+        with open(json_file, 'w', encoding='utf-8') as f:
+            json.dump(self.results, f, indent=2, ensure_ascii=False)
+
+        # Save CSV
+        csv_file = self.output_dir / f"analysis_{timestamp}.csv"
+        self.analyzer.export_to_csv(self.results, str(csv_file))
+
+        print(f"\n💾 Results saved:")
+        print(f"  • JSON: {json_file}")
+        print(f"  • CSV: {csv_file}")
+
     def _print_summary(self):
-        """Print analysis summary"""
+        """Print analysis summary (standard mode)"""
         if not self.results:
+            print("\n⚠️  No results to summarize")
             return
-        
+
+        print("\n" + "="*80)
+        print("ANALYSIS SUMMARY")
+        print("="*80)
+
         total = len(self.results)
-        successful = sum(1 for r in self.results if r.status == 'Success')
-        with_tables = sum(1 for r in self.results if r.tables)
-        with_rfc = sum(1 for r in self.results if r.rfc_functions)
-        high_confidence = sum(1 for r in self.results if r.confidence > 0.7)
-        
-        print("\n📊 Analysis Summary:")
-        print(f"  Total analyzed: {total}")
-        print(f"  Successful: {successful} ({successful/total*100:.1f}%)")
-        print(f"  With DB operations: {with_tables}")
-        print(f"  With RFC calls: {with_rfc}")
-        print(f"  High confidence (>0.7): {high_confidence}")
-    
+        with_syuname = sum(1 for r in self.results if r.get('has_syuname'))
+
+        print(f"Total entries analyzed: {total}")
+        print(f"Entries with SY-UNAME: {with_syuname} ({with_syuname/total*100:.1f}%)")
+
+        # Operation statistics
+        operations = {}
+        for result in self.results:
+            for op in result.get('db_operations', []):
+                operations[op] = operations.get(op, 0) + 1
+
+        if operations:
+            print("\nDatabase Operations Found:")
+            for op, count in sorted(operations.items(), key=lambda x: x[1], reverse=True):
+                print(f"  • {op}: {count}")
+
+    def _print_error(self, message: str):
+        """Print error message"""
+        print(f"❌ ERROR: {message}")
+
+    def _print_warning(self, message: str):
+        """Print warning message"""
+        print(f"⚠️  WARNING: {message}")
+
     def _print_csv_format_help(self):
         """Print CSV format help"""
         print("\n📋 Expected CSV format:")
-        print("   id,file_path,line_number")
-        print("   1,example_file.abap,45")
-        print("   2,another_file.abap,123")
-        print("\nNote: id column is optional")
-    
-    def _print_error(self, msg: str, indent: bool = False):
-        """Print error message"""
-        prefix = "   " if indent else ""
-        print(f"{prefix}❌ {msg}")
-    
-    def _print_warning(self, msg: str, indent: bool = False):
-        """Print warning message"""
-        prefix = "   " if indent else ""
-        print(f"{prefix}⚠️  {msg}")
-    
-    def run_tests(self) -> bool:
-        """Run test suite"""
-        print("🧪 Running Test Suite")
-        print("=" * 80)
-        
-        test_files = list(self.test_dir.glob("*.abap"))
-        if not test_files:
-            print("No test files found")
-            return False
-        
-        passed = 0
-        failed = 0
-        
-        for test_file in test_files[:10]:  # Limit to 10 for demo
-            print(f"\nTesting: {test_file.name}")
-            
-            try:
-                lines, _ = safe_file_read(str(test_file))
-                
-                # Find SY-UNAME
-                sy_uname_lines = []
-                for i, line in enumerate(lines):
-                    if 'SY-UNAME' in line.upper():
-                        sy_uname_lines.append(i + 1)
-                
-                if sy_uname_lines:
-                    # Analyze first occurrence
-                    analysis = self.analyzer.analyze_location(
-                        id_value="TEST",
-                        file_path=str(test_file),
-                        line_number=sy_uname_lines[0] - 1,  # Convert to 0-based
-                        code_snippet=lines,
-                        actual_line_number=sy_uname_lines[0]  # Pass actual line number
-                    )
-                    
-                    if analysis.status in ['Success', 'Partial']:
-                        print(f"  ✅ Pass - {len(analysis.tainted_variables)} variables tracked")
-                        passed += 1
-                    else:
-                        print(f"  ❌ Fail - {analysis.status}")
-                        failed += 1
-                else:
-                    print(f"  ⚠️  Skip - No SY-UNAME found")
-                    
-            except Exception as e:
-                print(f"  ❌ Error: {e}")
-                failed += 1
-        
-        print(f"\n{'='*80}")
-        print(f"Test Results: {passed} passed, {failed} failed")
-        
-        return failed == 0
-    
-    def generate_report(self) -> bool:
-        """Generate analysis report"""
-        print("📈 Generating Report")
-        print("=" * 80)
-        
-        # Find latest results
-        csv_files = list(self.output_dir.glob("analysis_*.csv"))
-        if not csv_files:
-            print("No analysis results found. Run 'analyze' first.")
-            return False
-        
-        latest = max(csv_files, key=lambda p: p.stat().st_mtime)
-        
-        print(f"Using: {latest}")
-        
-        # Read and process results
-        with open(latest, 'r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f)
-            rows = list(reader)
-        
-        # Generate report content
-        report = self._generate_report_content(rows)
-        
-        # Save report
-        report_file = self.output_dir / f"report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-        with open(report_file, 'w', encoding='utf-8') as f:
-            f.write(report)
-        
-        print(report)
-        print(f"\n📄 Report saved: {report_file}")
-        
-        return True
-    
-    def _generate_report_content(self, rows: List[Dict]) -> str:
-        """Generate report content"""
-        lines = []
-        lines.append("=" * 80)
-        lines.append("ABAP SY-UNAME TRACKER - ANALYSIS REPORT")
-        lines.append("=" * 80)
-        lines.append(f"Generated: {datetime.now().isoformat()}")
-        lines.append("")
-        
-        # Summary
-        total = len(rows)
-        successful = sum(1 for r in rows if r.get('Status') == 'Success')
-        
-        lines.append("SUMMARY")
-        lines.append("-" * 40)
-        lines.append(f"Total analyzed: {total}")
-        lines.append(f"Successful: {successful} ({successful/total*100:.1f}%)")
-        lines.append("")
-        
-        # Top tables
-        tables = {}
-        for row in rows:
-            if row.get('Tables'):
-                for table in row['Tables'].split(','):
-                    table = table.strip()
-                    if table:
-                        tables[table] = tables.get(table, 0) + 1
-        
-        if tables:
-            lines.append("TOP TABLES")
-            lines.append("-" * 40)
-            for table, count in sorted(tables.items(), key=lambda x: x[1], reverse=True)[:10]:
-                lines.append(f"  {table}: {count} occurrences")
-            lines.append("")
-        
-        # Top RFC functions
-        rfcs = {}
-        for row in rows:
-            if row.get('RFC_Functions'):
-                for rfc in row['RFC_Functions'].split(','):
-                    rfc = rfc.strip()
-                    if rfc:
-                        rfcs[rfc] = rfcs.get(rfc, 0) + 1
-        
-        if rfcs:
-            lines.append("TOP RFC FUNCTIONS")
-            lines.append("-" * 40)
-            for rfc, count in sorted(rfcs.items(), key=lambda x: x[1], reverse=True)[:10]:
-                lines.append(f"  {rfc}: {count} calls")
-            lines.append("")
-        
-        return "\n".join(lines)
+        print("  id,file_path,line_number")
+        print("  1,program.abap,123")
+        print("  2,/full/path/to/file.abap,456")
 
 
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
-        description='ABAP Tracker - Enhanced SY-UNAME Analysis Tool',
+        description='ABAP SY-UNAME Tracker - Enhanced Analysis Tool',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python main.py analyze                    # Analyze default CSV
-  python main.py analyze input/test.csv     # Analyze specific CSV
-  python main.py test                        # Run test suite
-  python main.py report                      # Generate analysis report
+  python main.py analyze                    # Standard analysis
+  python main.py analyze --enhanced         # Enhanced analysis with advanced patterns
+  python main.py analyze input/test.csv     # Analyze specific file
+  python main.py analyze --enhanced --window 100 --no-cache  # Custom settings
+  python main.py benchmark                  # Compare standard vs enhanced
+  python main.py test                       # Run test suite
+  python main.py report                     # Generate report
 
-CSV format:
-  id,file_path,line_number
-  1,example.abap,45
-  2,another.abap,123
+Enhanced Mode Features:
+  • Advanced pattern detection (EXEC SQL, CDS Views, BAPI, Authority Checks)
+  • Context-aware taint tracking with scope analysis
+  • Performance optimizations (caching, sliding window)
+  • Inter-procedural flow analysis
+  • Field symbol and reference tracking
         """
     )
-    
-    # Subcommands
-    subparsers = parser.add_subparsers(dest='command', help='Commands')
-    
-    # Analyze command
-    analyze_parser = subparsers.add_parser('analyze', help='Analyze CSV file')
-    analyze_parser.add_argument('csv_file', nargs='?', help='CSV file to analyze')
-    analyze_parser.add_argument('-v', '--verbose', action='store_true', help='Verbose output')
-    
-    # Test command
-    test_parser = subparsers.add_parser('test', help='Run test suite')
-    test_parser.add_argument('-v', '--verbose', action='store_true', help='Verbose output')
-    
-    # Report command
-    report_parser = subparsers.add_parser('report', help='Generate analysis report')
-    
+
+    parser.add_argument(
+        'command',
+        choices=['analyze', 'test', 'report', 'benchmark'],
+        help='Command to execute'
+    )
+
+    parser.add_argument(
+        'input_file',
+        nargs='?',
+        help='Input CSV file (optional, uses default if not specified)'
+    )
+
+    parser.add_argument(
+        '--enhanced', '-e',
+        action='store_true',
+        help='Use enhanced analyzer with advanced patterns and optimizations'
+    )
+
+    parser.add_argument(
+        '--window', '-w',
+        type=int,
+        default=50,
+        help='Sliding window size for enhanced mode (default: 50)'
+    )
+
+    parser.add_argument(
+        '--no-cache',
+        action='store_true',
+        help='Disable pattern caching in enhanced mode'
+    )
+
+    parser.add_argument(
+        '--verbose', '-v',
+        action='store_true',
+        help='Enable verbose output'
+    )
+
     args = parser.parse_args()
-    
-    # Initialize tracker
-    tracker = ABAPTracker(verbose=getattr(args, 'verbose', False))
-    
+
+    # Create tracker instance
+    tracker = ABAPTracker(
+        verbose=args.verbose,
+        enhanced=args.enhanced,
+        window_size=args.window,
+        enable_cache=not args.no_cache
+    )
+
     # Execute command
     success = False
-    
+
     if args.command == 'analyze':
-        success = tracker.analyze_csv(args.csv_file)
+        success = tracker.analyze_csv(args.input_file)
+
     elif args.command == 'test':
         success = tracker.run_tests()
+
+    elif args.command == 'benchmark':
+        success = tracker.benchmark()
+
     elif args.command == 'report':
-        success = tracker.generate_report()
-    else:
-        parser.print_help()
-        sys.exit(1)
-    
+        # Generate report from latest results
+        output_dir = Path("output")
+        json_files = sorted(output_dir.glob("analysis_*.json"))
+
+        if json_files:
+            latest = json_files[-1]
+            print(f"📊 Generating report from: {latest}")
+
+            with open(latest, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            report_file = output_dir / f"report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+
+            with open(report_file, 'w', encoding='utf-8') as f:
+                f.write("ABAP SY-UNAME ANALYSIS REPORT\n")
+                f.write("="*80 + "\n\n")
+                f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"Source: {latest}\n")
+                f.write(f"Total entries: {len(data)}\n\n")
+
+                # Add detailed analysis
+                if data and isinstance(data[0], dict):
+                    if 'operation' in data[0]:  # Enhanced format
+                        f.write("ENHANCED ANALYSIS RESULTS\n")
+                        f.write("-"*40 + "\n")
+                        for item in data:
+                            f.write(f"\nFile: {item.get('file_path', 'N/A')}\n")
+                            f.write(f"Line: {item.get('line_number', 'N/A')}\n")
+                            f.write(f"Operation: {item.get('operation', 'N/A')}\n")
+                            f.write(f"Table: {item.get('table', 'N/A')}\n")
+                            f.write(f"Confidence: {item.get('confidence', 0):.2f}\n")
+                            if item.get('tainted_variables'):
+                                f.write(f"Tainted: {', '.join(item['tainted_variables'])}\n")
+                    else:  # Standard format
+                        f.write("STANDARD ANALYSIS RESULTS\n")
+                        f.write("-"*40 + "\n")
+                        for item in data:
+                            f.write(f"\nID: {item.get('id', 'N/A')}\n")
+                            f.write(f"File: {item.get('source_file', 'N/A')}\n")
+                            f.write(f"Line: {item.get('line_number', 'N/A')}\n")
+                            f.write(f"Status: {item.get('status', 'N/A')}\n")
+
+            print(f"✅ Report saved to: {report_file}")
+            success = True
+        else:
+            print("❌ No analysis results found in output directory")
+            success = False
+
+    # Exit with appropriate code
     sys.exit(0 if success else 1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

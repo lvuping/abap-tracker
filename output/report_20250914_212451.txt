@@ -1,0 +1,15 @@
+================================================================================
+ABAP SY-UNAME TRACKER - ANALYSIS REPORT
+================================================================================
+Generated: 2025-09-14T21:24:51.807603
+
+SUMMARY
+----------------------------------------
+Total analyzed: 173
+Successful: 0 (0.0%)
+
+TOP RFC FUNCTIONS
+----------------------------------------
+  Z_RFC_UPDATE_USER: 7 calls
+  Z_USER_CHECK: 2 calls
+  TR_TASK_OVERVIEW: 2 calls

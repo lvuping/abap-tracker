@@ -1,0 +1,77 @@
+{
+  "timestamp": "2025-09-14T22:03:24.079269",
+  "total_analyzed": 2,
+  "results": [
+    {
+      "id": "1",
+      "source_file": "input/test_sample.abap",
+      "line_number": 10,
+      "status": "Complete",
+      "keywords": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "tables": [
+        "ZTABLE"
+      ],
+      "fields": [
+        "CREATED_BY"
+      ],
+      "rfc_functions": [],
+      "rfc_parameters": [],
+      "operations": [
+        "Assignment",
+        "Assignment",
+        "Structure Field",
+        "Assignment",
+        "Structure Field",
+        "DATABASE_INSERT"
+      ],
+      "perform_calls": [],
+      "tainted_variables": [
+        "SY-UNAME",
+        "LV_USER",
+        "LS_DATA-CREATED_BY",
+        "LS_DATA",
+        "LS_DATA-CREATED_DATE"
+      ],
+      "description": "Operations: Assignment, Assignment, Structure Field | Tables: ZTABLE | Fields: 1 affected | Variables: 5 tainted",
+      "trace_path": "✅ SY-UNAME found at line 10 | ➡️ Assignment: SY-UNAME → LV_USER at line 10 | ➡️ Assignment: LV_USER → LS_DATA-CREATED_BY at line 13 | ➡️ Assignment: SY-DATUM → LS_DATA-CREATED_DATE at line 14 | 💾 DATABASE_INSERT ZTABLE at line 17 (Fields: CREATED_BY)",
+      "error_reason": ""
+    },
+    {
+      "id": "2",
+      "source_file": "input/test_sample.abap",
+      "line_number": 25,
+      "status": "Complete",
+      "keywords": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "tables": [
+        "ZTABLE"
+      ],
+      "fields": [
+        "CHANGED_BY"
+      ],
+      "rfc_functions": [],
+      "rfc_parameters": [],
+      "operations": [
+        "Assignment",
+        "Structure Field",
+        "DATABASE_UPDATE"
+      ],
+      "perform_calls": [],
+      "tainted_variables": [
+        "SY-UNAME",
+        "LS_DATA-CHANGED_BY",
+        "LS_DATA"
+      ],
+      "description": "Operations: Assignment, Structure Field, DATABASE_UPDATE | Tables: ZTABLE | Fields: 1 affected | Variables: 3 tainted",
+      "trace_path": "✅ SY-UNAME found at line 25 | ➡️ Assignment: SY-UNAME → LS_DATA-CHANGED_BY at line 25 | 💾 DATABASE_UPDATE ZTABLE at line 26 (Fields: CHANGED_BY) | ✅ Found target operation at line 26, stopping analysis",
+      "error_reason": ""
+    }
+  ]
+}

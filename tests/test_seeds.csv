@@ -1,0 +1,7 @@
+file_path,line_number,code_line
+tests/test1_direct_insert.abap,6,"lv_user = sy-uname."
+tests/test1_direct_insert.abap,13,"ls_audit-created_by = sy-uname."
+tests/test2_form_propagation.abap,6,"gv_username = sy-uname."
+tests/test3_function_call.abap,7,"lv_current_user = sy-uname."
+tests/test4_complex_flow.abap,8,"gv_user = sy-uname."
+tests/test4_complex_flow.abap,52,"INSERT sy-uname INTO TABLE <fs_table>."

@@ -1,0 +1,3 @@
+﻿ID,Source_File,Line_Number,Status,Final_Table,Final_Fields,DB_Operations,RFC_Functions,PERFORM_Calls,Confidence,Tainted_Variables,Description,Error_Reason
+1,input/test_sample.abap,10,Complete,ZTABLE,CREATED_BY,"SELECT, INSERT, UPDATE",,,0.75,"SY-UNAME, LV_USER, LS_DATA-CREATED_BY, LS_DATA, LS_DATA-CREATED_DATE","Operations: Assignment, Assignment, Structure Field | Tables: ZTABLE | Fields: 1 affected | Variables: 5 tainted",
+2,input/test_sample.abap,25,Complete,ZTABLE,CHANGED_BY,"SELECT, INSERT, UPDATE",,,0.75,"SY-UNAME, LS_DATA-CHANGED_BY, LS_DATA","Operations: Assignment, Structure Field, DATABASE_UPDATE | Tables: ZTABLE | Fields: 1 affected | Variables: 3 tainted",

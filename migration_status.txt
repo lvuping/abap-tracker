@@ -1,0 +1,55 @@
+SY-UNAME LOCATION MIGRATION STATUS
+==================================================
+
+[2025-09-14 16:08:16.318432] Starting migration scan
+[2025-09-14 16:08:16.318436] Found 46 ABAP files
+[2025-09-14 16:08:16.318642] 01_database_insert.abap: Found 4 occurrences at lines [6, 7, 12, 16]
+[2025-09-14 16:08:16.319394] 02_database_update.abap: Found 17 occurrences at lines [29, 30, 31, 39, 48, 58, 64, 86, 97, 106, 150, 165, 205, 225, 256, 262, 289]
+[2025-09-14 16:08:16.320212] 03_database_modify.abap: Found 18 occurrences at lines [27, 28, 29, 37, 47, 57, 63, 86, 94, 150, 158, 172, 185, 227, 236, 288, 318, 338]
+[2025-09-14 16:08:16.321056] 04_database_delete.abap: Found 14 occurrences at lines [29, 30, 31, 41, 72, 81, 103, 169, 203, 208, 256, 263, 313, 343]
+[2025-09-14 16:08:16.322352] 05_database_select.abap: No sy-uname found
+[2025-09-14 16:08:16.322853] 06_move_operations.abap: Found 1 occurrences at lines [81]
+[2025-09-14 16:08:16.323695] 07_move_corresponding.abap: No sy-uname found
+[2025-09-14 16:08:16.324477] 08_clear_refresh_free.abap: No sy-uname found
+[2025-09-14 16:08:16.325211] 09_data_declarations.abap: Found 1 occurrences at lines [210]
+[2025-09-14 16:08:16.325871] 10_if_else.abap: Found 1 occurrences at lines [162]
+[2025-09-14 16:08:16.326795] 11_case_when.abap: Found 2 occurrences at lines [105, 109]
+[2025-09-14 16:08:16.327943] 12_loop_do_while.abap: No sy-uname found
+[2025-09-14 16:08:16.328845] 13_try_catch.abap: Found 1 occurrences at lines [118]
+[2025-09-14 16:08:16.329466] 14_itab_operations.abap: No sy-uname found
+[2025-09-14 16:08:16.330218] 18_perform_form.abap: No sy-uname found
+[2025-09-14 16:08:16.331274] 20_rfc_calls.abap: No sy-uname found
+[2025-09-14 16:08:16.332095] 34_multiline_colon.abap: Found 2 occurrences at lines [162, 233]
+[2025-09-14 16:08:16.332185] business_scenario.abap: Found 2 occurrences at lines [7, 14]
+[2025-09-14 16:08:16.332231] comment_find.abap: No sy-uname found
+[2025-09-14 16:08:16.332289] complex_structure.abap: Found 2 occurrences at lines [4, 10]
+[2025-09-14 16:08:16.332475] long_code_find.abap: Found 1 occurrences at lines [44]
+[2025-09-14 16:08:16.333031] mixed_case.abap: Found 1 occurrences at lines [3]
+[2025-09-14 16:08:16.333140] multiline_complex.abap: Found 1 occurrences at lines [3]
+[2025-09-14 16:08:16.333347] no_target.abap: No sy-uname found
+[2025-09-14 16:08:16.333410] simple_find.abap: Found 2 occurrences at lines [3, 6]
+[2025-09-14 16:08:16.333459] substring_negative.abap: No sy-uname found
+[2025-09-14 16:08:16.333503] test_basic.abap: Found 1 occurrences at lines [3]
+[2025-09-14 16:08:16.333551] test_colon_comma.abap: Found 2 occurrences at lines [3, 7]
+[2025-09-14 16:08:16.333932] test_complex_flow.abap: Found 16 occurrences at lines [4, 5, 11, 18, 24, 25, 26, 29, 66, 72, 79, 80, 96, 97, 132, 146]
+[2025-09-14 16:08:16.334114] test_comprehensive_scenario.abap: Found 6 occurrences at lines [3, 4, 5, 8, 18, 44]
+[2025-09-14 16:08:16.334154] test_cp949.abap: Found 2 occurrences at lines [2, 3]
+[2025-09-14 16:08:16.334202] test_default.abap: Found 2 occurrences at lines [3, 8]
+[2025-09-14 16:08:16.334285] test_extended_scenarios.abap: Found 7 occurrences at lines [3, 4, 5, 10, 17, 22, 26]
+[2025-09-14 16:08:16.334429] test_insert_values.abap: Found 11 occurrences at lines [3, 4, 11, 14, 21, 27, 30, 32, 35, 42, 51]
+[2025-09-14 16:08:16.334477] test_mixed.abap: Found 2 occurrences at lines [3, 7]
+[2025-09-14 16:08:16.334525] test_multiline.abap: Found 2 occurrences at lines [3, 8]
+[2025-09-14 16:08:16.334576] test_multiline_scenario.abap: Found 2 occurrences at lines [3, 6]
+[2025-09-14 16:08:16.334707] test_multiline_update.abap: Found 4 occurrences at lines [3, 10, 33, 40]
+[2025-09-14 16:08:16.334983] test_multiple_rfc.abap: Found 17 occurrences at lines [3, 4, 5, 13, 21, 36, 48, 62, 68, 69, 84, 85, 86, 95, 97, 100, 112]
+[2025-09-14 16:08:16.335213] test_no_target.abap: No sy-uname found
+[2025-09-14 16:08:16.335481] test_perform_using.abap: Found 21 occurrences at lines [3, 4, 5, 11, 15, 16, 23, 24, 28, 31, 32, 38, 42, 48, 49, 61, 70, 77, 83, 89, 95]
+[2025-09-14 16:08:16.335813] test_sample.abap: Found 2 occurrences at lines [10, 25]
+[2025-09-14 16:08:16.335850] user_example.abap: Found 1 occurrences at lines [3]
+[2025-09-14 16:08:16.336022] zabap.abap: Found 1 occurrences at lines [1]
+[2025-09-14 16:08:16.336232] zpa0020_fixed.abap: Found 2 occurrences at lines [5, 6]
+[2025-09-14 16:08:16.336294] ztest.abap: Found 2 occurrences at lines [4, 9]
+[2025-09-14 16:08:16.336297] Total occurrences found: 173
+
+==================================================
+Migration completed at 2025-09-14 16:08:16.336998

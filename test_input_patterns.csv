@@ -1,0 +1,16 @@
+id,file_path,line_number
+1,01_database_insert.abap,30
+2,01_database_insert.abap,50
+3,01_database_insert.abap,70
+4,01_database_insert.abap,90
+5,01_database_insert.abap,110
+6,02_database_update.abap,30
+7,02_database_update.abap,50
+8,02_database_update.abap,75
+9,02_database_update.abap,100
+10,02_database_update.abap,125
+11,03_database_modify.abap,30
+12,03_database_modify.abap,50
+13,03_database_modify.abap,75
+14,03_database_modify.abap,100
+15,03_database_modify.abap,125

@@ -1,132 +1,301 @@
-id,file_path,line_number
-1,01_database_insert.abap,34
-2,01_database_insert.abap,60
-3,01_database_insert.abap,118
-4,02_database_update.abap,33
-5,02_database_update.abap,51
-6,02_database_update.abap,67
-7,02_database_update.abap,134
-8,02_database_update.abap,154
-9,02_database_update.abap,206
-10,03_database_modify.abap,23
-11,03_database_modify.abap,35
-12,03_database_modify.abap,61
-13,03_database_modify.abap,122
-14,03_database_modify.abap,247
-15,04_database_delete.abap,64
-16,04_database_delete.abap,217
-17,06_move_operations.abap,81
-18,09_data_declarations.abap,210
-19,10_if_else.abap,162
-20,11_case_when.abap,105
-21,11_case_when.abap,109
-22,13_try_catch.abap,118
-23,34_multiline_colon.abap,162
-24,34_multiline_colon.abap,233
-25,business_scenario.abap,7
-26,business_scenario.abap,14
-27,comment_find.abap,3
-28,complex_structure.abap,4
-29,complex_structure.abap,10
-30,long_code_find.abap,44
-31,multiline_complex.abap,3
-32,simple_find.abap,3
-33,simple_find.abap,6
-34,substring_negative.abap,3
-35,test_basic.abap,3
-36,test_colon_comma.abap,3
-37,test_colon_comma.abap,7
-38,test_complex_flow.abap,4
-39,test_complex_flow.abap,5
-40,test_complex_flow.abap,11
-41,test_complex_flow.abap,18
-42,test_complex_flow.abap,24
-43,test_complex_flow.abap,25
-44,test_complex_flow.abap,26
-45,test_complex_flow.abap,29
-46,test_complex_flow.abap,66
-47,test_complex_flow.abap,72
-48,test_complex_flow.abap,79
-49,test_complex_flow.abap,80
-50,test_complex_flow.abap,96
-51,test_complex_flow.abap,97
-52,test_complex_flow.abap,132
-53,test_complex_flow.abap,146
-54,test_comprehensive_scenario.abap,3
-55,test_comprehensive_scenario.abap,4
-56,test_comprehensive_scenario.abap,5
-57,test_comprehensive_scenario.abap,8
-58,test_comprehensive_scenario.abap,18
-59,test_comprehensive_scenario.abap,44
-60,test_default.abap,3
-61,test_default.abap,8
-62,test_extended_scenarios.abap,3
-63,test_extended_scenarios.abap,4
-64,test_extended_scenarios.abap,5
-65,test_extended_scenarios.abap,10
-66,test_extended_scenarios.abap,17
-67,test_extended_scenarios.abap,22
-68,test_extended_scenarios.abap,26
-69,test_insert_values.abap,3
-70,test_insert_values.abap,4
-71,test_insert_values.abap,11
-72,test_insert_values.abap,14
-73,test_insert_values.abap,21
-74,test_insert_values.abap,27
-75,test_insert_values.abap,30
-76,test_insert_values.abap,32
-77,test_insert_values.abap,35
-78,test_insert_values.abap,42
-79,test_insert_values.abap,51
-80,test_mixed.abap,3
-81,test_mixed.abap,7
-82,test_multiline.abap,3
-83,test_multiline.abap,8
-84,test_multiline_scenario.abap,3
-85,test_multiline_scenario.abap,6
-86,test_multiline_update.abap,3
-87,test_multiline_update.abap,10
-88,test_multiline_update.abap,33
-89,test_multiline_update.abap,40
-90,test_multiple_rfc.abap,3
-91,test_multiple_rfc.abap,4
-92,test_multiple_rfc.abap,5
-93,test_multiple_rfc.abap,13
-94,test_multiple_rfc.abap,21
-95,test_multiple_rfc.abap,36
-96,test_multiple_rfc.abap,48
-97,test_multiple_rfc.abap,62
-98,test_multiple_rfc.abap,68
-99,test_multiple_rfc.abap,69
-100,test_multiple_rfc.abap,84
-101,test_multiple_rfc.abap,85
-102,test_multiple_rfc.abap,86
-103,test_multiple_rfc.abap,95
-104,test_multiple_rfc.abap,97
-105,test_multiple_rfc.abap,100
-106,test_multiple_rfc.abap,112
-107,test_perform_using.abap,3
-108,test_perform_using.abap,4
-109,test_perform_using.abap,5
-110,test_perform_using.abap,11
-111,test_perform_using.abap,15
-112,test_perform_using.abap,16
-113,test_perform_using.abap,23
-114,test_perform_using.abap,24
-115,test_perform_using.abap,28
-116,test_perform_using.abap,31
-117,test_perform_using.abap,32
-118,test_perform_using.abap,38
-119,test_perform_using.abap,42
-120,test_perform_using.abap,48
-121,test_perform_using.abap,49
-122,test_perform_using.abap,61
-123,test_perform_using.abap,70
-124,test_perform_using.abap,77
-125,test_perform_using.abap,83
-126,test_perform_using.abap,89
-127,test_perform_using.abap,95
-128,user_example.abap,3
-129,ztest.abap,4
-130,ztest.abap,9
-131,test_cp949,3
+id,file_path,line_number,code_line
+1,01_database_insert.abap,6,"DATA: lv_user TYPE sy-uname,"
+2,01_database_insert.abap,7,lv_creator TYPE sy-uname.
+3,01_database_insert.abap,12,"created_by TYPE sy-uname,"
+4,01_database_insert.abap,16,lv_user = sy-uname.
+5,02_database_update.abap,29,"DATA: lv_user TYPE sy-uname,"
+6,02_database_update.abap,30,"lv_updater TYPE sy-uname,"
+7,02_database_update.abap,31,lv_modifier TYPE sy-uname.
+8,02_database_update.abap,39,"modified_by TYPE sy-uname,"
+9,02_database_update.abap,48,"updater TYPE sy-uname,"
+10,02_database_update.abap,58,lv_user = sy-uname.
+11,02_database_update.abap,64,"ls_temp-changed_by = lv_updater.  "" sy-uname tracked"
+12,02_database_update.abap,86,"changed_by = sy-uname,"
+13,02_database_update.abap,97,lv_modifier = sy-uname.
+14,02_database_update.abap,106,"ls_temp-processed_by = lv_modifier.  "" sy-uname tracked"
+15,02_database_update.abap,150,lv_user = sy-uname.
+16,02_database_update.abap,165,ls_intermediate-updater = sy-uname.
+17,02_database_update.abap,205,changed_by = sy-uname
+18,02_database_update.abap,225,archive_user = sy-uname
+19,02_database_update.abap,256,lv_modifier = sy-uname.
+20,02_database_update.abap,262,"ls_temp-processed_by = lv_modifier.  "" Track sy-uname"
+21,02_database_update.abap,289,DATA(lv_new_text) = |Updated on { sy-datum } by { sy-uname }|.
+22,03_database_modify.abap,27,"DATA: lv_user TYPE sy-uname,"
+23,03_database_modify.abap,28,"lv_modifier TYPE sy-uname,"
+24,03_database_modify.abap,29,lv_processor TYPE sy-uname.
+25,03_database_modify.abap,37,"created_by TYPE sy-uname,"
+26,03_database_modify.abap,47,"modifier TYPE sy-uname,"
+27,03_database_modify.abap,57,lv_user = sy-uname.
+28,03_database_modify.abap,63,"ls_temp-changed_by = lv_modifier.  "" sy-uname tracked"
+29,03_database_modify.abap,86,lv_processor = sy-uname.
+30,03_database_modify.abap,94,"ls_temp-changed_by = lv_processor.  "" sy-uname tracked"
+31,03_database_modify.abap,150,lv_user = sy-uname.
+32,03_database_modify.abap,158,"ls_temp-accessed_by = lv_user.  "" Track sy-uname"
+33,03_database_modify.abap,172,wa_ztable-processed_by = sy-uname.
+34,03_database_modify.abap,185,lv_modifier = sy-uname.
+35,03_database_modify.abap,227,lv_user = sy-uname.
+36,03_database_modify.abap,236,"<fs_table>-modified_by = lv_user.  "" Track sy-uname"
+37,03_database_modify.abap,288,ls_intermediate-modifier = sy-uname.
+38,03_database_modify.abap,318,lv_processor = sy-uname.
+39,03_database_modify.abap,338,"ls_temp-checked_by = lv_processor.  "" Track sy-uname"
+40,04_database_delete.abap,29,"DATA: lv_user TYPE sy-uname,"
+41,04_database_delete.abap,30,"lv_deleter TYPE sy-uname,"
+42,04_database_delete.abap,31,lv_processor TYPE sy-uname.
+43,04_database_delete.abap,41,lv_user = sy-uname.
+44,04_database_delete.abap,72,lv_processor = sy-uname.
+45,04_database_delete.abap,81,"ls_temp-deleted_by = lv_processor.  "" Track sy-uname"
+46,04_database_delete.abap,103,lv_user = sy-uname.
+47,04_database_delete.abap,169,lv_deleter = sy-uname.
+48,04_database_delete.abap,203,ls_intermediate-modifier = sy-uname.
+49,04_database_delete.abap,208,ls_data-deleted_by = sy-uname.
+50,04_database_delete.abap,256,lv_processor = sy-uname.
+51,04_database_delete.abap,263,"ls_temp-deleted_by = lv_processor.  "" Track sy-uname"
+52,04_database_delete.abap,313,lv_user = sy-uname.
+53,04_database_delete.abap,343,lv_deleter = sy-uname.
+54,06_move_operations.abap,81,lv_var1 = sy-uname.
+55,09_data_declarations.abap,210,DATA(lv_template) = |User: { sy-uname } Date: { sy-datum }|.
+56,10_if_else.abap,162,IF sy-uname = 'SAP*' OR sy-uname = 'DDIC'.
+57,11_case_when.abap,105,CASE sy-uname.
+58,11_case_when.abap,109,"WRITE: / 'Regular user:', sy-uname."
+59,13_try_catch.abap,118,IF sy-uname IS INITIAL.
+60,34_multiline_colon.abap,162,"p_user TYPE sy-uname DEFAULT sy-uname,"
+61,34_multiline_colon.abap,233,r_user FOR sy-uname.
+62,business_scenario.abap,7,"PARAMETERS: p_user TYPE sy-uname DEFAULT sy-uname,"
+63,business_scenario.abap,14,"SELECT-OPTIONS: s_user FOR sy-uname,"
+64,complex_structure.abap,4,"p_user TYPE sy-uname,"
+65,complex_structure.abap,10,"s_user FOR sy-uname,"
+66,long_code_find.abap,44,PARAMETERS p_user TYPE sy-uname.
+67,mixed_case.abap,3,PARAMETERS p_user TYPE SY-UNAME.
+68,multiline_complex.abap,3,"SELECT-OPTIONS: s_user FOR ztable-user, "" 기본값 sy-uname 고려"
+69,simple_find.abap,3,PARAMETERS p_user TYPE sy-uname.
+70,simple_find.abap,6,SELECT-OPTIONS s_id FOR ztable-id DEFAULT sy-uname.
+71,test_basic.abap,3,PARAMETERS: p_user TYPE sy-uname.
+72,test_colon_comma.abap,3,"SELECT-OPTIONS : s_uname FOR sy-uname,"
+73,test_colon_comma.abap,7,"PARAMETERS : p_uname TYPE sy-uname,"
+74,test_complex_flow.abap,4,"DATA: gv_global_user TYPE sy-uname,"
+75,test_complex_flow.abap,5,"gv_temp_user TYPE sy-uname,"
+76,test_complex_flow.abap,11,METHODS: process_user IMPORTING iv_user TYPE sy-uname
+77,test_complex_flow.abap,18,DATA: mv_internal_user TYPE sy-uname.
+78,test_complex_flow.abap,24,"DATA: lv_user1 TYPE sy-uname,"
+79,test_complex_flow.abap,25,"lv_user2 TYPE sy-uname,"
+80,test_complex_flow.abap,26,"lv_user3 TYPE sy-uname,"
+81,test_complex_flow.abap,29,lv_user1 = sy-uname.
+82,test_complex_flow.abap,66,"FIELD-SYMBOLS: <fs_user> TYPE sy-uname,"
+83,test_complex_flow.abap,72,DATA: lv_dynamic_user TYPE sy-uname.
+84,test_complex_flow.abap,79,"DATA: lt_selected_users TYPE TABLE OF sy-uname,"
+85,test_complex_flow.abap,80,lv_selected_user TYPE sy-uname.
+86,test_complex_flow.abap,96,"DATA: lv_export_user TYPE sy-uname,"
+87,test_complex_flow.abap,97,lv_import_user TYPE sy-uname.
+88,test_complex_flow.abap,132,FORM update_audit_log USING p_user TYPE sy-uname.
+89,test_complex_flow.abap,146,FORM write_to_archive USING p_archive_user TYPE sy-uname.
+90,test_comprehensive_scenario.abap,3,"DATA: gv_user      TYPE sy-uname,"
+91,test_comprehensive_scenario.abap,4,"gv_log_user  TYPE sy-uname,"
+92,test_comprehensive_scenario.abap,5,gv_temp_user TYPE sy-uname.
+93,test_comprehensive_scenario.abap,8,"created_by TYPE sy-uname,"
+94,test_comprehensive_scenario.abap,18,gv_user = sy-uname.
+95,test_comprehensive_scenario.abap,44,FORM log_user_activity USING p_user TYPE sy-uname.
+96,test_cp949.abap,2,DATA: lv_user TYPE sy-uname.
+97,test_cp949.abap,3,lv_user = sy-uname.
+98,test_default.abap,3,SELECT-OPTIONS s_uname FOR bkpf-usnam DEFAULT sy-uname.
+99,test_default.abap,8,PARAMETERS p_name TYPE sy-uname DEFAULT sy-uname.
+100,test_extended_scenarios.abap,3,"DATA: gv_user_rfc    TYPE sy-uname,"
+101,test_extended_scenarios.abap,4,"gv_user_perform TYPE sy-uname,"
+102,test_extended_scenarios.abap,5,gv_user_unused  TYPE sy-uname.
+103,test_extended_scenarios.abap,10,gv_user_rfc = sy-uname.
+104,test_extended_scenarios.abap,17,gv_user_perform = sy-uname.
+105,test_extended_scenarios.abap,22,gv_user_unused = sy-uname.
+106,test_extended_scenarios.abap,26,FORM process_user_data USING p_user TYPE sy-uname.
+107,test_insert_values.abap,3,"DATA: lv_creator TYPE sy-uname,"
+108,test_insert_values.abap,4,"lv_modifier TYPE sy-uname,"
+109,test_insert_values.abap,11,lv_creator = sy-uname.
+110,test_insert_values.abap,14,username = sy-uname
+111,test_insert_values.abap,21,created_by = sy-uname
+112,test_insert_values.abap,27,lv_modifier = sy-uname.
+113,test_insert_values.abap,30,"( '001', sy-uname, 'CREATE', sy-datum, sy-uzeit ),"
+114,test_insert_values.abap,32,"( '003', sy-uname, 'DELETE', sy-datum, sy-uzeit )."
+115,test_insert_values.abap,35,ls_record-created_by = sy-uname.
+116,test_insert_values.abap,42,APPEND VALUE #( created_by = sy-uname
+117,test_insert_values.abap,51,"SELECT sy-uname, sy-datum"
+118,test_mixed.abap,3,"PARAMETERS: p_user TYPE sy-uname,"
+119,test_mixed.abap,7,"SELECT-OPTIONS: s_user FOR sy-uname,"
+120,test_multiline.abap,3,"SELECT-OPTIONS: s_user FOR sy-uname,"
+121,test_multiline.abap,8,"PARAMETERS: p_user TYPE sy-uname,"
+122,test_multiline_scenario.abap,3,"DATA: gv_user TYPE sy-uname,"
+123,test_multiline_scenario.abap,6,gv_user = sy-uname.
+124,test_multiline_update.abap,3,"DATA: lv_username TYPE sy-uname,"
+125,test_multiline_update.abap,10,lv_username = sy-uname.
+126,test_multiline_update.abap,33,SET approver = sy-uname
+127,test_multiline_update.abap,40,lv_username = sy-uname.
+128,test_multiple_rfc.abap,3,"DATA: gv_user TYPE sy-uname,"
+129,test_multiple_rfc.abap,4,"gv_remote_user TYPE sy-uname,"
+130,test_multiple_rfc.abap,5,"gv_sync_user TYPE sy-uname,"
+131,test_multiple_rfc.abap,13,gv_user = sy-uname.
+132,test_multiple_rfc.abap,21,gv_remote_user = sy-uname.
+133,test_multiple_rfc.abap,36,gs_user_data-username = sy-uname.
+134,test_multiple_rfc.abap,48,gv_sync_user = sy-uname.
+135,test_multiple_rfc.abap,62,iv_user = sy-uname
+136,test_multiple_rfc.abap,68,DATA: lv_temp_user TYPE sy-uname.
+137,test_multiple_rfc.abap,69,lv_temp_user = sy-uname.
+138,test_multiple_rfc.abap,84,ls_complex-created_by = sy-uname.
+139,test_multiple_rfc.abap,85,ls_complex-department-manager = sy-uname.
+140,test_multiple_rfc.abap,86,ls_complex-approval-approver = sy-uname.
+141,test_multiple_rfc.abap,95,IF sy-uname = 'ADMIN'.
+142,test_multiple_rfc.abap,97,EXPORTING iv_admin_user = sy-uname.
+143,test_multiple_rfc.abap,100,EXPORTING iv_normal_user = sy-uname.
+144,test_multiple_rfc.abap,112,INSERT INTO zasync_results VALUES ( username = sy-uname
+145,test_perform_using.abap,3,"DATA: gv_user TYPE sy-uname,"
+146,test_perform_using.abap,4,"gv_admin TYPE sy-uname,"
+147,test_perform_using.abap,5,"gv_supervisor TYPE sy-uname,"
+148,test_perform_using.abap,11,gv_user = sy-uname.
+149,test_perform_using.abap,15,gv_admin = sy-uname.
+150,test_perform_using.abap,16,gv_supervisor = sy-uname.
+151,test_perform_using.abap,23,gs_data-username = sy-uname.
+152,test_perform_using.abap,24,PERFORM update_structure USING sy-uname
+153,test_perform_using.abap,28,PERFORM main_process USING sy-uname.
+154,test_perform_using.abap,31,PERFORM log_activity USING sy-uname
+155,test_perform_using.abap,32,|User: { sy-uname }|
+156,test_perform_using.abap,38,gv_user = sy-uname.
+157,test_perform_using.abap,42,FORM process_user USING p_user TYPE sy-uname.
+158,test_perform_using.abap,48,FORM validate_access USING p_admin TYPE sy-uname
+159,test_perform_using.abap,49,p_supervisor TYPE sy-uname
+160,test_perform_using.abap,61,FORM update_structure USING p_user TYPE sy-uname
+161,test_perform_using.abap,70,FORM main_process USING p_username TYPE sy-uname.
+162,test_perform_using.abap,77,FORM sub_process USING p_user TYPE sy-uname.
+163,test_perform_using.abap,83,FORM another_process USING p_user TYPE sy-uname.
+164,test_perform_using.abap,89,FORM log_user USING p_user TYPE sy-uname.
+165,test_perform_using.abap,95,FORM log_activity USING p_user TYPE sy-uname
+166,test_sample.abap,10,lv_user = sy-uname.
+167,test_sample.abap,25,ls_data-changed_by = sy-uname.
+168,user_example.abap,3,aenam = sy-uname.
+169,zabap.abap,1,ZPA0020-ERNAM = SY-UNAME.
+170,zpa0020_fixed.abap,5,"ZPA0020-ADQN = SY-UNAME.     "" Added/modified by username"
+171,zpa0020_fixed.abap,6,"ZPA0020-ERNAM = SY-UNAME.    "" Created by username"
+172,ztest.abap,4,gv_user = sy-uname.
+173,ztest.abap,9,iv_username = sy-uname.
+174,complex_db_operations_01.abap,41,lv_user = sy-uname.
+175,complex_db_operations_01.abap,59,created_by = sy-uname
+176,complex_db_operations_01.abap,69,created_by = sy-uname
+177,complex_db_operations_01.abap,85,ls_user_info-created_by = sy-uname.
+178,complex_db_operations_01.abap,86,ls_user_info-modified_by = sy-uname.
+179,complex_db_operations_01.abap,103,lv_modifier = sy-uname.
+180,complex_db_operations_01.abap,138,changed_by = sy-uname
+181,complex_db_operations_01.abap,151,updated_by = sy-uname
+182,complex_db_operations_01.abap,169,ls_user_info-modified_by = sy-uname.
+183,complex_db_operations_01.abap,187,lv_creator = sy-uname.
+184,complex_db_operations_01.abap,203,modified_by = sy-uname
+185,complex_db_operations_01.abap,217,ls_audit-modified_by = sy-uname.
+186,complex_db_operations_01.abap,237,deleted_by = sy-uname
+187,complex_db_operations_01.abap,251,lv_current_user = sy-uname.
+188,complex_db_operations_01.abap,271,lv_user1 = sy-uname.
+189,complex_db_operations_01.abap,294,<fs_user>-created_by = sy-uname.
+190,complex_db_operations_01.abap,317,lr_ref->created_by = sy-uname.
+191,complex_db_operations_01.abap,333,( 'USER001', sy-uname, sy-datum, sy-uzeit ),
+192,complex_db_operations_01.abap,334,( 'USER002', sy-uname, sy-datum, sy-uzeit ),
+193,complex_db_operations_01.abap,335,( 'USER003', sy-uname, sy-datum, sy-uzeit ),
+194,complex_db_operations_01.abap,348,created_by = sy-uname
+195,complex_db_operations_01.abap,363,modified_by = sy-uname.
+196,complex_db_operations_01.abap,391,ps_user-modified_by = sy-uname.
+197,complex_db_operations_01.abap,412,ps_record-created_by = sy-uname.
+198,complex_db_operations_01.abap,429,ps_user-modified_by = sy-uname.
+199,complex_db_operations_01.abap,455,created_by = sy-uname
+200,complex_db_operations_01.abap,471,SET created_by = sy-uname,
+201,complex_db_operations_01.abap,491,created_by = sy-uname,
+202,complex_db_operations_01.abap,506,lv_user_chain1 = sy-uname.
+203,complex_db_operations_01.abap,539,changed_by = sy-uname
+204,mixed_patterns_test.abap,50,lv_user = sy-uname.
+205,mixed_patterns_test.abap,56,iv_username = sy-uname
+206,mixed_patterns_test.abap,72,lv_rfc_user = sy-uname.
+207,mixed_patterns_test.abap,90,iv_user = sy-uname
+208,mixed_patterns_test.abap,113,ls_user_data-created_by = sy-uname.
+209,mixed_patterns_test.abap,114,ls_user_data-modified_by = sy-uname.
+210,mixed_patterns_test.abap,135,lv_async_user = sy-uname.
+211,mixed_patterns_test.abap,158,iv_task_user = sy-uname
+212,mixed_patterns_test.abap,174,lt_users = VALUE #( ( sy-uname ) ).
+213,mixed_patterns_test.abap,187,iv_batch_user = sy-uname
+214,mixed_patterns_test.abap,203,lv_mixed_user = sy-uname.
+215,mixed_patterns_test.abap,215,created_by = sy-uname
+216,mixed_patterns_test.abap,234,iv_notify_user = sy-uname
+217,mixed_patterns_test.abap,253,IF sy-uname = 'ADMIN'.
+218,mixed_patterns_test.abap,256,iv_admin_user = sy-uname
+219,mixed_patterns_test.abap,261,ELSEIF sy-uname CP 'USER*'.
+220,mixed_patterns_test.abap,264,iv_standard_user = sy-uname
+221,mixed_patterns_test.abap,273,iv_guest_user = sy-uname
+222,mixed_patterns_test.abap,286,lv_chain_user = sy-uname.
+223,mixed_patterns_test.abap,296,iv_chain_user = sy-uname
+224,mixed_patterns_test.abap,314,iv_final_user = sy-uname
+225,mixed_patterns_test.abap,338,lv_parallel_user = sy-uname.
+226,mixed_patterns_test.abap,345,iv_user1 = sy-uname
+227,mixed_patterns_test.abap,352,iv_user2 = sy-uname
+228,mixed_patterns_test.abap,359,iv_user3 = sy-uname
+229,mixed_patterns_test.abap,372,lv_batch_user = sy-uname.
+230,mixed_patterns_test.abap,378,lt_batch_data = VALUE #( FOR i = 1 UNTIL i > 10 ( user = sy-uname
+231,mixed_patterns_test.abap,402,lv_system_user = sy-uname.
+232,mixed_patterns_test.abap,421,ps_async-created_by = sy-uname.
+233,mixed_patterns_test.abap,442,ps_result-processed_by = sy-uname.
+234,mixed_patterns_test.abap,462,ps_batch-creator = sy-uname.
+235,mixed_patterns_test.abap,486,ps_update-updated_by = sy-uname.
+236,mixed_patterns_test.abap,503,lv_nested_user = sy-uname.
+237,mixed_patterns_test.abap,515,iv_user = sy-uname
+238,mixed_patterns_test.abap,525,created_by = sy-uname
+239,mixed_patterns_test.abap,538,iv_log_user = sy-uname
+240,advanced_taint_tracking.abap,119,lv_source_user = sy-uname.
+241,advanced_taint_tracking.abap,140,wa_user_master-system_info-created_by = sy-uname.
+242,advanced_taint_tracking.abap,142,wa_user_master-system_info-modified_by = sy-uname.
+243,advanced_taint_tracking.abap,158,<fs_user_master>-system_info-created_by = sy-uname.
+244,advanced_taint_tracking.abap,159,<fs_user_master>-system_info-modified_by = sy-uname.
+245,advanced_taint_tracking.abap,166,<fs_nested_field>-modified_by = sy-uname.
+246,advanced_taint_tracking.abap,174,wa_user_master-system_info-created_by = sy-uname.
+247,advanced_taint_tracking.abap,175,wa_user_master-system_info-modified_by = sy-uname.
+248,advanced_taint_tracking.abap,181,wa_audit_complex-user_context-original_user = sy-uname.
+249,advanced_taint_tracking.abap,189,wa_user_master-system_info-created_by = sy-uname.
+250,advanced_taint_tracking.abap,190,wa_user_master-system_info-modified_by = sy-uname.
+251,advanced_taint_tracking.abap,213,IF sy-uname CA 'ADMIN'.
+252,advanced_taint_tracking.abap,214,lv_proxy_user = sy-uname.
+253,advanced_taint_tracking.abap,216,ELSEIF sy-uname CP 'USER*'.
+254,advanced_taint_tracking.abap,217,lv_session_user = sy-uname.
+255,advanced_taint_tracking.abap,220,lv_audit_user = sy-uname.
+256,advanced_taint_tracking.abap,234,lv_source_user = sy-uname.
+257,advanced_taint_tracking.abap,258,lv_source_user = sy-uname.
+258,advanced_taint_tracking.abap,294,lv_accumulated_user = sy-uname.
+259,advanced_taint_tracking.abap,323,lr_user_ref->system_info-created_by = sy-uname.
+260,advanced_taint_tracking.abap,324,lr_user_ref->system_info-modified_by = sy-uname.
+261,advanced_taint_tracking.abap,337,lr_audit_ref->user_context-changing_user = sy-uname.
+262,advanced_taint_tracking.abap,338,lr_audit_ref->user_context-session_user = sy-uname.
+263,advanced_taint_tracking.abap,355,lv_source_user = sy-uname.
+264,advanced_taint_tracking.abap,390,lv_source_user = sy-uname.
+265,advanced_taint_tracking.abap,421,lv_source_user = sy-uname.
+266,advanced_taint_tracking.abap,463,ps_user-system_info-modified_by = sy-uname.
+267,comprehensive_test_suite.abap,200,lv_level1 = sy-uname.
+268,comprehensive_test_suite.abap,228,created_by = sy-uname
+269,comprehensive_test_suite.abap,248,lv_user1 = sy-uname.
+270,comprehensive_test_suite.abap,262,lv_current = sy-uname.
+271,comprehensive_test_suite.abap,291,processed_by = sy-uname
+272,comprehensive_test_suite.abap,310,IF sy-uname = 'ADMIN'.
+273,comprehensive_test_suite.abap,311,lv_condition_user = sy-uname.
+274,comprehensive_test_suite.abap,315,ELSEIF sy-uname CP 'USER*'.
+275,comprehensive_test_suite.abap,316,lv_condition_user = sy-uname.
+276,comprehensive_test_suite.abap,320,ELSEIF sy-uname CA 'TEST'.
+277,comprehensive_test_suite.abap,321,lv_condition_user = sy-uname.
+278,comprehensive_test_suite.abap,327,lv_condition_user = sy-uname.
+279,comprehensive_test_suite.abap,343,CASE sy-uname.
+280,comprehensive_test_suite.abap,345,lv_switch_user = sy-uname.
+281,comprehensive_test_suite.abap,349,lv_switch_user = sy-uname.
+282,comprehensive_test_suite.abap,354,lv_switch_user = sy-uname.
+283,comprehensive_test_suite.abap,390,lv_dyn_user = sy-uname.
+284,comprehensive_test_suite.abap,422,lr_ref1->created_by = sy-uname.
+285,comprehensive_test_suite.abap,442,lv_start_user = sy-uname.
+286,comprehensive_test_suite.abap,496,iv_user = sy-uname
+287,comprehensive_test_suite.abap,523,lv_async_user = sy-uname.
+288,comprehensive_test_suite.abap,540,iv_task_user = sy-uname
+289,comprehensive_test_suite.abap,563,iv_final_user = sy-uname
+290,comprehensive_test_suite.abap,588,lv_edge_user = sy-uname.
+291,comprehensive_test_suite.abap,616,lv_very_long_user = sy-uname.
+292,comprehensive_test_suite.abap,664,lv_empty_user = sy-uname.
+293,comprehensive_test_suite.abap,678,IF sy-uname IS NOT INITIAL.
+294,comprehensive_test_suite.abap,682,created_by = sy-uname
+295,comprehensive_test_suite.abap,697,lv_partial_user = sy-uname.
+296,comprehensive_test_suite.abap,726,lv_mega_user = sy-uname.
+297,comprehensive_test_suite.abap,778,ultimate_user = sy-uname
+298,comprehensive_test_suite.abap,798,ps_proc-modifier = sy-uname.
+299,comprehensive_test_suite.abap,825,ps_callback-callback_user = sy-uname.
+300,comprehensive_test_suite.abap,847,ps_final-final_modifier = sy-uname.

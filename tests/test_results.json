@@ -1,0 +1,220 @@
+{
+  "timestamp": "2025-09-14T16:43:48.644905",
+  "root_path": ".",
+  "table_prefixes": [
+    "Z",
+    "Y"
+  ],
+  "traces": [
+    {
+      "start_file": "tests/test1_direct_insert.abap",
+      "start_line": 6,
+      "trace_id": "test1_direct_insert_6",
+      "trace_steps": [
+        {
+          "file": "tests/test1_direct_insert.abap",
+          "stmt_line_no": 6,
+          "stmt_text": "lv_user = sy-uname.",
+          "action": "assign"
+        },
+        {
+          "file": "tests/test1_direct_insert.abap",
+          "stmt_line_no": 13,
+          "stmt_text": "ls_audit-created_by = sy-uname.",
+          "action": "propagate"
+        },
+        {
+          "file": "tests/test1_direct_insert.abap",
+          "stmt_line_no": 9,
+          "stmt_text": "INSERT INTO ztable_users VALUES lv_user.",
+          "action": "db"
+        }
+      ],
+      "final_sinks": [
+        {
+          "type": "INSERT",
+          "table_name": "ZTABLE_USERS",
+          "sink_statement": "INSERT INTO ztable_users VALUES lv_user.",
+          "file": "tests/test1_direct_insert.abap",
+          "line": 9
+        }
+      ],
+      "confidence": "high",
+      "tainted_variables": [
+        "LV_USER",
+        "SY-UNAME",
+        "CREATED_BY"
+      ]
+    },
+    {
+      "start_file": "tests/test1_direct_insert.abap",
+      "start_line": 13,
+      "trace_id": "test1_direct_insert_13",
+      "trace_steps": [
+        {
+          "file": "tests/test1_direct_insert.abap",
+          "stmt_line_no": 13,
+          "stmt_text": "ls_audit-created_by = sy-uname.",
+          "action": "assign"
+        }
+      ],
+      "final_sinks": [],
+      "confidence": "low",
+      "tainted_variables": [
+        "SY-UNAME",
+        "CREATED_BY"
+      ]
+    },
+    {
+      "start_file": "tests/test2_form_propagation.abap",
+      "start_line": 6,
+      "trace_id": "test2_form_propagation_6",
+      "trace_steps": [
+        {
+          "file": "tests/test2_form_propagation.abap",
+          "stmt_line_no": 6,
+          "stmt_text": "gv_username = sy-uname.",
+          "action": "assign"
+        },
+        {
+          "file": "tests/test2_form_propagation.abap",
+          "stmt_line_no": 8,
+          "stmt_text": "PERFORM UPDATE_USER_LOG with tainted params",
+          "action": "call"
+        },
+        {
+          "file": "tests/test2_form_propagation.abap",
+          "stmt_line_no": 17,
+          "stmt_text": "ls_log-user_id = p_user.",
+          "action": "propagate"
+        },
+        {
+          "file": "tests/test2_form_propagation.abap",
+          "stmt_line_no": 25,
+          "stmt_text": "UPDATE zuser_master SET last_login_by = p_user WHERE active = 'X'.",
+          "action": "propagate"
+        },
+        {
+          "file": "tests/test2_form_propagation.abap",
+          "stmt_line_no": 25,
+          "stmt_text": "UPDATE zuser_master SET last_login_by = p_user WHERE active = 'X'.",
+          "action": "db"
+        }
+      ],
+      "final_sinks": [
+        {
+          "type": "UPDATE",
+          "table_name": "ZUSER_MASTER",
+          "sink_statement": "UPDATE zuser_master SET last_login_by = p_user WHERE active = 'X'.",
+          "file": "tests/test2_form_propagation.abap",
+          "line": 25
+        }
+      ],
+      "confidence": "medium",
+      "tainted_variables": [
+        "GV_USERNAME",
+        "LAST_LOGIN_BY",
+        "SY-UNAME",
+        "P_USER",
+        "USER_ID",
+        "STRING"
+      ]
+    },
+    {
+      "start_file": "tests/test3_function_call.abap",
+      "start_line": 7,
+      "trace_id": "test3_function_call_7",
+      "trace_steps": [
+        {
+          "file": "tests/test3_function_call.abap",
+          "stmt_line_no": 7,
+          "stmt_text": "lv_current_user = sy-uname.",
+          "action": "assign"
+        },
+        {
+          "file": "tests/test3_function_call.abap",
+          "stmt_line_no": 10,
+          "stmt_text": "CALL FUNCTION 'Z_UPDATE_USER_ACTIVITY' EXPORTING iv_username = lv_current_user iv_action   = 'LOGIN'",
+          "action": "propagate"
+        },
+        {
+          "file": "tests/test3_function_call.abap",
+          "stmt_line_no": 10,
+          "stmt_text": "CALL FUNCTION 'Z_UPDATE_USER_ACTIVITY' EXPORTING iv_username = lv_current_user iv_action   = 'LOGIN'",
+          "action": "call"
+        },
+        {
+          "file": "tests/test3_function_call.abap",
+          "stmt_line_no": 10,
+          "stmt_text": "CALL FUNCTION 'Z_UPDATE_USER_ACTIVITY' with tainted params",
+          "action": "call"
+        },
+        {
+          "file": "tests/test3_function_call.abap",
+          "stmt_line_no": 33,
+          "stmt_text": "ls_activity-username = iv_username.",
+          "action": "propagate"
+        },
+        {
+          "file": "tests/test3_function_call.abap",
+          "stmt_line_no": 41,
+          "stmt_text": "MODIFY zuser_master FROM VALUE #( username = iv_username last_action = iv_action ).",
+          "action": "db"
+        }
+      ],
+      "final_sinks": [
+        {
+          "type": "MODIFY",
+          "table_name": "ZUSER_MASTER",
+          "sink_statement": "MODIFY zuser_master FROM VALUE #( username = iv_username last_action = iv_action ).",
+          "file": "tests/test3_function_call.abap",
+          "line": 41
+        }
+      ],
+      "confidence": "medium",
+      "tainted_variables": [
+        "USERNAME",
+        "IV_USERNAME",
+        "SY-UNAME",
+        "LV_CURRENT_USER"
+      ]
+    },
+    {
+      "start_file": "tests/test4_complex_flow.abap",
+      "start_line": 8,
+      "trace_id": "test4_complex_flow_8",
+      "trace_steps": [
+        {
+          "file": "tests/test4_complex_flow.abap",
+          "stmt_line_no": 8,
+          "stmt_text": "gv_user = sy-uname.",
+          "action": "assign"
+        },
+        {
+          "file": "tests/test4_complex_flow.abap",
+          "stmt_line_no": 9,
+          "stmt_text": "gv_temp = gv_user.",
+          "action": "propagate"
+        }
+      ],
+      "final_sinks": [],
+      "confidence": "low",
+      "tainted_variables": [
+        "GV_TEMP",
+        "SY-UNAME",
+        "GV_USER"
+      ]
+    },
+    {
+      "start_file": "tests/test4_complex_flow.abap",
+      "start_line": 52,
+      "trace_id": "test4_complex_flow_52",
+      "trace_steps": [],
+      "final_sinks": [],
+      "confidence": "low",
+      "tainted_variables": [
+        "SY-UNAME"
+      ]
+    }
+  ]
+}
