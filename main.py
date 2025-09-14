@@ -416,23 +416,22 @@ class ABAPTracker:
                 self._print_warning(f"Entry {entry_id}: Line {line_number} exceeds file length")
                 return None
 
-            # Create analysis
-            analysis = ComprehensiveAnalysis(
-                id=entry_id,
-                source_file=str(abap_file),
-                line_number=line_number,
-                abap_lines=lines
-            )
-
             # Run analysis
-            result = self.analyzer.analyze_comprehensive(analysis)
+            result = self.analyzer.analyze_location(
+                id_value=str(entry_id),
+                file_path=str(abap_file),
+                line_number=line_number - 1,  # Convert to 0-based index
+                code_snippet=lines,
+                actual_line_number=line_number  # Keep 1-based for display
+            )
 
             # Progress indicator
             if self.verbose or idx % 10 == 0:
                 progress = (idx / total) * 100
                 print(f"  [{idx}/{total}] {progress:.1f}% - {file_path}:{line_number}")
 
-            return result
+            # Convert to dictionary format for saving
+            return result.to_csv_row() if result else None
 
         except Exception as e:
             self._print_error(f"Entry {idx}: {str(e)}")
@@ -452,7 +451,13 @@ class ABAPTracker:
 
         # Save CSV
         csv_file = self.output_dir / f"analysis_{timestamp}.csv"
-        self.analyzer.export_to_csv(self.results, str(csv_file))
+        with open(csv_file, 'w', encoding='utf-8', newline='') as f:
+            if self.results:
+                fieldnames = list(self.results[0].keys())
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                for result in self.results:
+                    writer.writerow(result)
 
         print(f"\n💾 Results saved:")
         print(f"  • JSON: {json_file}")
@@ -469,16 +474,19 @@ class ABAPTracker:
         print("="*80)
 
         total = len(self.results)
-        with_syuname = sum(1 for r in self.results if r.get('has_syuname'))
+        with_syuname = sum(1 for r in self.results if r.get('Tainted_Variables'))
 
         print(f"Total entries analyzed: {total}")
-        print(f"Entries with SY-UNAME: {with_syuname} ({with_syuname/total*100:.1f}%)")
+        print(f"Entries with SY-UNAME tracking: {with_syuname} ({with_syuname/total*100:.1f}%)")
 
         # Operation statistics
         operations = {}
         for result in self.results:
-            for op in result.get('db_operations', []):
-                operations[op] = operations.get(op, 0) + 1
+            ops_str = result.get('DB_Operations', '')
+            if ops_str:
+                for op in ops_str.split(', '):
+                    if op:
+                        operations[op] = operations.get(op, 0) + 1
 
         if operations:
             print("\nDatabase Operations Found:")

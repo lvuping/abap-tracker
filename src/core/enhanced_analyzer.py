@@ -6,6 +6,8 @@ Integrates advanced patterns, context-aware taint tracking, and sliding window a
 
 import re
 import time
+import io
+import csv
 from typing import List, Dict, Optional, Tuple, Any
 from dataclasses import dataclass, asdict
 from pathlib import Path
@@ -14,6 +16,7 @@ from pathlib import Path
 from patterns.advanced_patterns import AdvancedPatternDetector, PatternCache
 from utils.context_aware_taint import ContextAwareTaintTracker
 from core.final_handler import FinalDBHandler
+from utils.encoding_utils import safe_file_read
 
 
 @dataclass
@@ -104,9 +107,8 @@ class EnhancedABAPAnalyzer:
         start_time = time.time()
         results = []
 
-        # Read file
-        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-            lines = f.readlines()
+        # Read file with encoding detection
+        lines, encoding = safe_file_read(file_path)
 
         # First pass: Context-aware taint tracking
         taint_start = time.time()
@@ -384,13 +386,16 @@ class EnhancedABAPAnalyzer:
         Returns:
             Tuple of (results, performance_metrics)
         """
-        import csv
         results = []
 
-        # Read CSV
-        with open(csv_path, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            rows = list(reader)
+        # Read CSV with encoding detection
+        csv_lines, encoding = safe_file_read(csv_path)
+
+        # Parse CSV from lines
+        import io
+        csv_content = io.StringIO(''.join(csv_lines))
+        reader = csv.DictReader(csv_content)
+        rows = list(reader)
 
         # Group by file for efficiency
         files_to_analyze = {}
@@ -404,8 +409,14 @@ class EnhancedABAPAnalyzer:
 
         # Analyze each file
         for file_path, line_nums in files_to_analyze.items():
-            if Path(file_path).exists():
-                file_results = self.analyze_file(file_path, line_nums)
+            # Try file path as is, or relative to input directory
+            file_to_check = Path(file_path)
+            if not file_to_check.exists():
+                # Try relative to input directory
+                file_to_check = Path('input') / file_path
+
+            if file_to_check.exists():
+                file_results = self.analyze_file(str(file_to_check), line_nums)
                 results.extend(file_results)
 
         # Save results if output path provided
