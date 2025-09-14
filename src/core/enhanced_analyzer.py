@@ -399,9 +399,20 @@ class EnhancedABAPAnalyzer:
 
         # Group by file for efficiency
         files_to_analyze = {}
-        for row in rows:
-            file_path = row['file_path']
-            line_num = int(row['line_number']) - 1  # Convert to 0-indexed
+        for idx, row in enumerate(rows, 1):
+            file_path = row.get('file_path', '').strip()
+            line_number_str = row.get('line_number', '').strip()
+
+            # Skip rows with missing data
+            if not file_path or not line_number_str:
+                print(f"⚠️  Skipping row {idx}: missing file_path or line_number")
+                continue
+
+            try:
+                line_num = int(line_number_str) - 1  # Convert to 0-indexed
+            except ValueError:
+                print(f"⚠️  Skipping row {idx}: invalid line_number '{line_number_str}'")
+                continue
 
             if file_path not in files_to_analyze:
                 files_to_analyze[file_path] = []
