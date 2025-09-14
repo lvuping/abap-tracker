@@ -58,9 +58,13 @@ class ABAPTracker:
             self.analyzer = EnhancedABAPAnalyzer(
                 enable_caching=enable_cache,
                 enable_sliding_window=True,
-                window_size=window_size
+                window_size=window_size,
+                verbose=verbose  # Pass verbose flag
             )
-            print("🚀 Using Enhanced Analyzer with advanced pattern detection")
+            if verbose:
+                print("🚀 Using Enhanced Analyzer with VERBOSE LOGGING")
+            else:
+                print("🚀 Using Enhanced Analyzer with advanced pattern detection")
         else:
             self.analyzer = EnhancedCSVAnalyzer()
             print("📝 Using Standard Analyzer")
@@ -122,7 +126,14 @@ class ABAPTracker:
             print(f"  • Sliding window: {self.analyzer.sliding_window.window_size if self.analyzer.sliding_window else 'Disabled'}")
 
             start_time = time.time()
-            results, metrics = self.analyzer.analyze_csv(str(input_path))
+
+            # Use verbose analyzer if verbose mode is enabled
+            if self.verbose:
+                from core.enhanced_analyzer_verbose import analyze_csv_verbose
+                results, metrics = analyze_csv_verbose(self.analyzer, str(input_path))
+            else:
+                results, metrics = self.analyzer.analyze_csv(str(input_path))
+
             analysis_time = time.time() - start_time
 
             # Process results

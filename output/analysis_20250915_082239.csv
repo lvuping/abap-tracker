@@ -1,0 +1,4 @@
+file_path,line_number,status,operation,table,confidence,tainted_variables,advanced_patterns,context_scope
+input/test_multiple_rfc.abap,112,Match with SY-UNAME,INSERT,ZASYNC_RESULTS,1.00,"USERNAME, RECEIVED_AT",0,GLOBAL:GLOBAL
+input/mixed_patterns_test.abap,442,Match,INSERT,ZUSER_LOG,0.79,"TIMESTAMP, CLIENT, CREATED_BY, USER_ID",0,GLOBAL:GLOBAL
+input/comprehensive_test_suite.abap,343,Match,INSERT,ZUSER_LOG,0.79,"TIMESTAMP, CLIENT, CREATED_BY, USER_ID, LV_CASE_RESULT",0,GLOBAL:GLOBAL

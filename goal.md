@@ -61,22 +61,4 @@ REQUIREMENTS & IMPLEMENTATION DETAILS (step-by-step):
 
 7. Filtering DB table names:
    - Only consider tables that match user-configured real-db-table regexes (default: `^[ZY].*` but allow users to pass additional prefixes or explicit table names).
-   - Exclude internal table variable patterns: `^(?:LT_|GT_|IT_|CT_|TT_|LS_|GS_).+` (case-insensitive) unless they later flow into an INSERT INTO Z*/Y* table.
-
-8. CLI/Outputs:
-   - Provide a CLI: `python abap_sy_uname_tracker.py --root /path/to/src --input seeds.csv --out results.json --table-prefixes Z,Y`
-   - Provide a test runner: `pytest` or a small `run_tests.py` that loads the sample ABAP snippets and asserts expected final_sinks.
-
-DELIVERABLES:
-- abap_sy_uname_tracker.py (python 3.10+, uses only stdlib: re, csv, json, pathlib, argparse, typing)
-- tests/ (several ABAP files and expected JSON)
-- README.md describing usage and how to add/adjust regexes and table-prefixes.
-
-ITERATIVE DEBUG INSTRUCTION:
-- If a seed trace fails (no sink found but you expect one), produce a focused diff:
-  1) show the seed statement and the chain of used variables found
-  2) list regex patterns that did not match (assignments / db ops)
-  3) suggest minimal regex to add
-- Keep changes minimal and re-run tests until each failing test becomes green.
-
-Now implement the script and tests. Provide clear logs when running so user can see which rule matched each step.
+   - Exclude internal table variable patterns: `^(?:LT_|GT_|IT_|CT_|TT_|LS_|GS_).+` (case-insensitive) unless they later flow into an INSERT INTO Z*/Y* table

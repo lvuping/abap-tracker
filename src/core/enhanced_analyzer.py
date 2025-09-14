@@ -73,13 +73,15 @@ class EnhancedABAPAnalyzer:
 
     def __init__(self, enable_caching: bool = True,
                  enable_sliding_window: bool = True,
-                 window_size: int = 50):
+                 window_size: int = 50,
+                 verbose: bool = False):
         # Initialize components
         self.db_handler = FinalDBHandler()
         self.advanced_detector = AdvancedPatternDetector()
         self.taint_tracker = ContextAwareTaintTracker()
         self.pattern_cache = PatternCache() if enable_caching else None
         self.sliding_window = SlidingWindowAnalyzer(window_size) if enable_sliding_window else None
+        self.verbose = verbose  # Store verbose flag
 
         # Performance metrics
         self.metrics = {

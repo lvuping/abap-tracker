@@ -1,0 +1,149 @@
+[
+  {
+    "file_path": "input/test_multiple_rfc.abap",
+    "line_number": 112,
+    "status": "Match with SY-UNAME",
+    "table": "ZASYNC_RESULTS",
+    "fields": {
+      "USER_FIELD": "sy-uname"
+    },
+    "operation": "INSERT",
+    "confidence": 1.0,
+    "tainted_variables": [
+      "USERNAME",
+      "RECEIVED_AT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "GLOBAL:GLOBAL",
+      "inter_procedural_flows": [
+        "Z_TRANSFORM_USER",
+        "WRITE_TO_ARCHIVE",
+        "LOG_USER_ACTIVITY",
+        "Z_RFC_UPDATE_USER",
+        "PROCESS_USER_DATA",
+        "Z_UPDATE_REMOTE_USER",
+        "Z_SYNC_USER_DATA",
+        "Z_BATCH_UPDATE_USERS",
+        "Z_CREATE_USER",
+        "Z_REPLICATE_USER",
+        "Z_AUDIT_USER",
+        "Z_USER_FUNCTION"
+      ]
+    },
+    "performance_metrics": {
+      "analysis_time": 0.0003077983856201172,
+      "cache_used": true
+    }
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 442,
+    "status": "Match",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.7875000000000001,
+    "tainted_variables": [
+      "TIMESTAMP",
+      "CLIENT",
+      "CREATED_BY",
+      "USER_ID"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "GLOBAL:GLOBAL",
+      "inter_procedural_flows": [
+        "Z_TRANSFORM_USER",
+        "WRITE_TO_ARCHIVE",
+        "LOG_USER_ACTIVITY",
+        "Z_RFC_UPDATE_USER",
+        "PROCESS_USER_DATA",
+        "Z_UPDATE_REMOTE_USER",
+        "Z_SYNC_USER_DATA",
+        "Z_BATCH_UPDATE_USERS",
+        "Z_CREATE_USER",
+        "Z_REPLICATE_USER",
+        "Z_AUDIT_USER",
+        "Z_USER_FUNCTION",
+        "PROCESS_USER",
+        "VALIDATE_ACCESS",
+        "Z_USER_CHECK",
+        "LOG_USER_ACTION",
+        "Z_USER_MANAGEMENT_RFC",
+        "Z_COMPLEX_USER_SYNC",
+        "Z_BACKGROUND_USER_PROCESS",
+        "Z_STANDARD_USER_RFC",
+        "Z_BATCH_PARAMETER_UPDATE",
+        "Z_ASYNC_USER_VALIDATION",
+        "Z_GET_USER_AUTHORIZATION",
+        "Z_NOTIFY_USER_CREATION",
+        "Z_SYNC_USER_CHANGES",
+        "Z_BACKGROUND_SYNC_USERS",
+        "COMPLEX_USER_PROCESSING",
+        "LEVEL1_PROCESSING"
+      ]
+    },
+    "performance_metrics": {
+      "analysis_time": 0.0005052089691162109,
+      "cache_used": true
+    }
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 343,
+    "status": "Match",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.7875000000000001,
+    "tainted_variables": [
+      "TIMESTAMP",
+      "CLIENT",
+      "CREATED_BY",
+      "USER_ID",
+      "LV_CASE_RESULT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "GLOBAL:GLOBAL",
+      "inter_procedural_flows": [
+        "Z_TRANSFORM_USER",
+        "WRITE_TO_ARCHIVE",
+        "LOG_USER_ACTIVITY",
+        "Z_RFC_UPDATE_USER",
+        "PROCESS_USER_DATA",
+        "Z_UPDATE_REMOTE_USER",
+        "Z_SYNC_USER_DATA",
+        "Z_BATCH_UPDATE_USERS",
+        "Z_CREATE_USER",
+        "Z_REPLICATE_USER",
+        "Z_AUDIT_USER",
+        "Z_USER_FUNCTION",
+        "PROCESS_USER",
+        "VALIDATE_ACCESS",
+        "Z_USER_CHECK",
+        "LOG_USER_ACTION",
+        "Z_USER_MANAGEMENT_RFC",
+        "Z_COMPLEX_USER_SYNC",
+        "Z_BACKGROUND_USER_PROCESS",
+        "Z_STANDARD_USER_RFC",
+        "Z_BATCH_PARAMETER_UPDATE",
+        "Z_ASYNC_USER_VALIDATION",
+        "Z_GET_USER_AUTHORIZATION",
+        "Z_NOTIFY_USER_CREATION",
+        "Z_SYNC_USER_CHANGES",
+        "Z_BACKGROUND_SYNC_USERS",
+        "COMPLEX_USER_PROCESSING",
+        "LEVEL1_PROCESSING",
+        "DEEP_PROPAGATION_LEVEL1",
+        "EXTREME_PERFORM_LEVEL1",
+        "PROCESS_CALLBACK_DATA"
+      ]
+    },
+    "performance_metrics": {
+      "analysis_time": 0.0007150173187255859,
+      "cache_used": true
+    }
+  }
+]
