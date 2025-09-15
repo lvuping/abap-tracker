@@ -123,6 +123,7 @@ class EnhancedCSVAnalyzer:
 
         # Track variable through assignments (taint propagation)
         tainted_vars = {variable_name.upper()}
+        tainted_tables = set()  # Track internal tables that contain tainted data
 
         # Look ahead up to 50 lines for actual DB usage
         for i in range(line_number + 1, min(len(code_snippet), line_number + 50)):
@@ -150,17 +151,46 @@ class EnhancedCSVAnalyzer:
 
             # Check if any tainted variable is mentioned
             has_tainted = any(tv in line_upper for tv in tainted_vars)
-            if not has_tainted:
+
+            # Check for APPEND operations that put tainted data into internal tables
+            if 'APPEND' in line_upper and has_tainted:
+                # Pattern: APPEND structure TO internal_table
+                append_match = re.search(r'APPEND\s+(\w+)\s+TO\s+(\w+)', line, re.IGNORECASE)
+                if append_match:
+                    struct = append_match.group(1).upper()
+                    table = append_match.group(2).upper()
+                    if struct in tainted_vars:
+                        # The internal table now contains tainted data
+                        tainted_tables.add(table)
+                        tainted_vars.add(table)  # Also track as tainted variable
+
+            # Also check if any tainted table is mentioned
+            has_tainted_table = any(tt in line_upper for tt in tainted_tables)
+            if not has_tainted and not has_tainted_table:
                 continue
 
             # Check for DB operations
             for op_name, pattern in db_patterns.items():
                 match = pattern.search(line)
                 if match:
-                    table = match.group(1)
-                    # Verify it's a real table (Z* or Y*)
-                    if table and (table.upper().startswith('Z') or table.upper().startswith('Y')):
-                        result['table'] = table.upper()
+                    table = match.group(1).upper()
+
+                    # Check if this is an internal table operation (GT_*, LT_*, IT_*)
+                    if table.startswith(('GT_', 'LT_', 'IT_')):
+                        # Track this internal table as containing tainted data
+                        if has_tainted:
+                            tainted_tables.add(table)
+                            # Continue searching - don't return yet
+                    # Check if it's inserting FROM a tainted internal table INTO a Z/Y table
+                    elif has_tainted_table and (table.startswith('Z') or table.startswith('Y')):
+                        # Found the final destination!
+                        result['table'] = table
+                        result['operation'] = op_name
+                        result['field'] = 'USER_FIELD'  # Generic field name
+                        return result
+                    # Direct operation on Z* or Y* table with tainted variable
+                    elif has_tainted and (table.startswith('Z') or table.startswith('Y')):
+                        result['table'] = table
                         result['operation'] = op_name
 
                         # Try to find the field being set
@@ -416,26 +446,40 @@ class EnhancedCSVAnalyzer:
         tables = []
         fields = []
         
-        # Priority 1: From database sinks (most important) - ONLY FIRST ONE
+        # Priority 1: From database sinks (most important) - Prioritize Z/Y tables
         database_sinks = analysis_result.get('database_sinks', [])
         if database_sinks:
-            # Take only the FIRST sink (the first Z/Y table operation)
-            first_sink = database_sinks[0]
-            table = first_sink.get('table', '')
-            if table:
-                tables.append(table)
-            
-            # Only fields from the FIRST sink
-            sink_fields = first_sink.get('fields', [])
-            for field in sink_fields:
-                if field and field not in fields:
-                    # Include user tracking fields and common SAP user fields
-                    field_upper = field.upper()
-                    # Common SAP user fields: ERNAM (created by), AENAM (changed by), UNAME (user name)
-                    if (field_upper.endswith('_BY') or 
-                        field_upper in ['SY-UNAME', 'RFC_PARAMETER', 'ERNAM', 'AENAM', 'UNAME', 
-                                       'CREATED_BY', 'CHANGED_BY', 'MODIFIED_BY', 'DELETED_BY']):
-                        fields.append(field)
+            # First, look for Z/Y tables
+            for sink in database_sinks:
+                table = sink.get('table', '').upper()
+                if table and (table.startswith('Z') or table.startswith('Y')):
+                    tables.append(table)
+                    # Get fields from this Z/Y table sink
+                    sink_fields = sink.get('fields', [])
+                    for field in sink_fields:
+                        if field and field not in fields:
+                            field_upper = field.upper()
+                            if (field_upper.endswith('_BY') or
+                                field_upper in ['SY-UNAME', 'RFC_PARAMETER', 'ERNAM', 'AENAM', 'UNAME',
+                                               'CREATED_BY', 'CHANGED_BY', 'MODIFIED_BY', 'DELETED_BY']):
+                                fields.append(field)
+                    break  # Found Z/Y table, stop here
+
+            # If no Z/Y table found, take the first sink (might be internal table)
+            if not tables and database_sinks:
+                first_sink = database_sinks[0]
+                table = first_sink.get('table', '')
+                if table:
+                    tables.append(table)
+                # Get fields from this internal table sink
+                sink_fields = first_sink.get('fields', [])
+                for field in sink_fields:
+                    if field and field not in fields:
+                        field_upper = field.upper()
+                        if (field_upper.endswith('_BY') or
+                            field_upper in ['SY-UNAME', 'RFC_PARAMETER', 'ERNAM', 'AENAM', 'UNAME',
+                                           'CREATED_BY', 'CHANGED_BY', 'MODIFIED_BY', 'DELETED_BY']):
+                            fields.append(field)
         
         # Priority 2: Check for INSERT VALUES patterns using the enhanced handler
         if not tables or not fields:
