@@ -222,21 +222,41 @@ class StableEnhancedAnalyzer:
         """
         Find variables tainted with sy-uname
         """
-        tainted = {'SY-UNAME', 'SYUNAME'}
+        tainted = {'SY-UNAME', 'SYUNAME', 'SY_UNAME'}
 
         patterns = [
             r'(\w+)\s*=\s*sy-uname',
             r'DATA:\s*(\w+)\s+TYPE\s+sy-uname',
             r'(\w+)\s+TYPE\s+sy-uname',
             r'MOVE\s+sy-uname\s+TO\s+(\w+)',
-            r'(\w+)-(\w+)\s*=\s*sy-uname',
+            r'(\w+)-\w+\s*=\s*sy-uname',  # structure-field = sy-uname
         ]
 
         for line in window:
             for pattern in patterns:
                 matches = re.finditer(pattern, line, re.IGNORECASE)
                 for match in matches:
-                    tainted.add(match.group(1).upper())
+                    var_name = match.group(1).upper()
+                    tainted.add(var_name)
+                    # Also track variations
+                    if '-' in line and var_name in line.upper():
+                        # This is a structure, also add the structure name
+                        tainted.add(var_name)
+
+        # Also track propagation through assignments
+        for line in window:
+            line_upper = line.upper()
+            # Check for variable-to-variable assignments
+            for tainted_var in list(tainted):
+                if tainted_var in line_upper and '=' in line:
+                    # Pattern: new_var = tainted_var
+                    match = re.match(r'^\s*(\w+)\s*=\s*' + re.escape(tainted_var), line, re.IGNORECASE)
+                    if match:
+                        tainted.add(match.group(1).upper())
+                    # Pattern: structure-field = tainted_var
+                    match = re.match(r'^\s*(\w+)-\w+\s*=\s*' + re.escape(tainted_var), line, re.IGNORECASE)
+                    if match:
+                        tainted.add(match.group(1).upper())
 
         return tainted
 
@@ -281,8 +301,14 @@ class StableEnhancedAnalyzer:
         if not tainted_found:
             return None
 
-        # Extract table name
+        # Extract table name - first try current statement
         table = self.extract_table(statement, operation)
+
+        # If we got an internal table, look forward for the final destination
+        if not table or (table and table.startswith(('GT_', 'LT_', 'IT_'))):
+            final_table = self.find_final_table(window, line_idx, tainted_vars)
+            if final_table:
+                table = final_table
 
         return AnalysisResult(
             file_path=file_path,
@@ -318,9 +344,51 @@ class StableEnhancedAnalyzer:
 
         return statement
 
+    def find_final_table(self, window: List[str], start_idx: int, tainted_vars: set) -> Optional[str]:
+        """
+        Look forward to find the final Z*/Y* database table
+        """
+        # Track internal tables that contain tainted data
+        tainted_tables = set()
+
+        # First, identify any internal tables mentioned in current statement
+        current_stmt = self.build_statement(window, start_idx)
+        for table_pattern in [r'GT_\w+', r'LT_\w+', r'IT_\w+']:
+            matches = re.findall(table_pattern, current_stmt.upper())
+            for match in matches:
+                # Check if this table is used with tainted variables
+                for var in tainted_vars:
+                    if var in current_stmt.upper():
+                        tainted_tables.add(match)
+                        break
+
+        # Look forward for operations that use these tainted tables
+        for i in range(start_idx + 1, min(len(window), start_idx + 20)):
+            line = window[i].strip()
+            if not line or line.startswith('*'):
+                continue
+
+            line_upper = line.upper()
+
+            # Check if any tainted table is used in a database operation
+            for tainted_table in tainted_tables:
+                if tainted_table in line_upper:
+                    # Check for INSERT/UPDATE/MODIFY to Z*/Y* table
+                    for op in ['INSERT', 'UPDATE', 'MODIFY']:
+                        if op in line_upper:
+                            # Build the complete statement
+                            stmt = self.build_statement(window, i)
+                            # Extract the target table
+                            table = self.extract_table(stmt, op)
+                            if table and (table.startswith('Z') or table.startswith('Y')):
+                                # Found the final destination!
+                                return table
+
+        return None
+
     def extract_table(self, statement: str, operation: str) -> Optional[str]:
         """
-        Extract table name from statement
+        Extract table name from statement - prioritize Z*/Y* tables
         """
         patterns = {
             'INSERT': [r'INSERT\s+INTO\s+(\w+)', r'INSERT\s+(\w+)'],
@@ -333,7 +401,22 @@ class StableEnhancedAnalyzer:
             for pattern in patterns[operation]:
                 match = re.search(pattern, statement.upper())
                 if match:
-                    return match.group(1)
+                    table = match.group(1)
+                    # Check if it's a database table (Z* or Y*) or internal table
+                    if table.startswith(('Z', 'Y')):
+                        return table  # Return database table immediately
+                    elif table.startswith(('GT_', 'LT_', 'IT_')):
+                        # It's an internal table, check if there's a FROM TABLE clause
+                        # that might indicate the final destination
+                        if 'FROM TABLE' in statement.upper():
+                            # This is likely: MODIFY ZTABLE FROM TABLE GT_TABLE
+                            # Return the first table (ZTABLE) not the internal table
+                            return table if table.startswith(('Z', 'Y')) else None
+                        # For internal tables, return None to indicate we need to search further
+                        return None
+                    else:
+                        # Return the table name as is (might be standard SAP table)
+                        return table
 
         return None
 
