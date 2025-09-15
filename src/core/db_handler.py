@@ -34,6 +34,14 @@ class CompleteDBHandler:
         self.sys_vars = {'SY-UNAME', 'SY_UNAME', 'SY-DATUM', 'SY-UZEIT', 'SY-MANDT'}
         self.skip_patterns = {'MODIFY SCREEN', 'MODIFY LINE', 'MODIFY CURRENT', 'INSERT REPORT', 'UPDATE DATASET'}
 
+    def _is_database_table(self, table_name: str) -> bool:
+        """Check if table name is a valid database table (starts with Z or Y)"""
+        if not table_name:
+            return False
+        table_upper = table_name.upper()
+        # Custom SAP tables start with Z or Y
+        return table_upper.startswith('Z') or table_upper.startswith('Y')
+
     def analyze(self, lines: List[str], start_idx: int = 0, end_idx: int = None) -> List[DBOperation]:
         """Analyze code for database operations with comprehensive tracking"""
         if end_idx is None:
@@ -187,6 +195,9 @@ class CompleteDBHandler:
         match = re.search(r'INSERT\s+INTO\s+(\w+)\s+VALUES\s*\((.*?)\)', stmt, re.IGNORECASE | re.DOTALL)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             values = match.group(2)
             has_syuname = self._has_syuname(values)
             fields = {'USER_FIELD': 'sy-uname'} if has_syuname else {}
@@ -206,6 +217,9 @@ class CompleteDBHandler:
         match = re.search(r'INSERT\s+(\w+)\s+VALUES\s+(.*?)(?:\.)', stmt, re.IGNORECASE | re.DOTALL)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             values = match.group(2)
             has_syuname = self._has_syuname(values)
             fields = {'USER_FIELD': 'sy-uname'} if has_syuname else {}
@@ -225,6 +239,9 @@ class CompleteDBHandler:
         match = re.search(r'INSERT\s+(\w+)\s+FROM\s+VALUE\s+#?\s*\((.*?)\)', stmt, re.IGNORECASE | re.DOTALL)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             content = match.group(2)
             fields = self._parse_value_content(content)
             has_syuname = any('sy-uname' in str(v).lower() for v in fields.values())
@@ -244,6 +261,9 @@ class CompleteDBHandler:
         match = re.search(r'INSERT\s+(\w+)\s+FROM\s+TABLE\s+(\w+)', stmt, re.IGNORECASE)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             itab = match.group(2)
             fields, has_syuname = self._get_struct_fields(itab, context)
 
@@ -268,6 +288,9 @@ class CompleteDBHandler:
         match = re.search(r'INSERT\s+(\w+)\s+FROM\s+@?(\w+)', stmt, re.IGNORECASE)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             struct = match.group(2)
 
             if struct.upper() not in ['VALUE', 'TABLE', 'CORRESPONDING']:
@@ -297,6 +320,9 @@ class CompleteDBHandler:
         match = re.search(r'UPDATE\s+(\w+)\s+SET\s+(.*?)(?:WHERE|$)', stmt, re.IGNORECASE | re.DOTALL)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             set_clause = match.group(2)
             fields = self._parse_set_clause(set_clause)
             has_syuname = any('sy-uname' in str(v).lower() for v in fields.values()) or self._has_syuname(set_clause)
@@ -316,6 +342,9 @@ class CompleteDBHandler:
         match = re.search(r'UPDATE\s+(\w+)\s+FROM\s+@?(\w+)', stmt, re.IGNORECASE)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             struct = match.group(2)
             fields, has_syuname = self._get_struct_fields(struct, context)
 
@@ -367,6 +396,9 @@ class CompleteDBHandler:
         match = re.search(r'MODIFY\s+(\w+)\s+FROM\s+(\w+)\s+TRANSPORTING\s+(.*?)(?:WHERE|\.|\s*$)', stmt, re.IGNORECASE | re.DOTALL)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             struct = match.group(2)
             transporting = match.group(3)
 
@@ -404,6 +436,9 @@ class CompleteDBHandler:
         match = re.search(r'MODIFY\s+(\w+)\s+FROM\s+VALUE\s+#?\s*\((.*?)\)', stmt, re.IGNORECASE | re.DOTALL)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             content = match.group(2)
             fields = self._parse_value_content(content)
             has_syuname = any('sy-uname' in str(v).lower() for v in fields.values())
@@ -423,6 +458,9 @@ class CompleteDBHandler:
         match = re.search(r'MODIFY\s+(\w+)\s+FROM\s+@?(\w+)', stmt, re.IGNORECASE)
         if match:
             table = match.group(1).upper()
+            # Only process database tables (Z* or Y*)
+            if not self._is_database_table(table):
+                return None
             struct = match.group(2)
 
             if struct.upper() not in ['VALUE', 'TABLE', 'CORRESPONDING']:
