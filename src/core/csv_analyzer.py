@@ -34,7 +34,8 @@ class ComprehensiveAnalysis:
     def to_csv_row(self) -> Dict:
         """Convert to CSV row format - prioritizing direct impacts"""
         # Filter tables to only show Z* and Y* tables as final tables
-        final_tables = [t for t in self.tables if t.startswith(('Z', 'Y'))][:3]
+        # Check both uppercase and original case
+        final_tables = [t for t in self.tables if t.upper().startswith(('Z', 'Y'))][:3]
 
         return {
             "ID": self.id,
