@@ -393,7 +393,12 @@ class StableEnhancedAnalyzer:
         patterns = {
             'INSERT': [r'INSERT\s+INTO\s+(\w+)', r'INSERT\s+(\w+)'],
             'UPDATE': [r'UPDATE\s+(\w+)'],
-            'MODIFY': [r'MODIFY\s+(\w+)'],
+            'MODIFY': [
+                r'MODIFY:?\s+(\w+)\s+FROM\s+TABLE\s+\w+',  # MODIFY: ZTABLE FROM TABLE IT_TABLE
+                r'MODIFY\s+(\w+)\s+FROM\s+\w+',            # MODIFY ZTABLE FROM WA
+                r'MODIFY\s+(\w+)\s+TRANSPORTING',          # MODIFY TABLE TRANSPORTING fields
+                r'MODIFY\s+(\w+)'                          # Basic MODIFY TABLE
+            ],
             'DELETE': [r'DELETE\s+FROM\s+(\w+)', r'DELETE\s+(\w+)']
         }
 

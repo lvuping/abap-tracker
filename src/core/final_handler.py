@@ -339,8 +339,8 @@ class FinalDBHandler:
         if any(skip in stmt.upper() for skip in ['MODIFY SCREEN', 'MODIFY LINE', 'MODIFY CURRENT']):
             return None
 
-        # Pattern 1: MODIFY FROM TABLE
-        match = re.search(r'MODIFY\s+(\w+)\s+FROM\s+TABLE\s+(\w+)', stmt, re.IGNORECASE)
+        # Pattern 1: MODIFY FROM TABLE (with optional colon)
+        match = re.search(r'MODIFY:?\s+(\w+)\s+FROM\s+TABLE\s+(\w+)', stmt, re.IGNORECASE)
         if match:
             table = match.group(1).upper()
             itab = match.group(2)
@@ -363,7 +363,50 @@ class FinalDBHandler:
                 has_sy_uname=has_syuname
             )
 
-        # Pattern 2: MODIFY with TRANSPORTING
+        # Pattern 2: Direct MODIFY with TRANSPORTING (without FROM)
+        match = re.search(r'MODIFY\s+(\w+)\s+TRANSPORTING\s+(.*?)(?:WHERE|\.|\s*$)', stmt, re.IGNORECASE | re.DOTALL)
+        if match:
+            table = match.group(1).upper()
+            transporting = match.group(2)
+
+            # Get fields from table context (the table itself might be tainted)
+            fields, has_syuname = self._get_struct_fields(table, context)
+
+            # Parse transported fields
+            transported_fields = {}
+            for field in re.findall(r'\w+', transporting):
+                field_upper = field.upper()
+                if field_upper not in ['WHERE', 'AND', 'OR', 'INDEX', 'FROM', 'TO']:
+                    # Check if this field was marked as having sy-uname
+                    if field_upper in fields and fields[field_upper] == 'sy-uname':
+                        transported_fields[field_upper] = 'sy-uname'
+                        has_syuname = True
+                    elif field_upper in ['AENAM', 'ERNAM', 'UNAME', 'USERNAME', 'CREATED_BY', 'MODIFIED_BY', 'CHANGED_BY']:
+                        # Common user fields - check context for the table
+                        if f"{table}_tainted" in context or table in context:
+                            transported_fields[field_upper] = 'sy-uname'
+                            has_syuname = True
+                        else:
+                            transported_fields[field_upper] = 'transported'
+                    else:
+                        transported_fields[field_upper] = 'transported'
+
+            # Use transported fields if available
+            if transported_fields:
+                fields = transported_fields
+
+            return DBOperation(
+                operation=OperationType.MODIFY,
+                table=table,
+                fields=fields,
+                line_number=line_num,
+                pattern='direct_transporting',
+                confidence=0.85 if has_syuname else 0.75,
+                raw_statement=stmt[:100],
+                has_sy_uname=has_syuname
+            )
+
+        # Pattern 3: MODIFY with FROM and TRANSPORTING
         match = re.search(r'MODIFY\s+(\w+)\s+FROM\s+(\w+)\s+TRANSPORTING\s+(.*?)(?:WHERE|\.|\s*$)', stmt, re.IGNORECASE | re.DOTALL)
         if match:
             table = match.group(1).upper()
@@ -394,13 +437,13 @@ class FinalDBHandler:
                 table=table,
                 fields=fields,
                 line_number=line_num,
-                pattern='transporting',
+                pattern='from_transporting',
                 confidence=0.85 if has_syuname else 0.75,
                 raw_statement=stmt[:100],
                 has_sy_uname=has_syuname
             )
 
-        # Pattern 3: MODIFY FROM VALUE constructor
+        # Pattern 4: MODIFY FROM VALUE constructor
         match = re.search(r'MODIFY\s+(\w+)\s+FROM\s+VALUE\s+#?\s*\((.*?)\)', stmt, re.IGNORECASE | re.DOTALL)
         if match:
             table = match.group(1).upper()
@@ -419,7 +462,7 @@ class FinalDBHandler:
                 has_sy_uname=has_syuname
             )
 
-        # Pattern 4: Basic MODIFY FROM structure
+        # Pattern 5: Basic MODIFY FROM structure
         match = re.search(r'MODIFY\s+(\w+)\s+FROM\s+@?(\w+)', stmt, re.IGNORECASE)
         if match:
             table = match.group(1).upper()
