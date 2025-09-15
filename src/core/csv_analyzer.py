@@ -99,6 +99,7 @@ class EnhancedCSVAnalyzer:
             # Match various assignment patterns
             patterns = [
                 r'^\s*(\w+)\s*=\s*sy-uname',  # lv_user = sy-uname
+                r'^\s*(\w+)-\w+\s*=\s*sy-uname',  # structure-field = sy-uname
                 r'^\s*DATA:\s*(\w+)\s+TYPE\s+sy-uname',  # DATA: lv_user TYPE sy-uname
                 r'^\s*(\w+)\s+TYPE\s+sy-uname',  # lv_user TYPE sy-uname (in DATA block)
                 r'^\s*PARAMETERS:\s*(\w+)\s+.*DEFAULT\s+sy-uname',  # PARAMETERS: p_user ... DEFAULT sy-uname
@@ -164,6 +165,20 @@ class EnhancedCSVAnalyzer:
                         tainted_tables.add(table)
                         tainted_vars.add(table)  # Also track as tainted variable
 
+            # Check for MODIFY TRANSPORTING on internal tables (keeps them tainted)
+            if 'MODIFY' in line_upper and 'TRANSPORTING' in line_upper:
+                # Pattern: MODIFY internal_table TRANSPORTING ...
+                modify_match = re.search(r'MODIFY\s+(\w+)\s+TRANSPORTING', line, re.IGNORECASE)
+                if modify_match:
+                    table = modify_match.group(1).upper()
+                    # If this table is already tainted or has tainted fields, keep it tainted
+                    if table in tainted_vars or table.startswith(('GT_', 'LT_', 'IT_')):
+                        for tv in tainted_vars:
+                            if tv.startswith(table) or table in tv:
+                                tainted_tables.add(table)
+                                tainted_vars.add(table)
+                                break
+
             # Also check if any tainted table is mentioned
             has_tainted_table = any(tt in line_upper for tt in tainted_tables)
             if not has_tainted and not has_tainted_table:
@@ -181,26 +196,33 @@ class EnhancedCSVAnalyzer:
                         if has_tainted:
                             tainted_tables.add(table)
                             # Continue searching - don't return yet
-                    # Check if it's inserting FROM a tainted internal table INTO a Z/Y table
-                    elif has_tainted_table and (table.startswith('Z') or table.startswith('Y')):
-                        # Found the final destination!
-                        result['table'] = table
-                        result['operation'] = op_name
-                        result['field'] = 'USER_FIELD'  # Generic field name
-                        return result
-                    # Direct operation on Z* or Y* table with tainted variable
-                    elif has_tainted and (table.startswith('Z') or table.startswith('Y')):
-                        result['table'] = table
-                        result['operation'] = op_name
+                    # Check if it's a Z/Y table operation with FROM TABLE clause
+                    elif (table.startswith('Z') or table.startswith('Y')):
+                        # Check if it's using a tainted internal table
+                        if 'FROM TABLE' in line.upper():
+                            # Extract the source table
+                            from_table_match = re.search(r'FROM\s+TABLE\s+(\w+)', line, re.IGNORECASE)
+                            if from_table_match:
+                                source_table = from_table_match.group(1).upper()
+                                if source_table in tainted_tables or source_table in tainted_vars:
+                                    # Found the final destination!
+                                    result['table'] = table
+                                    result['operation'] = op_name
+                                    result['field'] = 'USER_FIELD'  # Generic field name
+                                    return result
+                        # Direct operation on Z* or Y* table with tainted variable
+                        elif has_tainted:
+                            result['table'] = table
+                            result['operation'] = op_name
 
-                        # Try to find the field being set
-                        if '=' in line:
-                            # Pattern like: field = variable
-                            field_match = re.search(r'(\w+)\s*=\s*' + re.escape(variable_name), line, re.IGNORECASE)
-                            if field_match:
-                                result['field'] = field_match.group(1).upper()
+                            # Try to find the field being set
+                            if '=' in line:
+                                # Pattern like: field = variable
+                                field_match = re.search(r'(\w+)\s*=\s*' + re.escape(variable_name), line, re.IGNORECASE)
+                                if field_match:
+                                    result['field'] = field_match.group(1).upper()
 
-                        return result
+                            return result
 
             # Check for structure field assignments that might lead to DB operations
             if '-' in line and '=' in line:
