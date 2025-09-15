@@ -123,16 +123,17 @@ class ABAPTracker:
             print(f"  • Advanced pattern detection (EXEC SQL, CDS, BAPI, etc.)")
             print(f"  • Context-aware taint tracking")
             print(f"  • Performance optimizations")
-            print(f"  • Sliding window: {self.analyzer.sliding_window.window_size if self.analyzer.sliding_window else 'Disabled'}")
+            print(f"  • Sliding window: 50 lines before/after")
 
             start_time = time.time()
 
-            # Use verbose analyzer if verbose mode is enabled
-            if self.verbose:
-                from core.enhanced_analyzer_verbose import analyze_csv_verbose
-                results, metrics = analyze_csv_verbose(self.analyzer, str(input_path))
-            else:
-                results, metrics = self.analyzer.analyze_csv(str(input_path))
+            # Use fixed analyzer for proper window analysis
+            from core.enhanced_analyzer_fixed import analyze_csv_with_fixed_analyzer
+            results, metrics = analyze_csv_with_fixed_analyzer(
+                str(input_path),
+                str(output_json),
+                verbose=self.verbose
+            )
 
             analysis_time = time.time() - start_time
 

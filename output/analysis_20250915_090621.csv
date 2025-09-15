@@ -1,0 +1,180 @@
+file_path,line_number,status,operation,table,confidence,tainted_variables,advanced_patterns,context_scope
+input/02_database_update.abap,30,Complete,UPDATE,Unknown,0.70,"UPDATER, LV_MODIFIER, SY-UNAME, LV_UPDATER",0,window_analysis
+input/02_database_update.abap,34,Complete,UPDATE,Unknown,0.70,"SY-UNAME, MODIFIED_BY",0,window_analysis
+input/02_database_update.abap,48,Complete,UPDATE,Unknown,0.70,"UPDATER, SY-UNAME",0,window_analysis
+input/02_database_update.abap,59,Complete,UPDATE,Unknown,0.70,"UPDATER, LV_USER, LV_UPDATER",0,window_analysis
+input/02_database_update.abap,64,Complete,UPDATE,Unknown,0.70,"UPDATER, SY-UNAME, CHANGED_BY, LV_UPDATER",0,window_analysis
+input/02_database_update.abap,84,Complete,UPDATE,ZTABLE,0.90,"SY-UNAME, CHANGED_BY",0,window_analysis
+input/02_database_update.abap,165,Complete,UPDATE,Unknown,0.70,"UPDATER, SY-UNAME, LS_INTERMEDIATE-UPDATER, LS_INTERMEDIATE",0,window_analysis
+input/02_database_update.abap,166,Complete,UPDATE,Unknown,0.70,LS_INTERMEDIATE,0,window_analysis
+input/02_database_update.abap,167,Complete,UPDATE,Unknown,0.70,LS_INTERMEDIATE,0,window_analysis
+input/02_database_update.abap,168,Complete,UPDATE,Unknown,0.70,"UPDATER, UPDATED_BY, LS_INTERMEDIATE-UPDATER, LS_INTERMEDIATE",0,window_analysis
+input/02_database_update.abap,177,Complete,UPDATE,ZTABLE,0.90,UPDATED_BY,0,window_analysis
+input/02_database_update.abap,178,Complete,UPDATE,Unknown,0.70,UPDATED_BY,0,window_analysis
+input/02_database_update.abap,203,Complete,UPDATE,ZTABLE,0.90,"SY-UNAME, CHANGED_BY",0,window_analysis
+input/02_database_update.abap,223,Complete,UPDATE,ZTABLE,0.90,"SY-UNAME, ARCHIVE_USER",0,window_analysis
+input/02_database_update.abap,289,Complete,UPDATE,Unknown,0.70,SY-UNAME,0,window_analysis
+input/03_database_modify.abap,114,Complete,UPDATE,Unknown,0.70,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,117,Complete,MODIFY,ZTABLE,0.90,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,126,Complete,MODIFY,LT_ZTABLE,0.90,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,134,Complete,MODIFY,LT_ZTABLE,0.90,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,141,Complete,MODIFY,Unknown,0.70,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,143,Complete,MODIFY,ZTABLE,0.90,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,174,Complete,MODIFY,LT_ZTABLE,0.90,"PROCESSED_BY, WA_ZTABLE",0,window_analysis
+input/03_database_modify.abap,251,Complete,UPDATE,Unknown,0.70,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,252,Complete,UPDATE,Unknown,0.70,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,256,Complete,UPDATE,Unknown,0.70,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,259,Complete,MODIFY,ZTABLE,0.90,WA_ZTABLE,0,window_analysis
+input/03_database_modify.abap,296,Complete,MODIFY,Unknown,0.70,"LS_DATA, LS_TABLE, WA_ZTABLE",0,window_analysis
+input/03_database_modify.abap,306,Complete,MODIFY,ZTABLE,0.90,WA_ZTABLE,0,window_analysis
+input/04_database_delete.abap,30,Complete,DELETE,Unknown,0.70,"LV_DELETER, LV_PROCESSOR, SY-UNAME",0,window_analysis
+input/04_database_delete.abap,42,Complete,DELETE,Unknown,0.70,"LV_DELETER, LV_USER",0,window_analysis
+input/04_database_delete.abap,45,Complete,DELETE,Unknown,0.70,"LV_DELETER, DELETED_BY",0,window_analysis
+input/04_database_delete.abap,81,Complete,DELETE,Unknown,0.70,"DELETED_BY, LV_PROCESSOR, SY-UNAME",0,window_analysis
+input/04_database_delete.abap,169,Complete,DELETE,Unknown,0.70,"LV_DELETER, SY-UNAME",0,window_analysis
+input/04_database_delete.abap,176,Complete,DELETE,Unknown,0.70,"LV_DELETER, DELETED_BY",0,window_analysis
+input/04_database_delete.abap,188,Complete,DELETE,Unknown,0.70,"LV_DELETER, LS_DATA, DELETED_BY, LS_DATA-DELETED_BY",0,window_analysis
+input/04_database_delete.abap,189,Complete,DELETE,ZTABLE,0.90,LS_DATA,0,window_analysis
+input/04_database_delete.abap,208,Complete,DELETE,Unknown,0.70,"LS_DATA, DELETED_BY, SY-UNAME, LS_DATA-DELETED_BY",0,window_analysis
+input/04_database_delete.abap,210,Complete,DELETE,Unknown,0.70,"LS_DATA, LS_TABLE",0,window_analysis
+input/04_database_delete.abap,263,Complete,DELETE,Unknown,0.70,"DELETED_BY, LV_PROCESSOR, SY-UNAME",0,window_analysis
+input/04_database_delete.abap,321,Complete,DELETE,Unknown,0.70,"DELETED_BY, LV_USER",0,window_analysis
+input/04_database_delete.abap,343,Complete,DELETE,Unknown,0.70,"LV_DELETER, SY-UNAME",0,window_analysis
+input/04_database_delete.abap,350,Complete,DELETE,Unknown,0.70,"LV_DELETER, DELETED_BY",0,window_analysis
+input/test_complex_flow.abap,75,Complete,UPDATE,ZDYNAMIC_TABLE,0.90,"LV_DYNAMIC_USER, UPDATED_BY",0,window_analysis
+input/test_complex_flow.abap,91,Complete,UPDATE,Unknown,0.70,LV_SELECTED_USER,0,window_analysis
+input/test_complex_flow.abap,108,Complete,INSERT,ZTRANSFORMED_USERS,0.90,"ORIGINAL, LV_IMPORT_USER, TRANSFORMED, LV_EXPORT_USER",0,window_analysis
+input/test_complex_flow.abap,124,Complete,INSERT,ZPROCESSED_USERS,0.90,"MV_INTERNAL_USER, USERNAME",0,window_analysis
+input/test_complex_flow.abap,132,Complete,UPDATE,Unknown,0.70,"P_USER, SY-UNAME",0,window_analysis
+input/test_complex_flow.abap,152,Complete,INSERT,ZARCHIVE,0.90,"ARCHIVED_BY, P_ARCHIVE_USER",0,window_analysis
+input/test_extended_scenarios.abap,11,Complete,UPDATE,Unknown,0.70,"I_USERNAME, GV_USER_RFC",0,window_analysis
+input/test_insert_values.abap,13,Complete,INSERT,ZUSER_LOG,0.90,"USERNAME, SY-UNAME",0,window_analysis
+input/test_insert_values.abap,19,Complete,INSERT,ZUSER_AUDIT,0.90,"CREATED_BY, SY-UNAME",0,window_analysis
+input/test_insert_values.abap,29,Complete,INSERT,ZTRANSACTION_LOG,0.90,"LV_MODIFIER, SY-UNAME",0,window_analysis
+input/test_insert_values.abap,31,Complete,UPDATE,Unknown,0.70,"LV_MODIFIER, SY-UNAME",0,window_analysis
+input/test_insert_values.abap,32,Complete,DELETE,Unknown,0.70,SY-UNAME,0,window_analysis
+input/test_insert_values.abap,39,Complete,INSERT,ZUSER_RECORDS,0.90,LS_RECORD,0,window_analysis
+input/test_insert_values.abap,50,Complete,INSERT,ZAUDIT_TRAIL,0.90,"USERNAME, SY-UNAME",0,window_analysis
+input/test_multiline_scenario.abap,10,Complete,UPDATE,ZUSER_DATA,0.90,"GV_USER, LAST_CHANGED_BY",0,window_analysis
+input/test_multiline_update.abap,14,Complete,UPDATE,ZUSERTAB,0.90,"LV_USERNAME, USER, LAST_CHANGED_BY",0,window_analysis
+input/test_multiline_update.abap,22,Complete,UPDATE,ZUSERS,0.90,"LV_USERNAME, USER, MODIFIED_BY",0,window_analysis
+input/test_multiline_update.abap,32,Complete,UPDATE,ZEMPLOYEES,0.90,"APPROVER, SY-UNAME",0,window_analysis
+input/test_multiline_update.abap,42,Complete,UPDATE,ZTABLE1,0.90,"LV_USERNAME, USER",0,window_analysis
+input/test_multiline_update.abap,43,Complete,UPDATE,ZTABLE2,0.90,"LV_USERNAME, USER",0,window_analysis
+input/test_multiline_update.abap,44,Complete,UPDATE,ZTABLE3,0.90,"LV_USERNAME, USER",0,window_analysis
+input/test_multiple_rfc.abap,15,Complete,UPDATE,Unknown,0.70,"USERNAME, IV_USERNAME, GV_USER",0,window_analysis
+input/test_multiple_rfc.abap,112,Complete,INSERT,ZASYNC_RESULTS,0.90,"USERNAME, SY-UNAME",0,window_analysis
+input/test_perform_using.abap,24,Complete,UPDATE,Unknown,0.70,"GS_DATA, SY-UNAME",0,window_analysis
+input/test_perform_using.abap,43,Complete,INSERT,ZUSER_PROCESS,0.90,"USERNAME, P_USER",0,window_analysis
+input/test_perform_using.abap,61,Complete,UPDATE,Unknown,0.70,"SY-UNAME, P_USER",0,window_analysis
+input/test_perform_using.abap,84,Complete,UPDATE,ZPROCESS_LOG,0.90,"PROCESSOR, P_USER",0,window_analysis
+input/test_perform_using.abap,90,Complete,INSERT,ZUSER_TRACE,0.90,"TRACED_USER, P_USER",0,window_analysis
+input/test_sample.abap,17,Complete,INSERT,ZTABLE,0.90,LS_DATA,0,window_analysis
+input/test_sample.abap,26,Complete,UPDATE,ZTABLE,0.90,LS_DATA,0,window_analysis
+input/user_example.abap,2,Complete,UPDATE,ZTABLE,0.90,"SY-UNAME, AENAM",0,window_analysis
+input/complex_db_operations_01.abap,50,Complete,UPDATE,Unknown,0.70,SYUNAME,0,window_analysis
+input/complex_db_operations_01.abap,76,Complete,INSERT,ZTABLE,0.90,SY-UNAME,0,window_analysis
+input/complex_db_operations_01.abap,80,Complete,INSERT,ZAUDIT,0.90,"SY-UNAME, CHANGED_BY, USER_NAME",0,window_analysis
+input/complex_db_operations_01.abap,83,Complete,INSERT,Unknown,0.70,"SY-UNAME, CHANGED_BY, USER_NAME",0,window_analysis
+input/complex_db_operations_01.abap,92,Complete,INSERT,ZUSER_LOG,0.90,"CREATED_BY, USER_ID, LV_USERNAME",0,window_analysis
+input/complex_db_operations_01.abap,108,Complete,INSERT,ZTABLE,0.90,WA_USER,0,window_analysis
+input/complex_db_operations_01.abap,126,Complete,UPDATE,ZTABLE,0.90,"USER_ID, SY-UNAME, UPDATED_BY",0,window_analysis
+input/complex_db_operations_01.abap,127,Complete,UPDATE,Unknown,0.70,USER_ID,0,window_analysis
+input/complex_db_operations_01.abap,132,Complete,UPDATE,ZTABLE,0.90,"UPDATED_BY, LV_USERNAME",0,window_analysis
+input/complex_db_operations_01.abap,138,Complete,UPDATE,ZAUDIT,0.90,"SY-UNAME, CHANGED_BY, USER_NAME",0,window_analysis
+input/complex_db_operations_01.abap,142,Complete,INSERT,Unknown,0.70,"SY-UNAME, USER_NAME",0,window_analysis
+input/complex_db_operations_01.abap,146,Complete,UPDATE,ZORDER,0.90,"CREATED_BY, SY-UNAME, UPDATED_BY",0,window_analysis
+input/complex_db_operations_01.abap,147,Complete,UPDATE,Unknown,0.70,"CREATED_BY, SY-UNAME",0,window_analysis
+input/complex_db_operations_01.abap,133,Complete,UPDATE,Unknown,0.70,UPDATED_ON,0,window_analysis
+input/complex_db_operations_01.abap,156,Complete,UPDATE,ZTABLE,0.90,"CREATED_BY, LV_CURRENT_USER, UPDATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,158,Complete,UPDATE,Unknown,0.70,"LV_CURRENT_USER, UPDATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,161,Complete,UPDATE,Unknown,0.70,"LV_CURRENT_USER, UPDATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,162,Complete,UPDATE,Unknown,0.70,UPDATED_ON,0,window_analysis
+input/complex_db_operations_01.abap,166,Complete,UPDATE,Unknown,0.70,"SY-UNAME, UPDATED_BY, WA_ORDER-UPDATED_BY, WA_ORDER",0,window_analysis
+input/complex_db_operations_01.abap,167,Complete,UPDATE,Unknown,0.70,"WA_ORDER, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,168,Complete,UPDATE,ZORDER,0.90,"UPDATED_BY, WA_ORDER-UPDATED_BY, WA_ORDER, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,169,Complete,UPDATE,Unknown,0.70,"WA_ORDER, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,175,Complete,UPDATE,ZTABLE,0.90,"SY-UNAME, UPDATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,176,Complete,UPDATE,Unknown,0.70,"SY-UNAME, UPDATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,177,Complete,UPDATE,Unknown,0.70,UPDATED_ON,0,window_analysis
+input/complex_db_operations_01.abap,181,Complete,UPDATE,ZTABLE,0.90,"LV_TEMP_USER, CREATED_BY, UPDATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,182,Complete,UPDATE,Unknown,0.70,"LV_TEMP_USER, CREATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,188,Complete,UPDATE,Unknown,0.70,"SY-UNAME, UPDATED_BY, WA_ORDER-UPDATED_BY, WA_ORDER",0,window_analysis
+input/complex_db_operations_01.abap,189,Complete,UPDATE,Unknown,0.70,"WA_ORDER, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,190,Complete,UPDATE,ZORDER,0.90,"ORDER_ID, UPDATED_BY, WA_ORDER-UPDATED_BY, WA_ORDER, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,191,Complete,UPDATE,Unknown,0.70,"ORDER_ID, WA_ORDER, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,200,Complete,UPDATE,ZAUDIT,0.90,"CHANGED_BY, LV_USERNAME",0,window_analysis
+input/complex_db_operations_01.abap,204,Complete,UPDATE,Unknown,0.70,"LV_USERNAME, USER_NAME",0,window_analysis
+input/complex_db_operations_01.abap,210,Complete,UPDATE,Unknown,0.70,"UPDATED_BY, SY-UNAME",0,window_analysis
+input/complex_db_operations_01.abap,211,Complete,UPDATE,Unknown,0.70,UPDATED_ON,0,window_analysis
+input/complex_db_operations_01.abap,212,Complete,UPDATE,ZTABLE,0.90,"UPDATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,213,Complete,UPDATE,Unknown,0.70,UPDATED_ON,0,window_analysis
+input/complex_db_operations_01.abap,221,Complete,UPDATE,Unknown,0.70,"WA_USER-UPDATED_BY, UPDATED_BY, SY-UNAME, WA_USER",0,window_analysis
+input/complex_db_operations_01.abap,222,Complete,UPDATE,Unknown,0.70,"WA_USER, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,223,Complete,MODIFY,ZTABLE,0.90,WA_USER,0,window_analysis
+input/complex_db_operations_01.abap,241,Complete,UPDATE,Unknown,0.70,"WA_USER-UPDATED_BY, UPDATED_BY, SY-UNAME, WA_USER",0,window_analysis
+input/complex_db_operations_01.abap,242,Complete,UPDATE,Unknown,0.70,"UPDATED_ON, WA_USER",0,window_analysis
+input/complex_db_operations_01.abap,251,Complete,UPDATE,Unknown,0.70,"LV_CURRENT_USER, UPDATED_BY, WA_ORDER-UPDATED_BY, WA_ORDER",0,window_analysis
+input/complex_db_operations_01.abap,252,Complete,UPDATE,Unknown,0.70,"UPDATED_ON, WA_ORDER",0,window_analysis
+input/complex_db_operations_01.abap,254,Complete,UPDATE,Unknown,0.70,"UPDATED_BY, UPDATED_ON, WA_ORDER",0,window_analysis
+input/complex_db_operations_01.abap,261,Complete,UPDATE,Unknown,0.70,"WA_USER-UPDATED_BY, UPDATED_BY, SY-UNAME, WA_USER",0,window_analysis
+input/complex_db_operations_01.abap,262,Complete,UPDATE,Unknown,0.70,"UPDATED_ON, WA_USER",0,window_analysis
+input/complex_db_operations_01.abap,263,Complete,MODIFY,IT_USERS,0.90,"UPDATED_BY, UPDATED_ON, WA_USER",0,window_analysis
+input/complex_db_operations_01.abap,264,Complete,UPDATE,Unknown,0.70,"UPDATED_BY, UPDATED_ON",0,window_analysis
+input/complex_db_operations_01.abap,229,Complete,MODIFY,Unknown,0.70,WA_AUDIT,0,window_analysis
+input/complex_db_operations_01.abap,233,Complete,MODIFY,ZAUDIT,0.90,WA_AUDIT,0,window_analysis
+input/complex_db_operations_01.abap,274,Complete,MODIFY,IT_AUDIT,0.90,WA_AUDIT,0,window_analysis
+input/complex_db_operations_01.abap,283,Complete,MODIFY,Unknown,0.70,WA_AUDIT,0,window_analysis
+input/complex_db_operations_01.abap,284,Complete,MODIFY,ZAUDIT,0.90,WA_AUDIT,0,window_analysis
+input/complex_db_operations_01.abap,288,Complete,UPDATE,Unknown,0.70,"UPDATED_BY, SY-UNAME",0,window_analysis
+input/complex_db_operations_01.abap,297,Complete,UPDATE,Unknown,0.70,"WA_USER-UPDATED_BY, LV_CURRENT_USER, UPDATED_BY, WA_USER",0,window_analysis
+input/complex_db_operations_01.abap,298,Complete,UPDATE,Unknown,0.70,WA_USER,0,window_analysis
+input/complex_db_operations_01.abap,299,Complete,MODIFY,ZTABLE,0.90,WA_USER,0,window_analysis
+input/complex_db_operations_01.abap,304,Complete,MODIFY,Unknown,0.70,WA_AUDIT,0,window_analysis
+input/complex_db_operations_01.abap,308,Complete,MODIFY,ZAUDIT,0.90,WA_AUDIT,0,window_analysis
+input/complex_db_operations_01.abap,318,Complete,UPDATE,Unknown,0.70,"WA_USER-UPDATED_BY, UPDATED_BY, LV_USERNAME, WA_USER",0,window_analysis
+input/complex_db_operations_01.abap,319,Complete,UPDATE,Unknown,0.70,WA_USER,0,window_analysis
+input/complex_db_operations_01.abap,321,Complete,MODIFY,LT_TEMP_USERS,0.90,WA_USER,0,window_analysis
+input/complex_db_operations_01.abap,329,Complete,DELETE,ZTABLE,0.90,"CREATED_BY, SY-UNAME",0,window_analysis
+input/complex_db_operations_01.abap,334,Complete,DELETE,ZAUDIT,0.90,"LV_USERNAME, USER_NAME",0,window_analysis
+input/complex_db_operations_01.abap,338,Complete,DELETE,ZORDER,0.90,"CREATED_BY, SY-UNAME",0,window_analysis
+input/complex_db_operations_01.abap,344,Complete,DELETE,IT_USERS,0.90,"CREATED_BY, LV_CURRENT_USER",0,window_analysis
+input/complex_db_operations_01.abap,351,Complete,DELETE,ZTABLE,0.90,"CREATED_BY, SY-UNAME",0,window_analysis
+input/complex_db_operations_01.abap,360,Complete,UPDATE,Unknown,0.70,SY-UNAME,0,window_analysis
+input/complex_db_operations_01.abap,367,Complete,UPDATE,Unknown,0.70,SYUNAME,0,window_analysis
+input/complex_db_operations_01.abap,389,Complete,INSERT,ZUSER_LOG,0.90,CREATED_BY,0,window_analysis
+input/mixed_patterns_test.abap,162,Complete,UPDATE,Unknown,0.70,"SY-UNAME, IV_BATCH_USER",0,window_analysis
+input/mixed_patterns_test.abap,212,Complete,INSERT,ZTABLE,0.90,WA_USER,0,window_analysis
+input/mixed_patterns_test.abap,227,Complete,INSERT,ZRFC_LOG,0.90,"CALLING_USER, LV_CURRENT_USER",0,window_analysis
+input/mixed_patterns_test.abap,238,Complete,UPDATE,ZTABLE,0.90,"USERNAME, MODIFIED_BY, LV_SESSION_USER",0,window_analysis
+input/mixed_patterns_test.abap,262,Complete,MODIFY,IT_USERS,0.90,WA_USER,0,window_analysis
+input/mixed_patterns_test.abap,281,Complete,INSERT,ZAUDIT,0.90,"USERNAME, CHANGED_BY, SY-UNAME",0,window_analysis
+input/mixed_patterns_test.abap,285,Complete,INSERT,Unknown,0.70,"USERNAME, CHANGED_BY, SY-UNAME",0,window_analysis
+input/mixed_patterns_test.abap,297,Complete,UPDATE,ZTABLE,0.90,"LV_ADMIN_USER, CREATED_BY, MODIFIED_BY",0,window_analysis
+input/mixed_patterns_test.abap,313,Complete,MODIFY,ZTABLE,0.90,"USERNAME, LV_BATCH_USER, CREATED_BY, MODIFIED_BY",0,window_analysis
+input/mixed_patterns_test.abap,329,Complete,UPDATE,TABLES,0.90,SY-UNAME,0,window_analysis
+input/mixed_patterns_test.abap,374,Complete,INSERT,ZUSER_LOG,0.90,CREATED_BY,0,window_analysis
+input/mixed_patterns_test.abap,392,Complete,UPDATE,TABLES,0.90,SYUNAME,0,window_analysis
+input/mixed_patterns_test.abap,397,Complete,UPDATE,Unknown,0.70,SYUNAME,0,window_analysis
+input/mixed_patterns_test.abap,401,Complete,UPDATE,Unknown,0.70,MODIFIED_BY,0,window_analysis
+input/mixed_patterns_test.abap,433,Complete,UPDATE,ZTABLE,0.90,MODIFIED_BY,0,window_analysis
+input/mixed_patterns_test.abap,455,Complete,INSERT,ZRFC_LOG,0.90,"CALLING_USER, LV_CALLBACK_USER",0,window_analysis
+input/advanced_taint_tracking.abap,127,Complete,INSERT,ZTABLE,0.90,"LV_FINAL_USER, CREATED_BY, MODIFIED_BY",0,window_analysis
+input/advanced_taint_tracking.abap,226,Complete,UPDATE,ZTABLE,0.90,"LV_PROXY_USER, CREATED_BY, LV_SESSION_USER, MODIFIED_BY",0,window_analysis
+input/advanced_taint_tracking.abap,278,Complete,INSERT,ZUSER_LOG,0.90,CREATED_BY,0,window_analysis
+input/advanced_taint_tracking.abap,303,Complete,INSERT,ZAUDIT,0.90,"CHANGED_BY, LV_FINAL_USER",0,window_analysis
+input/advanced_taint_tracking.abap,356,Complete,INSERT,ZTABLE,0.90,"CREATED_BY, LV_SOURCE_USER",0,window_analysis
+input/advanced_taint_tracking.abap,366,Complete,INSERT,ZAUDIT,0.90,"LV_PRIMARY_USER, CHANGED_BY",0,window_analysis
+input/advanced_taint_tracking.abap,368,Complete,INSERT,Unknown,0.70,"LV_PRIMARY_USER, CHANGED_BY",0,window_analysis
+input/advanced_taint_tracking.abap,376,Complete,INSERT,ZSESSION_LOG,0.90,"LOGGED_BY, LV_SECONDARY_USER, USER_ID",0,window_analysis
+input/advanced_taint_tracking.abap,448,Complete,INSERT,ZUSER_LOG,0.90,CREATED_BY,0,window_analysis
+input/comprehensive_test_suite.abap,202,Complete,INSERT,ZTABLE,0.90,"CREATED_BY, MODIFIED_BY, LV_USER_CHAIN_10",0,window_analysis
+input/comprehensive_test_suite.abap,294,Complete,UPDATE,ZTABLE,0.90,"CREATED_BY, LV_CONDITIONAL_USER, MODIFIED_BY",0,window_analysis
+input/comprehensive_test_suite.abap,319,Complete,INSERT,ZAUDIT,0.90,"CHANGED_BY, LV_CASE_RESULT",0,window_analysis
+input/comprehensive_test_suite.abap,333,Complete,UPDATE,ZTABLE,0.90,"CREATED_BY, LV_CASE_RESULT, MODIFIED_BY",0,window_analysis
+input/comprehensive_test_suite.abap,343,Complete,INSERT,ZUSER_LOG,0.90,"CREATED_BY, LV_CASE_RESULT, USER_ID",0,window_analysis
+input/comprehensive_test_suite.abap,357,Complete,MODIFY,ZTABLE,0.90,"CREATED_BY, LV_CASE_RESULT, USER_ID",0,window_analysis
+input/comprehensive_test_suite.abap,403,Complete,INSERT,ZUSER_LOG,0.90,"LV_NESTED_USER3, USER_ID",0,window_analysis
+input/comprehensive_test_suite.abap,441,Complete,INSERT,ZAUDIT,0.90,"LV_WHILE_TEMP2, CHANGED_BY",0,window_analysis
+input/comprehensive_test_suite.abap,675,Complete,MODIFY,Unknown,0.70,SYUNAME,0,window_analysis
+input/comprehensive_test_suite.abap,707,Complete,INSERT,ZRFC_LOG,0.90,"CALLING_USER, LV_CALLBACK_USER",0,window_analysis

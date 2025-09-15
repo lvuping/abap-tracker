@@ -1,0 +1,3243 @@
+[
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 30,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATER",
+      "LV_MODIFIER",
+      "SY-UNAME",
+      "LV_UPDATER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 34,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME",
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 48,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATER",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 59,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATER",
+      "LV_USER",
+      "LV_UPDATER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 64,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATER",
+      "SY-UNAME",
+      "CHANGED_BY",
+      "LV_UPDATER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 84,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME",
+      "CHANGED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 165,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATER",
+      "SY-UNAME",
+      "LS_INTERMEDIATE-UPDATER",
+      "LS_INTERMEDIATE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 166,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LS_INTERMEDIATE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 167,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LS_INTERMEDIATE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 168,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATER",
+      "UPDATED_BY",
+      "LS_INTERMEDIATE-UPDATER",
+      "LS_INTERMEDIATE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 177,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "UPDATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 178,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 203,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME",
+      "CHANGED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 223,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME",
+      "ARCHIVE_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/02_database_update.abap",
+    "line_number": 289,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 114,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 117,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 126,
+    "status": "Complete",
+    "table": "LT_ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 134,
+    "status": "Complete",
+    "table": "LT_ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 141,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 143,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 174,
+    "status": "Complete",
+    "table": "LT_ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "PROCESSED_BY",
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 251,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 252,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 256,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 259,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 296,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LS_DATA",
+      "LS_TABLE",
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/03_database_modify.abap",
+    "line_number": 306,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_ZTABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 30,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_DELETER",
+      "LV_PROCESSOR",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 42,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_DELETER",
+      "LV_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 45,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_DELETER",
+      "DELETED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 81,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "DELETED_BY",
+      "LV_PROCESSOR",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 169,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_DELETER",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 176,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_DELETER",
+      "DELETED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 188,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_DELETER",
+      "LS_DATA",
+      "DELETED_BY",
+      "LS_DATA-DELETED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 189,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LS_DATA"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 208,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LS_DATA",
+      "DELETED_BY",
+      "SY-UNAME",
+      "LS_DATA-DELETED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 210,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LS_DATA",
+      "LS_TABLE"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 263,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "DELETED_BY",
+      "LV_PROCESSOR",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 321,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "DELETED_BY",
+      "LV_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 343,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_DELETER",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/04_database_delete.abap",
+    "line_number": 350,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_DELETER",
+      "DELETED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_complex_flow.abap",
+    "line_number": 75,
+    "status": "Complete",
+    "table": "ZDYNAMIC_TABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_DYNAMIC_USER",
+      "UPDATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_complex_flow.abap",
+    "line_number": 91,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_SELECTED_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_complex_flow.abap",
+    "line_number": 108,
+    "status": "Complete",
+    "table": "ZTRANSFORMED_USERS",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "ORIGINAL",
+      "LV_IMPORT_USER",
+      "TRANSFORMED",
+      "LV_EXPORT_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_complex_flow.abap",
+    "line_number": 124,
+    "status": "Complete",
+    "table": "ZPROCESSED_USERS",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "MV_INTERNAL_USER",
+      "USERNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_complex_flow.abap",
+    "line_number": 132,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "P_USER",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_complex_flow.abap",
+    "line_number": 152,
+    "status": "Complete",
+    "table": "ZARCHIVE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "ARCHIVED_BY",
+      "P_ARCHIVE_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_extended_scenarios.abap",
+    "line_number": 11,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "I_USERNAME",
+      "GV_USER_RFC"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_insert_values.abap",
+    "line_number": 13,
+    "status": "Complete",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "USERNAME",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_insert_values.abap",
+    "line_number": 19,
+    "status": "Complete",
+    "table": "ZUSER_AUDIT",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_insert_values.abap",
+    "line_number": 29,
+    "status": "Complete",
+    "table": "ZTRANSACTION_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_MODIFIER",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_insert_values.abap",
+    "line_number": 31,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_MODIFIER",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_insert_values.abap",
+    "line_number": 32,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_insert_values.abap",
+    "line_number": 39,
+    "status": "Complete",
+    "table": "ZUSER_RECORDS",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LS_RECORD"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_insert_values.abap",
+    "line_number": 50,
+    "status": "Complete",
+    "table": "ZAUDIT_TRAIL",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "USERNAME",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiline_scenario.abap",
+    "line_number": 10,
+    "status": "Complete",
+    "table": "ZUSER_DATA",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "GV_USER",
+      "LAST_CHANGED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiline_update.abap",
+    "line_number": 14,
+    "status": "Complete",
+    "table": "ZUSERTAB",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_USERNAME",
+      "USER",
+      "LAST_CHANGED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiline_update.abap",
+    "line_number": 22,
+    "status": "Complete",
+    "table": "ZUSERS",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_USERNAME",
+      "USER",
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiline_update.abap",
+    "line_number": 32,
+    "status": "Complete",
+    "table": "ZEMPLOYEES",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "APPROVER",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiline_update.abap",
+    "line_number": 42,
+    "status": "Complete",
+    "table": "ZTABLE1",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_USERNAME",
+      "USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiline_update.abap",
+    "line_number": 43,
+    "status": "Complete",
+    "table": "ZTABLE2",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_USERNAME",
+      "USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiline_update.abap",
+    "line_number": 44,
+    "status": "Complete",
+    "table": "ZTABLE3",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_USERNAME",
+      "USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiple_rfc.abap",
+    "line_number": 15,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "USERNAME",
+      "IV_USERNAME",
+      "GV_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_multiple_rfc.abap",
+    "line_number": 112,
+    "status": "Complete",
+    "table": "ZASYNC_RESULTS",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "USERNAME",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_perform_using.abap",
+    "line_number": 24,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "GS_DATA",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_perform_using.abap",
+    "line_number": 43,
+    "status": "Complete",
+    "table": "ZUSER_PROCESS",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "USERNAME",
+      "P_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_perform_using.abap",
+    "line_number": 61,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME",
+      "P_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_perform_using.abap",
+    "line_number": 84,
+    "status": "Complete",
+    "table": "ZPROCESS_LOG",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "PROCESSOR",
+      "P_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_perform_using.abap",
+    "line_number": 90,
+    "status": "Complete",
+    "table": "ZUSER_TRACE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "TRACED_USER",
+      "P_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_sample.abap",
+    "line_number": 17,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LS_DATA"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/test_sample.abap",
+    "line_number": 26,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LS_DATA"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/user_example.abap",
+    "line_number": 2,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME",
+      "AENAM"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 50,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SYUNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 76,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 80,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME",
+      "CHANGED_BY",
+      "USER_NAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 83,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME",
+      "CHANGED_BY",
+      "USER_NAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 92,
+    "status": "Complete",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "USER_ID",
+      "LV_USERNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 108,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 126,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "USER_ID",
+      "SY-UNAME",
+      "UPDATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 127,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "USER_ID"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 132,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "UPDATED_BY",
+      "LV_USERNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 138,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME",
+      "CHANGED_BY",
+      "USER_NAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 142,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME",
+      "USER_NAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 146,
+    "status": "Complete",
+    "table": "ZORDER",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "SY-UNAME",
+      "UPDATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 147,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "CREATED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 133,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 156,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "LV_CURRENT_USER",
+      "UPDATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 158,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_CURRENT_USER",
+      "UPDATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 161,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_CURRENT_USER",
+      "UPDATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 162,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 166,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME",
+      "UPDATED_BY",
+      "WA_ORDER-UPDATED_BY",
+      "WA_ORDER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 167,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_ORDER",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 168,
+    "status": "Complete",
+    "table": "ZORDER",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "UPDATED_BY",
+      "WA_ORDER-UPDATED_BY",
+      "WA_ORDER",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 169,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_ORDER",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 175,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME",
+      "UPDATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 176,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME",
+      "UPDATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 177,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 181,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_TEMP_USER",
+      "CREATED_BY",
+      "UPDATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 182,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_TEMP_USER",
+      "CREATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 188,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME",
+      "UPDATED_BY",
+      "WA_ORDER-UPDATED_BY",
+      "WA_ORDER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 189,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_ORDER",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 190,
+    "status": "Complete",
+    "table": "ZORDER",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "ORDER_ID",
+      "UPDATED_BY",
+      "WA_ORDER-UPDATED_BY",
+      "WA_ORDER",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 191,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "ORDER_ID",
+      "WA_ORDER",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 200,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CHANGED_BY",
+      "LV_USERNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 204,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_USERNAME",
+      "USER_NAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 210,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 211,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 212,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "UPDATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 213,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 221,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_USER-UPDATED_BY",
+      "UPDATED_BY",
+      "SY-UNAME",
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 222,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_USER",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 223,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 241,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_USER-UPDATED_BY",
+      "UPDATED_BY",
+      "SY-UNAME",
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 242,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_ON",
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 251,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_CURRENT_USER",
+      "UPDATED_BY",
+      "WA_ORDER-UPDATED_BY",
+      "WA_ORDER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 252,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_ON",
+      "WA_ORDER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 254,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_BY",
+      "UPDATED_ON",
+      "WA_ORDER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 261,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_USER-UPDATED_BY",
+      "UPDATED_BY",
+      "SY-UNAME",
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 262,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_ON",
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 263,
+    "status": "Complete",
+    "table": "IT_USERS",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "UPDATED_BY",
+      "UPDATED_ON",
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 264,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_BY",
+      "UPDATED_ON"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 229,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_AUDIT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 233,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_AUDIT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 274,
+    "status": "Complete",
+    "table": "IT_AUDIT",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_AUDIT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 283,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_AUDIT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 284,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_AUDIT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 288,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "UPDATED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 297,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_USER-UPDATED_BY",
+      "LV_CURRENT_USER",
+      "UPDATED_BY",
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 298,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 299,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 304,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_AUDIT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 308,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_AUDIT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 318,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_USER-UPDATED_BY",
+      "UPDATED_BY",
+      "LV_USERNAME",
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 319,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 321,
+    "status": "Complete",
+    "table": "LT_TEMP_USERS",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 329,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 334,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_USERNAME",
+      "USER_NAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 338,
+    "status": "Complete",
+    "table": "ZORDER",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 344,
+    "status": "Complete",
+    "table": "IT_USERS",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "LV_CURRENT_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 351,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "DELETE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 360,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 367,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SYUNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/complex_db_operations_01.abap",
+    "line_number": 389,
+    "status": "Complete",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 162,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SY-UNAME",
+      "IV_BATCH_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 212,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 227,
+    "status": "Complete",
+    "table": "ZRFC_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CALLING_USER",
+      "LV_CURRENT_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 238,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "USERNAME",
+      "MODIFIED_BY",
+      "LV_SESSION_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 262,
+    "status": "Complete",
+    "table": "IT_USERS",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "WA_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 281,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "USERNAME",
+      "CHANGED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 285,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "USERNAME",
+      "CHANGED_BY",
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 297,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_ADMIN_USER",
+      "CREATED_BY",
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 313,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "USERNAME",
+      "LV_BATCH_USER",
+      "CREATED_BY",
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 329,
+    "status": "Complete",
+    "table": "TABLES",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SY-UNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 374,
+    "status": "Complete",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 392,
+    "status": "Complete",
+    "table": "TABLES",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "SYUNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 397,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SYUNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 401,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 433,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/mixed_patterns_test.abap",
+    "line_number": 455,
+    "status": "Complete",
+    "table": "ZRFC_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CALLING_USER",
+      "LV_CALLBACK_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 127,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_FINAL_USER",
+      "CREATED_BY",
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 226,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_PROXY_USER",
+      "CREATED_BY",
+      "LV_SESSION_USER",
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 278,
+    "status": "Complete",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 303,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CHANGED_BY",
+      "LV_FINAL_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 356,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "LV_SOURCE_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 366,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_PRIMARY_USER",
+      "CHANGED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 368,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "LV_PRIMARY_USER",
+      "CHANGED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 376,
+    "status": "Complete",
+    "table": "ZSESSION_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LOGGED_BY",
+      "LV_SECONDARY_USER",
+      "USER_ID"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/advanced_taint_tracking.abap",
+    "line_number": 448,
+    "status": "Complete",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 202,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "MODIFIED_BY",
+      "LV_USER_CHAIN_10"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 294,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "LV_CONDITIONAL_USER",
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 319,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CHANGED_BY",
+      "LV_CASE_RESULT"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 333,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "UPDATE",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "LV_CASE_RESULT",
+      "MODIFIED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 343,
+    "status": "Complete",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "LV_CASE_RESULT",
+      "USER_ID"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 357,
+    "status": "Complete",
+    "table": "ZTABLE",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CREATED_BY",
+      "LV_CASE_RESULT",
+      "USER_ID"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 403,
+    "status": "Complete",
+    "table": "ZUSER_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_NESTED_USER3",
+      "USER_ID"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 441,
+    "status": "Complete",
+    "table": "ZAUDIT",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "LV_WHILE_TEMP2",
+      "CHANGED_BY"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 675,
+    "status": "Complete",
+    "table": "Unknown",
+    "fields": {},
+    "operation": "MODIFY",
+    "confidence": 0.7,
+    "tainted_variables": [
+      "SYUNAME"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  },
+  {
+    "file_path": "input/comprehensive_test_suite.abap",
+    "line_number": 707,
+    "status": "Complete",
+    "table": "ZRFC_LOG",
+    "fields": {},
+    "operation": "INSERT",
+    "confidence": 0.9,
+    "tainted_variables": [
+      "CALLING_USER",
+      "LV_CALLBACK_USER"
+    ],
+    "advanced_patterns": [],
+    "context_info": {
+      "scope": "window_analysis"
+    },
+    "performance_metrics": {}
+  }
+]
