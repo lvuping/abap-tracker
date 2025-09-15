@@ -127,11 +127,10 @@ class ABAPTracker:
 
             start_time = time.time()
 
-            # Use fixed analyzer for proper window analysis
-            from core.enhanced_analyzer_fixed import analyze_csv_with_fixed_analyzer
-            results, metrics = analyze_csv_with_fixed_analyzer(
+            # Use stable analyzer for Windows compatibility
+            from core.enhanced_analyzer_stable import run_stable_analysis
+            results, metrics = run_stable_analysis(
                 str(input_path),
-                str(output_json),
                 verbose=self.verbose
             )
 
