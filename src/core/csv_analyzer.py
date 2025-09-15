@@ -33,12 +33,15 @@ class ComprehensiveAnalysis:
     
     def to_csv_row(self) -> Dict:
         """Convert to CSV row format - prioritizing direct impacts"""
+        # Filter tables to only show Z* and Y* tables as final tables
+        final_tables = [t for t in self.tables if t.startswith(('Z', 'Y'))][:3]
+
         return {
             "ID": self.id,
             "Source_File": self.source_file,
             "Line_Number": self.line_number,
             "Status": self.status,
-            "Final_Table": ", ".join(self.tables[:3]) if self.tables else "",  # Primary tables
+            "Final_Table": ", ".join(final_tables) if final_tables else "",  # Only Z* and Y* tables
             "Final_Fields": ", ".join(self.fields[:5]) if self.fields else "",  # Key fields only
             "DB_Operations": ", ".join([k for k in self.keywords if k in ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'MODIFY']][:3]),
             "RFC_Functions": ", ".join(self.rfc_functions[:3]) if self.rfc_functions else "",

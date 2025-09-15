@@ -1,2 +1,4 @@
 *.abap
 .env
+*.csv
+*.json
